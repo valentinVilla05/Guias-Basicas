@@ -34,6 +34,11 @@ Estos están creados con "Git" como base.
 
 Con este comando añadimos todos los cambios que hemos realizado desde el último commit al "Staging area".
 
+Al hacer un `git add` tenemos la opción de especificar los archivos que queremos añadir en el siguiente commit de la siguiente manera: `git add proyecto/archivos/index.html proyecto/imagenes/imagen.png`, en este caso he añadido solamente 2 archivos especificando su ruta y nombre y esos seran los que se añadan en el siguiente commit. 
+Si has modificado varios archivos y queremos añadirlos todos de una vez (sin tener que escribir uno por uno) basta con escribir: `git add .`
+
+A la hora de especificar archivos funciona igual que con comandos de terminal.
+
 ![Cambio](/images/cambio.gif)
 
 En este fragmento muestro (desde la interfaz gráfica de Visual Studio Code) como al realizar un cambio en un archivo del proyecto lo he añadido a el Staging Area manualmente.
@@ -44,8 +49,6 @@ El Staging Area es la "fase intermedia" que hay para cada vez que hacemos un **c
 
 Basicamente lo que hace es dejar los cambios en modo de borrador para ver que archivos y lineas se han añadido o cambiado para así decidir cuales son las que quieres implementar en tu próximo commit en vez de añadir todos los cambios de una vez.
 
- <br>
- <br>
 
  > `git commit -m "nombre_commit"`
 
