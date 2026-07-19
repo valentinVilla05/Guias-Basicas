@@ -162,7 +162,7 @@ Si queremos copiar un directorio usaremos:
 
 Ahora vamos a ver el comando para eliminar cosas con el que hay que tener mucho ojo:
 
-Si quremos eliminar un archivo usamos:
+Si queremos eliminar un archivo usamos:
 
 > `rm ~/Documentos/mi_archivo.txt`
 
@@ -206,7 +206,7 @@ El sistema de permisos en linux es muy importante debido a que es un sistema muy
 
 Para ver los permisos que tiene cada archivo podemos usar como vimos `ls` con la flag `-l`:
 
-![permisos](image.png)
+![permisos](/images_linux/permisos.png)
 
 #### ¿Qué significa cada cosa?
 
@@ -266,12 +266,12 @@ Por ejemplo si un archivo pertenece a `root` y quiero que sea mio hago:
 
 > `sudo chown valentin_villa05 archivo.txt`
 
-¿Por qué usamos `sudo`? Un cambio de propiertario suele ser imortante, por lo tanto, necesitaremos permisos de administrador.
+¿Por qué usamos `sudo`? Un cambio de propietario suele ser imortante, por lo tanto, necesitaremos permisos de administrador.
 
 
 ### Redirecciones, pipes y filtros
 
-El punto de todos estos comandos está en que no solo podemos usarlos uno a uno individualmente sino que podemos conctarlos entre sí.
+El punto de todos estos comandos está en que no solo podemos usarlos uno a uno individualmente sino que podemos conectarlos entre sí.
 
 1. Para empezar tenemos las **redirecciones** (`>` y `>>`):
 Cuando hacemos un `cat`, `less`, `ls`, etc el contenido sale por pantalla directamente en la terminal pero podemos hacer que en vez de eso se guarde en un archivo. Para hacerlo hacemos:
@@ -304,8 +304,10 @@ Ejemplo:
 
 Podemos combinarlo junto al pipe. Ejemplo: 
 
-Imagina que tenemos servidor web ha fallado y tenemos un archivo de registro (*log*) con 20.000 líneas. No vamos a leerlo entero. Podemos usar `cat` para abrirlo, meterle una tubería y usar `grep` para que solo nos muestre las líneas donde pone "ERROR":
-  
-  > `cat ~/Logs/servidor.log | grep "ERROR"`
+Vamos a ver el historial de comandos que hemos usado pero solo quiero ver los comandos de git que haya puesto:
+
+> `history | grep "git"`
+
+![grep](/images_linux/grep.png)
 
 [Comando grep completo](https://cheat.sh/grep)
