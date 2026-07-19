@@ -2,7 +2,7 @@
 
 # ¿Qué es Linux?
 
-Para empezar vamos a ver que es linux. Debemos saber antes que nada que Linux **no es un sistema operativo** si como lo es Windows o MacOS sino que es linux es el núcleo o kernel y a partir de este núcleo es que se crean las **distribuciones/distros** que son los sistemas operativos que podemos usar.
+Para empezar vamos a ver que es linux. Debemos saber antes que nada que Linux **no es un sistema operativo** como lo son Windows o macOS sino que es linux es el núcleo o kernel y a partir de este núcleo es que se crean las **distribuciones/distros** que son los sistemas operativos que podemos usar.
 
 #### ¿Hace falta poner 10000 comandos hasta para cambiar el fondo de pantalla en linux?
 Evidentemente no. Hay muchas grandes distribuciones que tienen una **interfaz gráfica** amigable y muy fáciles de usar.
@@ -35,7 +35,7 @@ Aquí podemos ver las carpetas que componen el sistema.
 
 * **`/etc`**: El cerebro del sistema. Aquí dentro se guardan prácticamente todos los archivos de configuración de el PC y de los programas que instalemos. Son archivos de texto que puedes editar.
 
-* **`/home`**: Dentro habrá una carpeta con tu nombre (ej. `/home/<nombre_usuario]/`) donde se guardan tus descargas, documentos y configuraciones personales. Aquí está a los que estamos acostumbreados de "Descargas", "Documentos, "Imagenes"...
+* **`/home`**: Dentro habrá una carpeta con tu nombre (ej. `/home/<nombre_usuario>/`) donde se guardan tus descargas, documentos y configuraciones personales. Aquí está a los que estamos acostumbreados de "Descargas", "Documentos, "Imagenes"...
 
 * **`/root`**: Es la carpeta personal del súper-usuario administrador (`root`).
 
@@ -55,7 +55,7 @@ Aquí podemos ver las carpetas que componen el sistema.
 
 * **`/opt`** *(Optional)*: Carpeta para programas de terceros que no siguen la estructura clásica de Linux (por ejemplo, si instalas Google Chrome, Discord o DaVinci Resolve, suelen meterse aquí ya que no pertenecen nativamente a linux).
 
-* **`/srv`** *(Service)*: Si usasmos nuestro ordenador como servidor para alojar una página web o un servidor, los archivos que se muestran al público se suelen guardar aquí.
+* **`/srv`** *(Service)*: Si usamos nuestro ordenador como servidor para alojar una página web o un servidor, los archivos que se muestran al público se suelen guardar aquí.
 
 * **`/run`**: Guarda datos técnicos sobre el sistema que se está ejecutando desde el último arranque (como qué usuarios han iniciado sesión). Se vacía al apagar el PC.
 
@@ -84,3 +84,94 @@ Igualmente, si en algún momento no sabemos exactamente en que directorio estamo
  y esto nos dirá donde estamos exactamente. 
 
  Ejemplo: ![pwd](/images_linux/pwd.png)
+
+ Si queremos ver el contenido del directorio en el que estamos usamos:
+
+ > `ls`
+
+ Esto nos muestra una lista de los archivos y carpetas que hay en el directorio en el que nos encontramos.
+
+ Ejemplo: ![ls](/images_linux/ls.png) 
+
+ `ls` tiene muchos parámetros para mostrar más o menos información en la lista, para verlo más en detalle podemos consultarlo aquí:
+
+ * [Información para `ls`](https://cheat.sh/ls)
+
+Para movernos entre carpetas utilizamos `cd`. Por ejemplo, si queremos ir a la carpeta Documentos hacemos:
+
+> `cd Documentos/`
+
+Tenemos dos opciones para movernos:
+1. **Ruta relativa:** Usar la ruta a partir de donde estemos (`cd Documentos/`).
+2. **Ruta absoluta:** Usar la ruta completa desde nuestra carpeta personal usando el símbolo `~` (`cd ~/Documentos`, donde la `~` representa nuestro *home* o directorio personal).
+
+Si queremos movernos un directorio hacia arriba (volver atrás), usamos:
+
+> `cd ..`
+
+Es útil saber que cuando estamos poniendo rutas o comandos siempre podemos usar la tecla 'tabulador' que nos "autocompletará" lo que estamos escribiendo por ejemplo: 
+
+![autocompletado](/images_linux/autocompletado.gif)
+
+Hay diferentes tipos de terminales, aunque el autocompletado no aparezca en pantalla podemos usar tabulador y lo escribirá igualmente.
+
+### Comandos para crear y eliminar cosas
+
+Si queremos crear una carpeta es tan sencillo como:
+
+> `mkdir <nombre_carpeta>`
+
+y nos creará un directorio con el nombre que hemos puesto en el directorio donde estemos en ese momento.
+('mkdir' viene de 'make directory')
+
+O si queremos crear una rama de carpetas como por ejemplo "Documentos/universidad/primer_curso/apuntes/" podemos usar:
+
+> `mkdir -p Documentos/universidad/primer_curso/apuntes/`
+
+Tambien podemos crear archivos con:
+
+> `touch <nombre_archivo>.txt`
+
+Eso nos creará un archivo de texto (al poner la extensión 'txt' pero podemos poner la extensión que queramos y creará un archivo de ese formato). Además touch sirve para modificar los archivos ya existentes como la fecha de creación u otras propiedades. Podemos consultar más información aquí:
+
+[Comando touch completo](https://cheat.sh/touch)
+
+Si queremos mover un archivo o una carpeta a otro sitio usaremos `mv`, por ejemplo vamos a mover un archivo de la carpeta Descargas a nuestra carpeta Documentos:
+
+> `mv ~/Descargas/archivo.txt ~/Documentos/mi_carpeta`
+
+La estructura a seguir es `mv` + ruta donde está el archivo + ruta donde queremos moverlo.
+
+**¡Ojo!** `mv` no solo sirve para mover archivos o carpetas, tambien sirve para renombrar, para eso solo tenemos que 'mover' un archivo o carpeta al mismo sitio donde está poniendole un nombre diferente, por ejemplo, voy a cambiarle el nombre de un archivo de "apuntes.txt" a "ejercicios.txt"
+
+> `mv ~/Documentos/apuntes.txt ~/Documentos/ejercicios.txt`
+
+Para ver los distintos parámetros que podemos aplicar al comando `mv` para que, por ejemplo, sobreescriba los archivos que movemos, podemos consultarlo aqui:
+
+[Comando mv completo](https://cheat.sh/mv)
+
+Si lo que queremos es copiarlo a otro directorio usaremos `cp`:
+
+> `cp ~/Descargas/archivo.txt ~/Documentos/mi_carpeta` 
+
+Si queremos copiar un directorio usaremos:
+
+> `cp -r ~/Descargas/mis_fotos ~/Documentos/mi_carpeta`
+
+[Comando cp completo](https://cheat.sh/cp)
+
+Ahora vamos a ver el comando para eliminar cosas con el que hay que tener mucho ojo:
+
+Si quremos eliminar un archivo usamos:
+
+> `rm ~/Documentos/mi_archivo.txt`
+
+Y si queremos borrar recursivamente una carpeta y todas sus subcarpetas de dentro usamos:
+
+> `rm -rf ~/Documentos/mis_carpetas`
+
+Con esto hay que tener cuidado ya que como hemos visto en linux todo son carpetas y archivos, es decir, que si ponemos `rm -rf /` eliminará **todo** desde el directorio raiz, es decir, nos quedamos sin sistema. De normal este comando no nos dejará ejecutarlo ya que necesitará permisos de administrador el cual se concede poniendo `sudo` al inicio del comando. Además en las versiones de hoy en día el propio sistema te dirá "tu pc va a implosionar si haces esto" y no te permitirá hacerlo a no ser que por alguna razón quieras hacerlo y le especifiques en el comando `--no-preserve-root`
+
+Siempre que pongamos `sudo` al inicio ese comando se ejecutará con permisos de administrador y nos pedirá la contraseña de usuario antes de ejecutarse.
+
+[Comando rm completo](https://cheat.sh/rm)
