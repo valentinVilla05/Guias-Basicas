@@ -175,3 +175,137 @@ Con esto hay que tener cuidado ya que como hemos visto en linux todo son carpeta
 Siempre que pongamos `sudo` al inicio ese comando se ejecutará con permisos de administrador y nos pedirá la contraseña de usuario antes de ejecutarse.
 
 [Comando rm completo](https://cheat.sh/rm)
+
+### Comandos para ver o editar archivos
+
+Si queremos ver lo que hay dentro de un archivo sin tener que abrirlo podemos usar `cat`, por ejemplo:
+
+> `cat ~/Documentos/archivo_prueba.txt`
+
+![cat](images_linux/cat.png)
+
+En caso de que sepamos que el archivo es muy grande, para que no pete la terminal podemos usar  `less`:
+
+> `less ~/Documentos/archivo_muy_largo.txt`
+
+Nos muestra el contenido como cat pero en el que podremos ir subiendo o bajando para no crashear la terminal, si queremos salir de esta lectura usaremos `Q`
+
+Por otro lado, si queremos editar un archivo sin necesidad de abrir un editor de texto podemos hacerlo desde el propio editor que tiene la terminal `nano`, ejemplo:
+
+![nano](/images_linux/nano.gif)
+
+**¿Cómo se maneja Nano?**
+Como estás dentro de la terminal, los ratones no funcionan. Te mueves con las flechas del teclado y abajo del todo verás un menú con atajos. El símbolo `^` significa la tecla **`Ctrl`**:
+
+* **Para Guardar:** Pulsa `Ctrl + O` y luego dale a `Enter` (confirma el nombre).
+* **Para Salir:** Pulsa `Ctrl + X`. (Si hiciste cambios y no guardaste, te preguntará si quieres guardarlos con `Y` o `N`).
+
+### Sistema de permisos 
+
+El sistema de permisos en linux es muy importante debido a que es un sistema muy seguro y muy cerrado con respecto a quien puede tocar que cosas. Por eso habrá veces que si intentas mover algún archivo o ejecutar algún script te dirá `Permission denied`.
+
+Para ver los permisos que tiene cada archivo podemos usar como vimos `ls` con la flag `-l`:
+
+![permisos](image.png)
+
+#### ¿Qué significa cada cosa?
+
+1. **El primer carácter:** Te dice qué tipo de objeto es:
+   * `-` = Es un archivo normal.
+   * `d` = Es un directorio (carpeta).
+   * `l` = Es un enlace (acceso directo).
+
+2. **Los siguientes 9 caracteres:** Se dividen en **3 bloques de 3 letras**:
+   * **Bloque 1 (`rw-`):** Permisos del **Dueño** (*User* / el usuario que creó el archivo).
+   * **Bloque 2 (`r--`):** Permisos del **Grupo** (*Group* / usuarios que pertenecen al mismo grupo de trabajo).
+   * **Bloque 3 (`r--`):** Permisos del **Resto del mundo** (*Others* / cualquier otra persona en el PC).
+
+### ¿Y qué significa cada letra?
+    
+* **`r`**: (*Read*) Es el permiso de **lectura**, es decir, puedes abrirlo y ver lo que hay dentro 
+* **`w`**: (*Write*) Permiso de **escritura**. Permite modificar o editar lo que hay dentro o  borrar el archivo
+* **`x`**: (*Execute*) Permiso de **ejecución**. Permite ejecutar el archivo como si fuera un programa (usado sobre todo en scripts)
+* **`-`**: (*Guión*) Permiso desactivado.
+
+
+#### ¿Cómo cambiamos los permisos?
+
+Para cambiar los permisos de un archivo usamos `chmod` (*Change Mode*). Podemos usarlo de la manera fácil (con las letras) o la manera difícil (con números).
+
+1. Usando letras:
+
+Usamos **`+`** o **`-`** para añadir o quitar permisos y especificamos a quien (`u` dueño, `g` grupo, `o` otros, `a` todos)
+
+- Dar permiso de ejecución: 
+> `chmod u+x script.sh`
+- Quitar permisos de escritura a todo el mundo:
+> `chmod a-w archivo.txt`
+- Dar permiso de ejecucion a todo el mundo:
+> `chmod +x programa`
+
+2. Usando números:
+Consiste en darle un valor numérico a cada permiso:
+* **Read (`r`)** = 4
+* **Write (`w`)** = 2
+* **Execute (`x`)** = 1
+* **Sin permiso (`-`)** = 0
+
+Para dar permisos, simplemente **sumamos los números** de lo que quieres permitir para cada uno de los 3 bloques (Dueño, Grupo, Otros):
+
+* Si quieres que el Dueño tenga **Lectura (4) + Escritura (2) = 6**, y el resto solo **Lectura (4)**:
+  > `chmod 644 notas.txt`
+* Si quieres que sea un programa ejecutable donde el Dueño hace todo **(4+2+1 = 7)** y los demás leen y ejecutan **(4+1 = 5)**:
+  > `chmod 755 mi_programa.sh`
+
+Hacer `chmod 777` es una chapuza y un agujero de seguridad ya que le estás dando **todos** los permisos a **todos** los usuarios.
+
+[Comando chmod completo](https://cheat.sh/chmod)
+
+La diferencia entre **`chmod`** y **`chown`** es que como hemos visto `chmod` cambia los permisos y `chown` cambia el dueño de un archivo.
+Por ejemplo si un archivo pertenece a `root` y quiero que sea mio hago:
+
+> `sudo chown valentin_villa05 archivo.txt`
+
+¿Por qué usamos `sudo`? Un cambio de propiertario suele ser imortante, por lo tanto, necesitaremos permisos de administrador.
+
+
+### Redirecciones, pipes y filtros
+
+El punto de todos estos comandos está en que no solo podemos usarlos uno a uno individualmente sino que podemos conctarlos entre sí.
+
+1. Para empezar tenemos las **redirecciones** (`>` y `>>`):
+Cuando hacemos un `cat`, `less`, `ls`, etc el contenido sale por pantalla directamente en la terminal pero podemos hacer que en vez de eso se guarde en un archivo. Para hacerlo hacemos:
+
+> `cat ~/Documentos/archivo_prueba.txt > ~/Documentos/redirecciones.txt`
+
+o 
+
+> `cat ~/Documentos/archivo_prueba.txt >> ~/Documentos/redirecciones.txt`
+
+#### ¿Qué diferencia hay entre uno y otro?
+
+* `>` Sobreescribe lo que haya en el archivo.
+* `>>` Añade a lo que ya haya en el archivo.
+
+2. También tenemos las 'pipes' (`|`):
+
+Esto sirve para canalizar datos. Es decir, coge lo que genera el comando de la izquierda y se lo envía al comando de la derecha.
+
+
+3.  El buscador `grep`:
+
+Es un comando que sirve para buscar una palabra dentro de un archivo.
+
+Ejemplo:
+
+> `grep "universidad" ~/Documentos/apuntes.txt`
+
+*(Te mostrará en pantalla únicamente las líneas del archivo donde aparezca la palabra "universidad").*
+
+Podemos combinarlo junto al pipe. Ejemplo: 
+
+Imagina que tenemos servidor web ha fallado y tenemos un archivo de registro (*log*) con 20.000 líneas. No vamos a leerlo entero. Podemos usar `cat` para abrirlo, meterle una tubería y usar `grep` para que solo nos muestre las líneas donde pone "ERROR":
+  
+  > `cat ~/Logs/servidor.log | grep "ERROR"`
+
+[Comando grep completo](https://cheat.sh/grep)
