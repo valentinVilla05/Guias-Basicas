@@ -134,7 +134,7 @@ Tambien podemos crear archivos con:
 
 Eso nos creará un archivo de texto (al poner la extensión 'txt' pero podemos poner la extensión que queramos y creará un archivo de ese formato). Además touch sirve para modificar los archivos ya existentes como la fecha de creación u otras propiedades. Podemos consultar más información aquí:
 
-[Comando touch completo](https://cheat.sh/touch)
+[Comando `touch` completo](https://cheat.sh/touch)
 
 Si queremos mover un archivo o una carpeta a otro sitio usaremos `mv`, por ejemplo vamos a mover un archivo de la carpeta Descargas a nuestra carpeta Documentos:
 
@@ -269,7 +269,7 @@ Por ejemplo si un archivo pertenece a `root` y quiero que sea mio hago:
 ¿Por qué usamos `sudo`? Un cambio de propietario suele ser imortante, por lo tanto, necesitaremos permisos de administrador.
 
 
-### Redirecciones, pipes y filtros
+### Redirecciones, pipes y filtros...
 
 El punto de todos estos comandos está en que no solo podemos usarlos uno a uno individualmente sino que podemos conectarlos entre sí.
 
@@ -310,4 +310,26 @@ Vamos a ver el historial de comandos que hemos usado pero solo quiero ver los co
 
 ![grep](/images_linux/grep.png)
 
-[Comando grep completo](https://cheat.sh/grep)
+[Comando `grep` completo](https://cheat.sh/grep)
+
+
+4. `find`:
+
+Mientras que `grep` sirve para buscar alguna palabra dentro de un archivo, `find` sirve para buscar archivos. Útil por si no sabes donde guardaste un archivo.
+
+La estructura básica es: `find [dónde buscar] [criterio] [qué buscas]`.
+
+* **Buscar un archivo por su nombre exacto en la carpeta actual (`.`) y sus subcarpetas:**
+> `find . -name "ejercicios.txt"`
+
+* **Buscar sin importar mayúsculas o minúsculas:**
+> `find . -iname "EjErCiCiOs.txt"`
+
+*(El flag `-iname` ignora si está en mayúsculas o minúsculas).*
+
+* **Buscar solo carpetas que contengan una palabra:**
+> `find . -type d -name "*universidad*"`
+
+*(El flag `-type d` le dice que busque solo directorios/carpetas. Si quisieramos buscar solo archivos usarías `-type f`).*
+
+[Comando `find` completo](https://cheat.sh/find)
