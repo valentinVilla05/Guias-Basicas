@@ -89,6 +89,7 @@ nombre="Me llamo Valentin"
 
 echo "Hola, $nombre"
 ```
+Importante que al asignar una variable **no podemos dejar espacios entre el `=`**
 
 Evidentemente también podemos interactuar con el usuario en cuestión de la siguiente manera:
 
@@ -172,4 +173,132 @@ Otros flags utiles son:
 
 * **`-d`** directorio: Comprueba si existe un directorio.
 
+[Más información del `if`](https://cheat.sh/if)
+
 #### Bucles en bash.
+
+La estructura para hacer un bucle `for` en bash es la siguiente:
+
+*(Programa que crea 5 carpetas enumeradas)*
+``` bash 
+for NUMERO in {1..5} do
+    echo "Creando la carpeta Carpeta_$NUMERO..."
+    mkdir -p "Carpeta_$NUMERO"
+done
+```
+[Más información del `for`](https://cheat.sh/for)
+
+También tenemos el bucle `while`:
+
+*(Programa que cuenta hasta llegar al 3)*
+``` bash
+CONTADOR=1
+
+while [ $CONTADOR -le 3 ]; do
+    echo "Contador en: $CONTADOR"
+    CONTADOR=$((CONTADOR + 1))
+done 
+```
+
+[Más información del `while`](https://cheat.sh/while)
+
+---
+
+### Argumentos en la linea de comandos
+
+Cuando usamos sccripts lo normal es pasar los paramétros en la propia linea de comandos y no ir parando para preguntar al usuario.
+
+Para capturar y usar esos datos dentro del script, Bash reserva unas **variables especiales**:
+
+* **`$0`**: Guarda el nombre de tu propio script.
+* **`$1`, `$2`, `$3`...**: Representan el primer, segundo, tercer parámetro que le hemos pasado.
+* **`$#`**: Nos dice el **número total** de argumentos que se han introducido.
+* **`$@`**: Contiene **todos** los argumentos pasados juntos en una lista.
+
+¿Cómo se usa?
+
+*(Ejemplo de script para hacer copias de seguridad rápidas)*
+
+``` bash
+#!/bin/bash
+
+#Primero comprobamos que el usuario nos haya pasado 2 parámetros
+if [ $# -lt 2 ]; then
+    echo "Debes indicar ORIGEN y DESTINO"
+    echo "Uso correcto: $0 <archivo_origen> <carpeta_destino>"
+    exit 1
+fi
+
+# Asignamos las variables
+ORIGEN=$1
+DESTINO=$2
+
+echo "Moviendo $ORIGEN a $DESTINO"
+mv "$ORIGEN" "$DESTINO"
+```
+*(Pro tip: poner las variables en los comandos entre comillas por si hay algún archivo con espacios en el nombre, el script no fallará)*
+
+### Switch case
+
+Si tenemos que evaluar diferentes opciones usaremos un `case` :
+
+``` bash
+echo "1) Actualizar sistema"
+echo "2) Limpiar papelera y temporales"
+echo "3) Salir"
+
+read OPCION
+
+case $OPCION in
+    1)
+        echo "Actualizando"
+        ;;
+    2)
+        echo "Limpiando archivos temporales"
+        rm -rf /tmp/*
+        ;;
+    3)
+        echo "Saliendo"
+        ;;
+    *) 
+        echo "Opcion no válida"
+        ;;
+esac
+```
+
+[Más información del `case`](https://cheat.sh/case)
+
+### Funciones en Bash
+
+``` bash
+
+#!/bin/bash
+
+# Definimos la función
+mostrar_header() {
+    echo "=================================="
+    echo "   $1"  # $1 aquí es el argumento que recibe LA FUNCIÓN, no el script
+    echo "=================================="
+}
+
+mostrar_header "INICIANDO PROCESO"
+mkdir -p test_dir
+
+mostrar_header "PROCESO FINALIZADO"
+
+```
+
+### Control de errores
+
+``` bash
+#!/bin/bash
+
+# Intentamos entrar a una carpeta
+cd ~/CarpetaQueNoExiste 2>/dev/null
+
+# Comprobamos si el comando anterior falló ($? diferente de 0)
+if [ $? -ne 0 ]; then
+    echo "Error: La carpeta no existe, no se puede continuar."
+    exit 1
+fi
+```
