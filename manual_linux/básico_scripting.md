@@ -2,7 +2,7 @@
 
 Un **script** es un archivo de texto que contiene una lista de comandos de linux ordenados.
 
-Muy útil para automaztizar tareas, copias de seguridad 
+Muy útil para automatizar tareas, copias de seguridad 
 
 ### ¿Cómo creamos un script?
 
@@ -10,7 +10,7 @@ Para crear un script tenemos que crear un archivo de extensión `.sh`. Por ejemp
 
 > `touch primer_script.sh`
 
-**Lo primero** que debemos escribir al crear un sript es la siguiente linea:
+**Lo primero** que debemos escribir al crear un script es la siguiente linea:
 
 > `#!/bin/bash`
 
@@ -55,7 +55,7 @@ mkdir mi_primer_script
 
 touch mi_primer_script/mensaje_del_script.txt 
 
-echo "Hola, estoy creando mi primer script chachi-piruli" >> mi_primer_script mensaje_del_script.txt' 
+echo "Hola, estoy creando mi primer script chachi-piruli" >> mi_primer_script/mensaje_del_script.txt' 
 
 cd mi_primer_script/ 
 
@@ -89,7 +89,21 @@ nombre="Me llamo Valentin"
 
 echo "Hola, $nombre"
 ```
-Importante que al asignar una variable **no podemos dejar espacios entre el `=`**
+Importante que al asignar una variable **no podemos dejar espacios entre el `=`**.
+También es útil saber que podemos guardar comandos dentro de variables.
+
+``` bash
+#!/bin/bash
+
+# Guardamos la fecha actual en formato AAAA-MM-DD
+FECHA=$(date +%Y-%m-%d)
+
+# Guardamos el nombre del usuario (lo más probable que sea nuestro usuario)
+USUARIO=$(whoami)
+
+echo "Hola $USUARIO, creando copia del día $FECHA..."
+mkdir -p ~/respaldos/backup_$FECHA
+```
 
 Evidentemente también podemos interactuar con el usuario en cuestión de la siguiente manera:
 
@@ -181,7 +195,7 @@ La estructura para hacer un bucle `for` en bash es la siguiente:
 
 *(Programa que crea 5 carpetas enumeradas)*
 ``` bash 
-for NUMERO in {1..5} do
+for NUMERO in {1..5}; do
     echo "Creando la carpeta Carpeta_$NUMERO..."
     mkdir -p "Carpeta_$NUMERO"
 done
@@ -206,7 +220,7 @@ done
 
 ### Argumentos en la linea de comandos
 
-Cuando usamos sccripts lo normal es pasar los paramétros en la propia linea de comandos y no ir parando para preguntar al usuario.
+Cuando usamos scripts lo normal es pasar los parámetros en la propia linea de comandos y no ir parando para preguntar al usuario.
 
 Para capturar y usar esos datos dentro del script, Bash reserva unas **variables especiales**:
 
@@ -302,3 +316,62 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 ```
+
+### Apuntes extra
+
+* ##### Colores en la terminal
+
+Podemos hacer nuestra terminal más visual añadiendole colores de la siguiente manera:
+
+``` bash
+
+# Definimos los colores
+VERDE="\033[0;32m"
+
+ROJO="\033[0;31m"
+
+AMARILLO="\033[1;33m"
+
+RESET="\033[0m" # Vuelve al color normal de la terminal
+
+# El flag -e es OBLIGATORIO para que interprete los colores
+echo -e "${VERDE} Proceso completado con éxito.${RESET}"
+echo -e "${AMARILLO} Advertencia: El disco está al 80%.${RESET}"
+echo -e "${ROJO} Error grave: Sin conexión a Internet.${RESET}"
+
+```
+
+* ##### Programas que un script se ejecute automáticamente
+
+Escribimos:
+
+> `crontab -e`
+
+Se abrirá un archivo con este formato:
+
+> `[minuto] [hora] [día del mes] [mes] [día de la semana] [comando o script]`
+
+Si queremos que se ejecute todos los dias a las 3 am por ejemplo ponmdremos:
+
+> `0 3 * * * /home/usuario/scripts/script.sh`
+
+Si queremos que se ejecute cada 20 minutos:
+
+> `*/20 * * * * /home/usuario/scripts/script.sh`
+
+* ##### Atajos 
+
+También podemos crear atajos para no tener que escribir comandos enteros, para debemos editar el archivo: `~/.bashrc`
+
+Usamos: 
+> `nano ~/.bashrc`
+
+Buscamos las lineas donde se encuentren los `alias` y escribimos lo que queramos, por ejemplo, si queremos que al escribir "apagar" en la terminal se apague nuestro ordenador ponemos:
+
+>`alias='shutdown +0'`
+
+Una vez hayamos escrito los atajos que queramos debemos actualizar el archivo, guardamos, salimos de nano y escribimos:
+
+> `source ~/.bashrc`
+
+Y así se habrá actualizado nuestro archivo.
