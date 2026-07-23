@@ -368,7 +368,7 @@ Usamos:
 
 Buscamos las lineas donde se encuentren los `alias` y escribimos lo que queramos, por ejemplo, si queremos que al escribir "apagar" en la terminal se apague nuestro ordenador ponemos:
 
->`alias='shutdown +0'`
+>`alias apagar='shutdown +0'`
 
 Una vez hayamos escrito los atajos que queramos debemos actualizar el archivo, guardamos, salimos de nano y escribimos:
 
