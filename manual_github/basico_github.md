@@ -25,7 +25,7 @@ Estos están creados con "Git" como base.
 
  Un repositorio es básicamente la carpeta de tu proyecto solo que al inicializarlo se crea una carpeta oculta en ella que se llama ".git" que contiene todos los archivos necesarios para que todo git funcione y puedas ejecutar los comandos. (Entre otras cosas contiene el historial de cambios, todos los commits que se hagan y la configuración).
  
- ![Carpeta .git](/images_github/carpeta_git.png)
+ ![Carpeta .git](images_github/carpeta_git.png)
 
  <br>
  <br>
@@ -39,7 +39,7 @@ Si has modificado varios archivos y queremos añadirlos todos de una vez (sin te
 
 A la hora de especificar archivos funciona igual que con comandos de terminal.
 
-![Cambio](/images_github/cambio.gif)
+![Cambio](images_github/cambio.gif)
 
 En este fragmento muestro (desde la interfaz gráfica de Visual Studio Code) como al realizar un cambio en un archivo del proyecto lo he añadido a el Staging Area manualmente.
 
@@ -71,7 +71,7 @@ Este comando puede tomar varios valores en su pámetro:
 
 Hasta ahora todos los cambios, guardados y todo lo que hemos hecho ha sido en nuestro repositorio **local**, es decir, en nuestro ordenador. Nada de lo que hemos hecho se ve reflejado aún en github. Para eso usamos este comando, para subir todos estos cambios al servidor/nube Github
 
- ![Fases](/images_github/fases.png)
+ ![Fases](images_github/fases.png)
 
 Aquí de manera más gráfica se muestra las fases 
 
@@ -144,7 +144,7 @@ Compara las dos versiones usando sus códigos de ID
 
 Trabajar con ramas es una buena práctica a la vez de muy útil. Su función principal es poder seguir con el desarrollo de algo mientras la rama principal, la cual es "main" o "master", se mantiene estable y funcionando. 
 
-![branch](/images_github/branch.png)
+![branch](images_github/branch.png)
 
 Ejemplo: Si quieres implementar una nueva funcionalidad, creas una nueva rama y trabajas sobre ella mientras la principal sigue funcionando estable, cuando esa nueva funcionalidad esté lista, fusionas la rama como la rama principal. Así el proyecto no ha dejado de funcionar en ningún momento y hemos podido implementar la nueva funcionalidad sin problemas. 
 
@@ -237,4 +237,4 @@ Vacía por completo la lista de stashes.
 
  Con esto podemos clonar un repositorio de github a nuestro ordenador. El enlace lo obtenemos desde aquí:
 
- ![clone](/images_github/clone.png)
+ ![clone](images_github/clone.png)
