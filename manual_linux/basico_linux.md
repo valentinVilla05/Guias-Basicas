@@ -19,7 +19,7 @@ El uso de terminal aunque al principio asusta y no se entiende es mucho más sim
 
 Debemos saber que a diferencia de windows que todo parte del disco C: en linux todo parte del directorio raiz `/`. También en linux **todo** es un archivo desde un fichero de texto hasta un teclado que enchufes es interpretado como un archivo:
 
-![estructura](/images_linux/carpetas.png)
+![estructura](images_linux/carpetas.png)
 Aquí podemos ver las carpetas que componen el sistema. 
 
 ¿Qué contiene cada carpeta?
@@ -83,7 +83,7 @@ Igualmente, si en algún momento no sabemos exactamente en que directorio estamo
 
  y esto nos dirá donde estamos exactamente. 
 
- Ejemplo: ![pwd](/images_linux/pwd.png)
+ Ejemplo: ![pwd](images_linux/pwd.png)
 
  Si queremos ver el contenido del directorio en el que estamos usamos:
 
@@ -91,7 +91,7 @@ Igualmente, si en algún momento no sabemos exactamente en que directorio estamo
 
  Esto nos muestra una lista de los archivos y carpetas que hay en el directorio en el que nos encontramos.
 
- Ejemplo: ![ls](/images_linux/ls.png) 
+ Ejemplo: ![ls](images_linux/ls.png) 
 
  `ls` tiene muchos parámetros para mostrar más o menos información en la lista, para verlo más en detalle podemos consultarlo aquí:
 
@@ -111,7 +111,7 @@ Si queremos movernos un directorio hacia arriba (volver atrás), usamos:
 
 Es útil saber que cuando estamos poniendo rutas o comandos siempre podemos usar la tecla 'tabulador' que nos "autocompletará" lo que estamos escribiendo por ejemplo: 
 
-![autocompletado](/images_linux/autocompletado.gif)
+![autocompletado](images_linux/autocompletado.gif)
 
 Hay diferentes tipos de terminales, aunque el autocompletado no aparezca en pantalla podemos usar tabulador y lo escribirá igualmente.
 
@@ -192,7 +192,7 @@ Nos muestra el contenido como cat pero en el que podremos ir subiendo o bajando 
 
 Por otro lado, si queremos editar un archivo sin necesidad de abrir un editor de texto podemos hacerlo desde el propio editor que tiene la terminal `nano`, ejemplo:
 
-![nano](/images_linux/nano.gif)
+![nano](images_linux/nano.gif)
 
 **¿Cómo se maneja Nano?**
 Como estás dentro de la terminal, los ratones no funcionan. Te mueves con las flechas del teclado y abajo del todo verás un menú con atajos. El símbolo `^` significa la tecla **`Ctrl`**:
@@ -206,7 +206,7 @@ El sistema de permisos en linux es muy importante debido a que es un sistema muy
 
 Para ver los permisos que tiene cada archivo podemos usar como vimos `ls` con la flag `-l`:
 
-![permisos](/images_linux/permisos.png)
+![permisos](images_linux/permisos.png)
 
 #### ¿Qué significa cada cosa?
 
@@ -308,7 +308,7 @@ Vamos a ver el historial de comandos que hemos usado pero solo quiero ver los co
 
 > `history | grep "git"`
 
-![grep](/images_linux/grep.png)
+![grep](images_linux/grep.png)
 
 [Comando `grep` completo](https://cheat.sh/grep)
 
