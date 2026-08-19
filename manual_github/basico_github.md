@@ -156,7 +156,7 @@ Con este comando conseguimos la lista de todas las ramas que haya. (La rama en l
 
 Con este comando creamos una rama nueva con el nombre que le pongamos.
 
-> `git checkout nombre_rama`
+> `git checkout -b nombre_rama`
 
 Con este comando cambiamos de la rama en la que estemos a la rama que digamos
 
