@@ -1,0 +1,66 @@
+Tema 1: Introducción a las Bases de Datos:
+    * Conceptos clave: Base de datos (datos + metadatos/esquema) y Sistema de Gestión de Bases de Datos (SGBD).
+    * Inconvenientes de los sistemas de ficheros: Redundancia e inconsistencia, dificultad de acceso, aislamiento de datos, problemas de integridad, falta de atomicidad en actualizaciones, problemas de acceso concurrente y seguridad.
+    * Niveles de abstracción: Nivel físico, nivel lógico y nivel de vistas.Usuarios de bases de datos: Usuarios finales, programadores de aplicaciones y Administradores de Bases de Datos (DBA).
+    * Componentes y funciones del SGBD: Esquema, lenguajes (DDL, DML, DCL), diccionario de datos y almacenamiento.
+    * Características del SGBD: Acceso múltiple, concurrencia, flexibilidad, protección ante fallos, independencia física y lógica, control de redundancia.
+    * Tipos de bases de datos: Por modelo de datos (Jerárquico, Red, Relacional, Orientado a Objetos, NoSQL) y por ubicación de información (Local, Distribuida, Federada, En la nube).
+
+
+Tema 2: Álgebra Relacional:
+    * Conceptos del modelo relacional: Relación (tabla), tupla (registro), atributo (columna), grado/aridad, dominio, clave primaria y restricciones de relación.
+    * Operaciones básicas:
+        - Selección ($\sigma$) y Proyección ($\pi$).
+        - Asignación y Renombrado ($\rho$).
+        - Operadores lógicos (NOT, AND, OR) en predicados de selección.
+        - Operaciones de conjuntos: Unión ($\cup$), Intersección ($\cap$) y Diferencia ($-$).
+        - Producto cartesiano ($\times$).Operaciones compuestas: Reunión / Join ($\bowtie$), Equijoin y Natural Join.
+
+
+Tema 3: Lenguaje de Consultas SQL:
+    * Clasificación de SQL: DDL (Data Definition Language), DML (Data Management Language) y DCL (Data Control Language).
+    * Tipos de datos básicos: VARCHAR, NUMBER, DATE.
+    * Definición de datos (DDL):
+        - Sentencias: CREATE TABLE, ALTER TABLE, DROP TABLE, CREATE VIEW, DROP VIEW, CREATE INDEX, DROP INDEX.
+        - Restricciones (Constraints): PRIMARY KEY, UNIQUE, NOT NULL, CHECK, FOREIGN KEY (REFERENCES), cláusulas ON DELETE / ON UPDATE (CASCADE, RESTRICT, SET NULL).
+    * Manipulación y consulta de datos (DML):
+        - Sentencias de modificación: INSERT INTO, UPDATE ... SET, DELETE FROM.
+        - Consultas básicas (SELECT): FROM, WHERE, ORDER BY, GROUP BY, HAVING.
+        - Operadores de filtrado: =, <>, LIKE, BETWEEN, IN, IS NULL, AND, OR, NOT.
+        - Funciones de agregación: COUNT, SUM, AVG, MAX, MIN.
+        - Alias de columna/tabla y productos cartesianos.
+    * Consultas avanzadas:
+         - Combinación de tablas (Joins explícitos e implícitos).
+         - Subconsultas anidadas, variables de tupla y subconsultas parametrizadas/correlacionadas.
+         - Operador [NOT] EXISTS y operaciones de conjuntos (UNION, INTERSECT, MINUS).
+         - Extensión de DML con subconsultas.
+    * Seguridad y Control (DCL): Control de accesos y gestión de privilegios mediante GRANT y REVOKE.
+
+
+Tema 4: Modelo Entidad-Relación (ERM/EERM) y Transformación Relacional:
+    * Diseño conceptual: Esquema conceptual, independencias de diseño y modelos de datos.
+    * Elementos del Modelo ER:
+        - Entidades y Entidades débiles (dependencia de identificación y existencia).
+        - Atributos: simples, compuestos, monovaluados, multivaluados, almacenados y derivados.
+        - Claves: Superclave, clave candidata, clave primaria (PK), claves alternativas y clave foránea (FK).
+        - Relaciones y Cardinalidad ($1:1$, $1:N$, $N:M$). Relaciones ternarias y de grado superior.
+    *  Conceptos avanzados de modelado (EERM):
+        - Agregación (abstracción de relaciones como entidades).
+        - Especialización y Generalización (Jerarquías "Es Un" / ISA, subtipos y supertipos).
+        - Pautas de diseño: conversión de relaciones ternarias a binarias y eliminación de redundancias.
+    * Transformación al Modelo Relacional (Paso a Tablas):
+        - Mapeo de entidades simples, entidades débiles y atributos multivaluados.
+        - Mapeo de relaciones binarias ($1:1$, $1:N$, $N:M$), ternarias y agregaciones.
+        - Mapeo de jerarquías de herencia (estrategias: tabla por subclase, solo subclases, solo superclase).
+
+
+Tema 5: Normalización:
+    * Fundamentos Objetivos de la normalización, problemas de diseño (redundancia y anomalías de inserción, borrado y modificación).
+    * Dependencias funcionales:
+        - Dependencia Funcional Simple / Elemental (FD).
+        - Dependencia Funcional Completa (FFD).
+        - Dependencia Transitiva (TD).
+    * Formas Normales:
+        - Primera Forma Normal (1NF): Clave primaria definida, atributos con dominio atómico (sin grupos repetitivos/multivaluados) y dependencias funcionales sobre la clave. Procedimiento de descomposición.
+        - Segunda Forma Normal (2NF): Requisito 1NF + ausencia de dependencias parciales (todos los atributos no clave deben depender de forma completa/FFD de toda la clave primaria). Procedimiento de descomposición.
+        - Tercera Forma Normal (3NF): Requisito 2NF + ausencia de dependencias transitivas (ningún atributo no clave depende de otro atributo no clave). Procedimiento de descomposición.
