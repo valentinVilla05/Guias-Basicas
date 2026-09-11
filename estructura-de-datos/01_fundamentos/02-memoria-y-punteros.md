@@ -1,6 +1,6 @@
 # Memoria y Punteros en C++
 
-### La Memoria RAM
+### 1. La Memoria RAM
 Es necesario entender el funcionamiento de la memoria ram para poder manejar correctamente punteros y memoria dinámica-
 
 * La memoria RAM se divide en celdas donde se almacenan los distintos valores con su tipo de dato correspondiente, *int, float, double, char, string..*
@@ -18,7 +18,7 @@ Es necesario entender el funcionamiento de la memoria ram para poder manejar cor
 
 También es importante entender que no todos los tipos de dato ocupan el mismo espacio en memoria.
 
-### Tipos de datos y memoria
+### 2. Tipos de datos y memoria
 
 | Tipo de dato | ¿Qué almacena? | Memoria |
 |--------------|----------------|---------|
@@ -31,9 +31,130 @@ También es importante entender que no todos los tipos de dato ocupan el mismo e
 | `string` | Texto | Variable |
 
 
-### Operadores
+### 3. Operadores
+**Operador dirección (&)**: Se coloca delante de una variable existente para obtener su dirección de memoria en formato hexadecimal. Significa "¿dónde está guardada esta variable?".
 
-Operador dirección (&): Se coloca delante de una variable existente para obtener su dirección de memoria en formato hexadecimal. Significa "¿dónde está guardada esta variable?".
-* **Operador de desreferencia (`*`):** Se coloca delante de un puntero para acceder al dato que hay dentro de la dirección que guarda. Significa *"¿qué valor hay dentro de esa dirección?"*.
+**Operador de desreferencia / indirección (*)**: Se coloca delante de un puntero para acceder al contenido real ubicado en la dirección que este almacena. Significa "¿qué valor hay dentro de esa dirección?".
+
+```text
+& = Ubicación ("Encuentra la dirección").
+* = Contenido ("Ve a la dirección y lee/modifica lo que hay dentro").
+```
+----
+
+### 4. ¿Qué es un puntero?
+Un puntero no es más que una variable cuyo valor es una dirección de memoria de otra variable
+
+Si una variable entera guarda el número 42, un puntero guardará algo como 0x7ffc82.
+
+Para declarar un puntero se coloca un asterisco * entre el tipo de dato y el nombre del puntero:
+```cpp
+C++
+int x = 20;       // Variable normal
+int* ptr = &x;    // 'ptr' guarda la dirección de memoria de 'x'
+```
+
+#### Punteros nulos
+Un puntero no inicializado contiene **basura de memoria** es decirapunta a una dirección aleatoria. SIempre que creemos un puntero sin asignarle una variable debemos incializarlo a `nullptr`
+
+```cpp
+int* p = nullptr; // Puntero seguro que apunta a 'nada'
+
+if (p != nullptr) {
+    std::cout << *p << std::endl; // Evitamos que pueda lanzar una excepción
+}
+```
+
+#### Punteros Colgantes
+Ocurre cuando un puntero apunta a una dirección de memoria que ya ha sido previamente eliminada
+
+---
+### 5. La organización de memoria : Stack vs Heap
+Hay dos zonas principales de memoria en c++
+
+``` text
+┌─────────────────────────────────────────────────────────┐
+│                      MEMORIA RAM                        │
+├────────────────────────────┬────────────────────────────┤
+│           STACK            │            HEAP            │
+│  - Gestionado por el CPU   - Gestionado manualmente     │
+│  - Tamaño fijo y rápido    - Tamaño grande / flexible   │
+│  - Estructura LIFO (Pila)  - Acceso mediante punteros   │
+└────────────────────────────┴────────────────────────────┘
+```
+
+| Característica | El Stack (Pila) | El Heap (Montículo) |
+|---|---|---|
+| Gestión | Automática por el compilador | Manual por el programador |
+| Velocidad | Extremadamente rápido | Más lento |
+| Duración de datos | Viven solo mientras dure su función/ámbito | Viven hasta que tú los elimines explícitamente |
+| Asignación | Variables locales declaradas normalmente (`int x;`) | Memoria dinámica reservada con `new` |
+
+### 6. Memoria dinámica
+La Memoria Dinámica nos permite **reservar espacio en el Heap durante el tiempo de ejecución** (por ejemplo, cuando no sabemos de antemano cuántos elementos va a ingresar el usuario)
+
+#### Reservar y Liberar Memoria Individual
+```cpp
+// 1. Reservar un entero en el Heap
+int* p = new int(50); // Se crea el dato en el Heap y 'p' guarda su direccion
+
+std::cout << *p << std::endl; // Imprime 50
+
+// 2. Liberar la memoria cuando ya no se necesite
+delete p; 
+p = nullptr; // Buena practica para evitar punteros colgantes
+```
+#### Reservar y Liberar Arrays Dinámicos
+``` cpp
+int tamano = 5;
+int* arreglo = new int[tamano]; // Reserva espacio para 5 enteros contiguos en el Heap
+
+for (int i = 0; i < tamano; ++i) {
+    arreglo[i] = (i + 1) * 10;
+}
+
+// Para liberar un array se usa delete[] con corchetes
+delete[] arreglo;
+arreglo = nullptr;
+```
+
+**Fugas de Memoria (Memory Leaks)** : Si usamos `new` sin poner `delete`, la memoria quedará bloqueada en la RAM hasta que se cierre la aplicación, lo que puede agotar toda la memoria del sistema
+
+### 7. Paso por Valor vs. Paso por Referencia
+Tenemos 3 maneras distintas
+
+``` cpp
+#include <iostream>
+
+// 1. Paso por VALOR: Se crea una COPIA. Modificar 'a' no afecta a la variable original.
+void porValor(int a) {
+    a = 5;
+}
+
+// 2. Paso por PUNTERO: Pasa la dirección. Modifica el valor original.
+void porPuntero(int* a) {
+    if (a != nullptr) {
+        *a = 5;
+    }
+}
+
+// 3. Paso por REFERENCIA (&): Alias directo a la variable original. Más limpio y seguro.
+void porReferencia(int& a) {
+    a = 5;
+}
+
+int main() {
+    int x = 10;
+
+    porValor(x);
+    std::cout << x << std::endl; // Imprime 10 (sin cambios)
+
+    porPuntero(&x);
+    std::cout << x << std::endl; // Imprime 5
+
+    porReferencia(x);
+    std::cout << x << std::endl; // Imprime 5
+}
+```
 
 ---

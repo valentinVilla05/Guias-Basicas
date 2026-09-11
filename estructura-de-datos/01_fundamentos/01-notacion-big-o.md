@@ -101,7 +101,7 @@ for (int i = n; i > 0; i /= 2) {
 ```
 
 #### 5. Complejidad cuasilineal -- O(n log n) --
-Típica de algoritmos de ordenación eficientes (*MergeSort*). Se da cuando dividimos el problema a la mitad ($O(\log n)$) y en cada nivel procesamos todos los elementos ($O(n)$).
+Típica de algoritmos de ordenación eficientes (*MergeSort*). Se da cuando dividimos el problema a la mitad (O(log n)) y en cada nivel procesamos todos los elementos O(n).
 
 ```cpp
 
