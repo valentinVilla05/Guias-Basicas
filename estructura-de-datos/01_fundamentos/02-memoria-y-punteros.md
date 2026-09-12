@@ -2,7 +2,7 @@
 
 ### 1. La Memoria RAM
 
-Es necesario entender el funcionamiento de la memoria ram para poder manejar correctamente punteros y memoria dinámica-
+Es necesario entender el funcionamiento de la memoria ram para poder manejar correctamente punteros y memoria dinámica.
 
 - La memoria RAM se divide en celdas donde se almacenan los distintos valores con su tipo de dato correspondiente, _int, float, double, char, string.._
 - Cada casillero tiene un número de dirección único (por ejemplo, `0x7ffc82`).
@@ -60,7 +60,7 @@ int* ptr = &x;    // 'ptr' guarda la dirección de memoria de 'x'
 
 #### Punteros nulos
 
-Un puntero no inicializado contiene **basura de memoria** es decirapunta a una dirección aleatoria. SIempre que creemos un puntero sin asignarle una variable debemos incializarlo a `nullptr`
+Un puntero no inicializado contiene **basura de memoria** es decir apunta a una dirección aleatoria. Siempre que creemos un puntero sin asignarle una variable debemos incializarlo a `nullptr`
 
 ```cpp
 int* p = nullptr; // Puntero seguro que apunta a 'nada'
@@ -78,7 +78,7 @@ Ocurre cuando un puntero apunta a una dirección de memoria que ya ha sido previ
 
 ### 5. La organización de memoria : Estática vs Stack vs Heap
 
-Hay dos zonas principales de memoria en c++
+Hay tres zonas principales de memoria en c++
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐

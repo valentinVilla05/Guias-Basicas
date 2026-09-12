@@ -1,16 +1,20 @@
 # Templates
->Es esencial entender el funcionamiento de las templates ya que serán usadas para muchas de las estructuras lineales por tema de eficiencia
+
+> Es esencial entender el funcionamiento de las templates ya que serán usadas para muchas de las estructuras lineales por tema de eficiencia
 
 ## 1. Conceptos
+
 Una **plantilla** (`template`) es una herramienta de C++ que permite escribir código **genérico**, es decir sin especificar el tipo de dato con el que estamos trabajando, (`int`,`float`,`std::string`,`...`)
 
 ### ¿Cómo funciona realmente?
+
 Es un mecanismo de **metaprogramación**, lo que quiere decir que el código no se compila directamente, sino que sirve como un **"molde"** para que el compilador genere el código real cuando se utiliza
 
 ## 1.2 El problema que resuelven
+
 Imagina que tenemos que definir dos tipos de funciones que reciben números y tiene que determinar cual es mayor de ambos, en ese caso tenemos que programar dos funciones distintas:
 
-``` cpp
+```cpp
 //Versión de enteros
 int maximo(int a, int b){
     if(a>b)
@@ -25,8 +29,10 @@ double maximo(double a, double b){
     return b;
 }
 ```
+
 En este caso las funciones son cortas pero en caso de que tengamos que escribir mucho código llega un punto en el que es más eficaz definir una **función genérica** como:
-``` cpp
+
+```cpp
 template <typename T>
 T maximo(T a, T b) {
     if (a>b)
@@ -36,25 +42,32 @@ T maximo(T a, T b) {
 ```
 
 ### Desventajas del código especificado:
-*   **Mantenimiento pesado**: Cualquier cambbio en lógica obliga a modificar todas las sobrecargas
-* **Ineficiencia**: Si tenemos 10 tipos de datos diferentes terminamos con 10 funciones idénticas
+
+- **Mantenimiento pesado**: Cualquier cambio en lógica obliga a modificar todas las sobrecargas
+- **Ineficiencia**: Si tenemos 10 tipos de datos diferentes terminamos con 10 funciones idénticas
 
 ## 2. Plantillas de Funciones
+
 ### 1. Sintaxis básica
+
 Se utiliza la palabra clave `template` seguida de la lista de parámetros entre corchetes angulares: `< >`
 
 Si nos fijamos en el código anterior y lo analizamos poco a poco:
-* `typename T` : Declara un parámetro de tipo (o tipo de dato abstracto) llamado T. Representa un tipo de dato que concretamos más adelante (en el main)
 
-* `T a, T b`: Indica la creación de dos parámetros de tipo `T`
+- `typename T` : Declara un parámetro de tipo (o tipo de dato abstracto) llamado T. Representa un tipo de dato que concretamos más adelante (en el main)
 
-* `T maximo`: La función devuelve un valor del mismo tipo `T`
+- `T a, T b`: Indica la creación de dos parámetros de tipo `T`
+
+- `T maximo`: La función devuelve un valor del mismo tipo `T`
 
 ---
-### 2. Instancia y Deducción de Tipos
-El proceso mediante el cual el compilador genera una función real a partir de la plantilla se llama `instanciación` 
 
-###  A. Deducción Implícita
+### 2. Instancia y Deducción de Tipos
+
+El proceso mediante el cual el compilador genera una función real a partir de la plantilla se llama `instanciación`
+
+### A. Deducción Implícita
+
 El compilador deduce automáticamente el tipo `T` a partir de los argumentos pasados:
 
 ```cpp
@@ -63,16 +76,20 @@ double y = maximo(3.5, 2.1);  // El compilador deduce T = double y genera maximo
 ```
 
 ### B. Especificación Explícita
+
 Si los tipos de argumentos no coinciden o si deseas forzar un tipo concreto, se indica explícitamente entre `< >`
 
 ```cpp
 auto z = maximo<double>(5, 3.14); // Convierte 5 a double y usa T = double
 ```
-----
+
+---
+
 ### 3. Múltiples Parámetros de Tipo
+
 Si los argumentos pueden ser de tipos diferentes, se declaran más parámetros de tipo:
 
-``` cpp
+```cpp
 template <typename T, typename U>
 void imprimirPar(const T &primero, const U &segundo) {
     std::cout << "(" << primero << ", " << segundo << ")\n";
@@ -83,12 +100,14 @@ imprimirPar(10, "Hola"); // T = int, U = string
 ```
 
 ## 3. Plantillas de Clase (`Class Templates`)
->No solo podemos definir funciones de tipo genérico si no que también podemos definir clases de tipo `template`
+
+> No solo podemos definir funciones de tipo genérico si no que también podemos definir clases de tipo `template`
 
 ### 1. Definición de una Clase Genérica
-Permiten crear estructuras de datos y clases que operan sobre cualquier  tipo de dato
 
-``` cpp
+Permiten crear estructuras de datos y clases que operan sobre cualquier tipo de dato
+
+```cpp
 template <typename T>
 class ContenedorSimple {
 private:
@@ -109,9 +128,9 @@ public:
 
 ### 2. Uso de Clase
 
-> Importante: A diferencia de las funciones, al instanciar una plantilla de clase **siempre es obligatorio** indicar el tipo entre `< >` 
+> Importante: A diferencia de las funciones, al instanciar una plantilla de clase **siempre es obligatorio** indicar el tipo entre `< >`
 
-``` cpp
+```cpp
 ContenedorSimple<int> miEntero(42);
 ContenedorSimple<std::string> miTexto("Estructuras de Datos");
 
@@ -120,14 +139,16 @@ std::cout << miTexto.getElemento() << std::endl;
 ```
 
 ## 4. Compilación de plantillas
+
 **IMPORTANTE** : La definición (implementación) de plantillas debe ser accesible en el archivo cabecera (`h`) **NUNCA** en el `cpp`
 
 En el caso de que la declaración se realice en el cpp saltará un error: "Undefined Reference"
 
 ## 5. Non-type Parameters
-Aparte de recibir tipos de datos (`typename T`), las plantillas pueden recibir valores constantes evaluables en tiempo de compilación: (*enteros, bools, enum...*)
 
-``` cpp
+Aparte de recibir tipos de datos (`typename T`), las plantillas pueden recibir valores constantes evaluables en tiempo de compilación: (_enteros, bools, enum..._)
+
+```cpp
 template <typename T, std::size_t N>
 class ArrayEstatico {
 private:
@@ -148,13 +169,15 @@ ArrayEstatico<int, 5> miArray; // Crea un array estático de 5 enteros
 std::cout << "Tamaño: " << miArray.getTamano() << std::endl;
 ```
 
-* Ventaja : Podemos crear estructuras con memoria estática, es decir sin necesitar `new` ni `delete`
+- Ventaja : Podemos crear estructuras con memoria estática, es decir sin necesitar `new` ni `delete`
 
 ## 6. Especialización de Plantillas
+
 Si lo requerimos podemos implementar una plantilla que funcione genéricamente de una forma pero si le pasamos un tipo de dato específico cambie su comportamiento
 
 **Ejemplo de su implementación:**
-``` cpp
+
+```cpp
 // 1. Plantilla genérica
 template <typename T>
 class Impresor {
@@ -179,6 +202,7 @@ Impresor<bool>::imprimir(true);   // Usa la especialización -> "Valor booleano:
 ```
 
 ## 7. Resumen y Buenas Prácticas
+
 1. **Escribe y prueba primero con un tipo concreto (ej. int o double)** Si estamos haciendo una función o clase compleja podemos crear la clase específica para un tipo de dato y una vez funcione se puede trasladar a template sustituyendo el tipo de dato por `T` y añadiendo `template <typename T>`
 
 2. **Todo en el .h**: En ningún momento necesitamos el cpp
