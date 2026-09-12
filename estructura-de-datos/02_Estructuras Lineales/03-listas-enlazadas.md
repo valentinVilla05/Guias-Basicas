@@ -12,12 +12,15 @@ Un nodo se representa de la siguiente manera:
 * Dato: valor que queremos almacenar
 * Siguiente: una referencia/puntero que indica donde está el **siguiente nodo**
 
-> Aclaración: El último nodo debe de tener el puntero asignado a nullptr
+> Aclaración: El último nodo debe de tener el puntero asignado a `nullptr`
 
 A diferencia de un array, **los nodos no tienen porqué estar juntos en memoria**. Pueden estar en posiciones completamente diferentes y conectadas por punteros
 
 Al primero de los nodos se le conoce como **`cabecera`** y al último **`cola`**
 
+
+## Representación
+![Representación_lista_enlazada](../assets/img/listas_enlazadas.gif)
 ---
 
 ### 1. Comparativa de Complejidad: Vector Dinámico vs. Lista Enlazada

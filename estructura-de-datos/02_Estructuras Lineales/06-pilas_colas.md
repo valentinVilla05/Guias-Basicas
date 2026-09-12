@@ -10,19 +10,7 @@ Una **pila** (O stack) es una estructura de datos lineal que se basa  en la filo
     * `pop()` : Elimina el elemento situado arriba del todo
     * `empty()`: Comprueba si la lista está vacía
 
-
-``` text
-        APILAR (push)              DESAPILAR (pop)
-            │                            ▲
-            ▼                            │
-      ┌───────────┐                ┌───────────┐
-      │  Dato N   │ ◄── TOP        │  Dato N   │ ◄── (Extraído)
-      ├───────────┤                ├───────────┤
-      │  Dato 2   │                │  Dato 2   │ ◄── Nuevo TOP
-      ├───────────┤                ├───────────┤
-      │  Dato 1   │                │  Dato 1   │
-      └───────────┘                └───────────┘
-```
+![pila](../assets/img/pila_lifo.gif)
 
 ### 2. Implementaciones Básicas de una Pila
 
@@ -69,14 +57,7 @@ Una **cola** (O queue) es una estructura lineal de datos basada en la filosofía
     * `front()`: Consulta el primer elemento(el más antiguo)
     * `pop()`: elimina el primer elemento
 
-``` text
-                    ┌───────────┐───────────┐───────────┐
-primer elemento ->  │  Dato 1   │  Dato 2   │   Dato 3  | <- último elemento
-                    └───────────┘───────────┘───────────┘
-                           ↑                       ↑
-                       DESENCOLAR                ENCOLAR
-                       (pop front)             (push back)
-```
+![Colas](../assets/img/cola_fifo.gif)
 
 ### 3. Implementaciones Básicas de una Cola
 ### A. Cola Estática mediante Vector Circular
@@ -117,10 +98,7 @@ Se suele implementar mediante una lista enlazada que mantiene los dos punteros `
 ### 1.Concepto
 Es una estructura de datos donde cada elemento tiene asociada una **prioridad**. El elemento que se extrae con `pop()` o se consulta con `top()` es siempre el de **mayor prioridad**. 
 
-``` text
-    INSERCIÓN (push)                         EXTRACCIÓN (pop)
-    push(6), push(8), push(2) ────────► [Prioridad: 8, 6, 2] ────────► sale 8
-```
+![Cola_Prioridad](../assets/img/cola_prioridad.gif)
 ---
 
 ### 2.Formas de Implementación

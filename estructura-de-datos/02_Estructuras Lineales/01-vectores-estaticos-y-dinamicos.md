@@ -100,6 +100,7 @@ En lugar de recorrer el vector de principio a fin **O(n)** aplica:
 4. Si es mayor, descarta toda la mitad izquierda y se queda con la derecha
 5. Repite el proceso hasta encontrarlo
 
+![Busqueda_binaria](../assets/img/busqueda_binaria.gif)
 Complejidad: **O(log2 (n))**
 ``` cpp
 int busquedaBinaria(const int v[], int tamano, int datoBuscado) {

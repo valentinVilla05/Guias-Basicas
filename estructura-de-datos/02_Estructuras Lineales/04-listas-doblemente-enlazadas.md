@@ -5,32 +5,7 @@ En esta lección se abordan tres estructuras lineales avanzadas: **las listas do
 ### 1. Definición
 Una lista **doblemente enlazada** es una estructuras de datos secuencial donde cada nodo almacena el elemento de dato y dos punteros: uno al nodo posterior (`sig`) y otro al anterior (`ant`)
 
-```text 
-         LISTA DOBLEMENTE ENLAZADA
-
-        ant          dato          sig
-         ↓             ↓             ↓
-     ┌─────────┬───────────┬─────────┐
-     │   NULL  │    45     │  0x2000 │
-     └─────────┴───────────┴─────────┘
-         ↑                         ↓
-         │                         │
-     ┌─────────┬───────────┬─────────┐
-     │  0x1000 │    12     │  0x3000 │
-     └─────────┴───────────┴─────────┘
-         ↑                         ↓
-         │                         │
-     ┌─────────┬───────────┬─────────┐
-     │  0x2000 │    89     │  0x4000 │
-     └─────────┴───────────┴─────────┘
-         ↑                         ↓
-         │                         │
-     ┌─────────┬───────────┬─────────┐
-     │  0x3000 │    33     │  NULL   │
-     └─────────┴───────────┴─────────┘
-                                   ↑
-                                  FIN
-```
+![lista_doblemente_enlazada](../assets/img/lista_doblemente_enlazada.gif)
 
 * **Ventajas claves**
     * Permite **iteración bidireccional**

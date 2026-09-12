@@ -2,7 +2,8 @@
 
 En esta lección se estudian dos formas avanzadas de organización de datos: **las matrices** (arrays bidimensionales/multidimensionales) y **los conjuntos de bits** (Bitset), analizando su representación en memoria, implementación mediante plantillas en C++ y su eficiencia algorítmica.
 
-
+#### Representación:
+![matrices-bitset](../assets/img/arrays_y_bitsets.gif)
 ## Parte I : Matrices
 ### 1. Definición:
 Una matriz o array bidimensional de tamaño $n \times m$ es **un contenedor secuencial que almacena objetos del mismo tipo en una zona contigua de memoria**, utilizando dos índices: uno para las **filas** ($n$) y otro para las **columnas** ($m$)
@@ -87,9 +88,9 @@ Matriz<T> Matriz<T>::operator*(const Matriz<T>& a) const {
 ### 1. Definición de Conjunto
 Un conjunto $P$ es una **colección de elementos sin orden predeterminado y sin elementos repetidos**
 
-**Definiciones**
+**Definiciones: **
 
-| Representación | Sigificado|
+| Representación | Significado|
 | ------------- | ---------- |
 | **x ∈ P** | x es miembro del conjunto P |
 | **P = ∅** | P es el conjunto vacío |
@@ -97,6 +98,8 @@ Un conjunto $P$ es una **colección de elementos sin orden predeterminado y sin 
 | **P⋃Q** | (unión) todos los elementos de P OR Q|
 | **P⋂Q** | (intersección) los elementos de P AND Q|
 |**P-Q** |  resta, los elementos de P que no estén en Q |
+
+#### Representación:
 
 ### 2. Comparativa: Vectores de Datos vs. Conjunto de Bits (Bitset)
 | Criterio | Conjunto basado en Vector | Conjunto de Bits (Bitset) |
