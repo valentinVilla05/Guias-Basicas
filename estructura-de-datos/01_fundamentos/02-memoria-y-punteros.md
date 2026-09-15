@@ -131,7 +131,36 @@ arreglo = nullptr;
 ```
 
 **Fugas de Memoria (Memory Leaks)** : Si usamos `new` sin poner `delete`, la memoria quedará bloqueada en la RAM hasta que se cierre la aplicación, lo que puede agotar toda la memoria del sistema
+#### Vector de enteros en memoria dinámica
+```cpp
+class VectorInt{
+    private:
+        int *mem;
+        long int tam;
+    public:
+        VectorInt(long int atam){
+            mem=new int[tam=atam];
+        }
+        ~VectorInt(){
+            delete[] mem;
+        }
+        int leer(long int pos){
+            return mem[pos];
+        }
+        void escribir(long int pos, const int &valor){
+            //Es una práctica buena pasar con const (tipo de dato) &(parametro) por temas de eficacia , sin embargo como int es un tipo de dato pequeño no tenemos porq hacerlo obligatoriamente, para clases, string y demás si!
+            
+            //mem[pos]=valor; En los apuntes hace esto lo cual está mal!! imagina que es un vector de tamaño 3 y le pasamos 4 , el programa se queda totalmente colgado
 
+            //Manera Correcta
+            if(valor>=0 && valor<=pos){
+                mem[pos]=valor;
+            }else{
+                throw std::out_of_range("NO SE ENCUENTRA DENTRO DEL VECTOR!");
+            }
+        }
+}
+```
 ### 7. Paso por Valor vs. Paso por Referencia
 
 Tenemos 3 maneras distintas
