@@ -172,6 +172,9 @@ Invierten el sentido de la iteración
 
 - `.rend()` apunta a la posición previa al primer elemento
 
+* El operador `++it` desplaza el iterador hacia atrás en el contenedor.
+
+
 ```cpp
 std::vector<int> v = {1, 2, 3};
 
@@ -180,7 +183,6 @@ for (auto it = v.rbegin(); it != v.rend(); ++it) {
 }
 ```
 
-El operador ++it desplaza el iterador hacia atrás en el contenedor.
 
 ## 6. Recomendaciones
 
