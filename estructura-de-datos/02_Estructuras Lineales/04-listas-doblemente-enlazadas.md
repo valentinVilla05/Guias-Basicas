@@ -1,5 +1,5 @@
 # Listas Doblemente Enlazadas, Circulares y Matrices Dispersas
-En esta lección se abordan tres estructuras lineales avanzadas: **las listas doblemente enlazadas**, **las listas circulares** y **las matrices dispersas** (implementadas mediante listas de listas).
+En esta lección se abordan tres estructuras lineales avanzadas: **las listas doblemente enlazadas**, **las listas circulares** y **las matrices dispersas** (implementadas mediante listas de listas)
 
 ## Parte I: Listas Doblemente Enlazadas
 ### 1. Definición
@@ -8,7 +8,7 @@ Una lista **doblemente enlazada** es una estructuras de datos secuencial donde c
 ![lista_doblemente_enlazada](../assets/img/lista_doblemente_enlazada.gif)
 
 * **Ventajas claves**
-    * Permite **iteración bidireccional**
+    * Permite **iteración bidireccional**, (lo q no estaba permitido en las listas enladas simples)
     * Garantiza tiempo constante $O(1)$ para la inserción y el borrado en cualquier posición (siempre q se tenga referencia o iterador a dicho nodo)
 
 ### 2. Estructura del Nodo e Iterador en C++
@@ -205,7 +205,8 @@ public:
 
 #### Desventajas
 - **Mayor consumo de memoria:** Cada nodo requiere dos punteros en lugar de uno.
-- **Complejidad de punteros:** Las inserciones y borrados exigen actualizar hasta 4 punteros de forma coordinada.
+- **Complejidad de punteros:** Las inserciones y borrados exigen actualizar hasta 4 punteros de forma coordinada
+
 
 ---
 
@@ -213,10 +214,10 @@ public:
 
 #### Ventajas
 - **Sin punteros nulos:** Todo nodo tiene un sucesor válido, simplificando los algoritmos cíclicos.
-- **Ahorro de referencia:** Solo requieren el puntero `cola` para acceder tanto al final como al inicio en `O(1)`.
+- **Ahorro de referencia:** Solo requieren el puntero `cola` para acceder tanto al final como al inicio en `O(1)`
 
 #### Desventajas
-- **Riesgo de bucles infinitos:** Si no se gestiona correctamente la condición de parada durante las iteraciones, se pueden producir bucles sin fin.
+- **Riesgo de bucles infinitos:** Si no se gestiona correctamente la condición de parada durante las iteraciones, se pueden producir bucles sin fin
 
 ---
 

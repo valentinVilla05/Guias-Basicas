@@ -1,10 +1,10 @@
 # Iteradores en C++
 
-> Un iterador es un "puntero inteligente" que sirve como puente único para recorrer cualquier contenedor (`vector`, `list`, `set`) exactamente de la misma forma, sin importar cómo guarde la memoria por dentro.
+> Un iterador es un "puntero inteligente" que sirve como puente único para recorrer cualquier contenedor (`vector`, `list`, `set`) exactamente de la misma forma, sin importar cómo guarde la memoria por dentro
 
 ## 1. Concepto
 
-Un **iterador** es un objeto que abstrae el comportamiento de un **puntero**. Su objetivo es dar una interfaz unificada para acceder, recorrer y modificar elementos en los contenedores de la STL.
+Un **iterador** es un objeto que abstrae el comportamiento de un **puntero**. Su objetivo es dar una interfaz unificada para acceder, recorrer y modificar elementos en los contenedores de la STL
 
 ```text
 ┌──────────────┐                 ┌────────────┐

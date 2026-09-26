@@ -83,8 +83,13 @@ public:
     Iterador<T> iterador() const; 
 };
 ```
+
+> Aclaración: el **friend** en la linea 7 lo que nos indica es que la clase Iterador<T> puede acceder a los **atributos privados de la clase ListaEnlazada**, es decir tiene un funcionamiento similar a los protected cuando las clases hijas podian modificar los atributos de la padre pero en este caso no hay herencia de por medio
 ---
 ### 3. Operaciones Principales de Inserción y Borrado
+
+> En las listas ES MUY IMPORTANTE hacer comprobaciones de nullptr, si no lo hacemos puede darnos fallo en todo el código
+
 #### Inserción al Inicio — $O(1)$
 ``` cpp
 template <class T>
@@ -110,6 +115,7 @@ void ListaEnlazada<T>::insertarFinal(const T& dato) {
     cola = nuevo; 
 }
 ```
+
 #### Borrado al Final -- $O(n)$
 ``` cpp
 template <class T>
@@ -134,6 +140,9 @@ void ListaEnlazada<T>::borrarFinal() {
     cola->sig = nullptr; 
 }
 ```
+
+> También es muy importante en funciones de este estilo considerar todos los casos posibles, es decir si es nullptr, si solo tiene un nodo...
+
 ---
 ### 4. Recorrido Mediante Iteradores
 Para evitar recorridos ineficientes o acceso aleatorio O(n) mediante índices, se utiliza la clase **`Iterador`** que encapsula el desplazamiento de punteros
