@@ -1,66 +1,75 @@
 # Aprendiendo Sistemas de Ficheros
 
+Hay que tener en cuenta que en un sistema Linux **TODO** es un fichero, desde un documento de texto hasta el ratón que conectamos. Por tanto es importante saber como gestionar y manejar los archivos en este sistema.
+
+Para entender esto un poco mejor: [Explicación resumida de como funciona linux](https://github.com/valentinVilla05/Guias-Basicas/blob/master/sistemas_operativos/manual_linux/basico_linux.md#c%C3%B3mo-se-estructura-una-distro-de-linux)
+
 ## Consideraciones de ficheros
 
-* Son **Case-sensitive** : Distinguen entre mayúsculas y minúsculas (datos!=Datos!=DATOS)
+- Los nombres son **Case-sensitive** : Distinguen entre mayúsculas y minúsculas (datos ≠ Datos ≠ DATOS)
 
-* **Ficheros ocultos**: Empiezan por un punto (ej: `.bashrc`). No se muestran con `ls` normal y estos guardan configuraciones o ejecutan scripts de inicio
+- **Ficheros ocultos**: Empiezan por un punto (ej: `.bashrc`). No se muestran con `ls` normal y estos guardan configuraciones o ejecutan scripts de inicio. (Podemos ocultar cualquiera de nuestros archivos simplemente escribiendo '.' al principio del nombre)
+  Si queremos ver los archivos ocultos en nuestro gestor de archivos (no en la terminal) basta con pulsar `Control H`.
 
-* **Buenas prácticas:**
-    * Usar solo minúsculas
-    * Usar guíon bajo `_` en vez de espacios 
-    * Mantener nombres cortos y con extensión explícita
-    * Evitar caracteres especiales como `$`,`-`,``%`
+- **Buenas prácticas:**
+  - **NO usar espacios**
+  - Usar solo minúsculas
+  - Usar guíon bajo `_` en vez de espacios
+  - Mantener nombres cortos y con extensión explícita
+  - Evitar caracteres especiales como `$`,`-`,`%`
 
-* **Trayectorias de ficheros**
-    * Secuencia de nombres separados por `/ para localizar un elemento en un árbol de directorios
+- **Trayectorias de ficheros**
+  - A diferencia de Windows que se usa `\` en linux se usa una secuencia de nombres separados por `/` para localizar un elemento en un árbol de directorios
 
-    * Tipos de Rutas:
-        * **Absoluta:** empiezan con `/` (directorio raíz) y se especifica el camino desde el origen (ej: `/usr/bin/python`)
-        * **Relativa:** no empiezan con `/`. Partendel directorio de trabajo actual 
-    
-    * Navegación especial:
-        * `.` -> Directtorio actual
-        * `..`-> Directorio padre
-    
-    * Cuando usar cada una:
-        * **Relativa** para moverse pocos niveles dentro del sistema cercano
-        * **Absoluta** para rutas lejanas
+  - Tipos de Rutas:
+    - **Absoluta:** empiezan con `/` (directorio raíz) y se especifica el camino desde el origen (ej: `/usr/bin/python`)
+    - **Relativa:** no empiezan con `/`. Parten del directorio de trabajo actual.
+  - Navegación especial:
+    - `.` -> Directorio actual
+    - `..`-> Directorio padre
+  - Cuando usar cada una:
+    - **Relativa** para moverse pocos niveles dentro del sistema cercano
+    - **Absoluta** para rutas lejanas
 
-* **Otras consideraciones**
-    * `~`indica que estamos en la base del usuario actual (`/home/usuario`)
-    * Variable `$HOME``guarda la ruta directorio base
+- **Otras consideraciones**
+  - `~` indica que estamos en la base del usuario actual (`/home/usuario`)
+  - Variable `$HOME` guarda la ruta directorio base
 
 ## Listado de Ficheros (`ls`)
+
 Sintaxis general:
 
 > **ls [opciones] [nombre_o_ruta...]**
 
 ( si no lleva nombre es que actua en el directorio actual)
 
-* **Opciones clave:**
-    * `-a`: Muestra **todos** los archivos, incluido los ocultos
-    * `-l`: Muestra info sobre permisos, propietarios ...
-    * `-F`: Añade un indicador visual al final del nombre (`/` si es directorio, `*` si es un ejecutable)
-    * `-C`: Muestra el listado organizado en columnas
+- **Opciones clave:**
+  - `-a`: Muestra **todos** los archivos, incluido los ocultos
+  - `-l`: Muestra info sobre [permisos](https://github.com/valentinVilla05/Guias-Basicas/blob/master/sistemas_operativos/manual_linux/basico_linux.md#sistema-de-permisos), propietarios ...
+  - `-F`: Añade un indicador visual al final del nombre (`/` si es directorio, `*` si es un ejecutable)
+  - `-C`: Muestra el listado organizado en columnas
 
 ## Permisos
+
 **Hay 3 tipos de permisos y 3 niveles de usuarios**
 
 Los permisos se dividen en **tres bloques de 3**
 
 ![alt text](imagenes/permi.png)
 
-* **Propietario / User (`u`):** El usuario dueño del archivo
-* **Gurpo / Group (`g`):** Usuarios que pertenencen al grupo del archivo
-* **Otros / Others (`o`):** Cualquier otro usuario en el sistema
+- **Propietario / User (`u`):** El usuario dueño del archivo
+- **Grupo / Group (`g`):** Usuarios que pertenencen al grupo del archivo
+- **Otros / Others (`o`):** Cualquier otro usuario en el sistema
+
+Es decir, estos 3 bloques indican **qué** permisos tiene cada uno de ellos.
 
 ### **Significado de permisos**
-| Permiso | Letra | En archivos | En directorios | 
-| -- | -- | -- | -- |
-| **Lectura** | `r`| Ver el contenido del archivo | Listar los archivos que contiene | 
-| **Escritura** | `w` | Modificar el contenido | Crear, borrar o renombrar | 
-| **Ejecución** | `x` | Ejecutar el archivo como un script o programa | Entrar al directorio y acceder a sus arcvhios |
+
+| Permiso       | Letra | En archivos                                   | En directorios                                |
+| ------------- | ----- | --------------------------------------------- | --------------------------------------------- |
+| **Lectura**   | `r`   | Ver el contenido del archivo                  | Listar los archivos que contiene              |
+| **Escritura** | `w`   | Modificar el contenido                        | Crear, borrar o renombrar                     |
+| **Ejecución** | `x`   | Ejecutar el archivo como un script o programa | Entrar al directorio y acceder a sus archivos |
 
 ### **Permisos en notación octal**
 
@@ -68,53 +77,71 @@ Si están activos se muestran como `r,w,x` (**1**) y si no están como `-` (**0*
 
 El valor va en función de la posición
 
-| Permiso | Binario | Valor decimal | 
-| -- | -- | -- | 
-| `r` | `100` | 4 | 
-| `w` | `010` | 2 | 
-| `x` | `001` | 1 |
-| `-` | `000` | 0 |
+| Permiso | Binario | Valor decimal |
+| ------- | ------- | ------------- |
+| `r`     | `100`   | 4             |
+| `w`     | `010`   | 2             |
+| `x`     | `001`   | 1             |
+| `-`     | `000`   | 0             |
 
-Como podemos ver va por potencias de 2 
+Como podemos ver va por potencias de 2
+
+Los permisos también se representan como la suma de los valores, es decir, para indicar que tiene todos los permisos (`rwx`) el valor sería 7 (4+2+1), o si solo tiene lectura y escritura (`rw`) el valor sería 6 (4+2).
 
 ### Ejemplos
-| Cadena de texto | Cálculo sumatorio | Número Octal | Significado |
-|---|---|---:|---|
-| `rwx------` | `(4+2+1) 0 0` | `700` | Solo el dueño tiene todos los accesos. |
-| `rw-r--r--` | `(4+2+0) 4 4` | `644` | Dueño lee/escribe; grupo y otros solo leen. (Típico de archivos) |
-| `rwxr-xr-x` | `(4+2+1) (4+0+1) (4+0+1)` | `755` | Dueño todo; grupo y otros leen y ejecutan. (Típico de carpetas/scripts) |
-| `rwxrwxrwx` | `(4+2+1) (4+2+1) (4+2+1)` | `777` | Control total para todo el mundo. (Inseguro) |
+
+| Cadena de texto | Cálculo sumatorio         | Número Octal | Significado                                                             |
+| --------------- | ------------------------- | -----------: | ----------------------------------------------------------------------- |
+| `rwx------`     | `(4+2+1) 0 0`             |        `700` | Solo el dueño tiene todos los accesos.                                  |
+| `rw-r--r--`     | `(4+2+0) 4 4`             |        `644` | Dueño lee/escribe; grupo y otros solo leen. (Típico de archivos)        |
+| `rwxr-xr-x`     | `(4+2+1) (4+0+1) (4+0+1)` |        `755` | Dueño todo; grupo y otros leen y ejecutan. (Típico de carpetas/scripts) |
+| `rwxrwxrwx`     | `(4+2+1) (4+2+1) (4+2+1)` |        `777` | Control total para todo el mundo. (Inseguro)                            |
 
 ### Cambio de Permisos (`chmod`)
+
 Hay dos métodos para cambiar permisos
 
 #### Método 1: Notación Absoluta (OCTAL)
+
 ![alt text](imagenes/ab.png)
+
+En este ejemplo se ha creado un archivo "ejemploPermisos.txt", mostramos con `ls -l` la información detallada del mismo y cambiamos sus permisos con `chmod`.
+
+- `chmod 755` le da todos los permisos (`rwx`) al propietario, y solo lectura y ejecucion (`rx`) a los otros 2 bloques.
+- `chmod 600` le da permiso de lectura y escritura al propietario (`rw`) y **ningún** permiso al resto de bloques
 
 **Hay que especificar los 3 dígitos**
 
 #### Método 2: Notación Simbólica
+
 Usa operadores para añadir (`+`), quitar (`-`) o fijar (`=`) permisos:
 
-* **Usuarios:** `u` (user), `g` (group), `o` (others), `a`  (all / todos)
+- **Usuarios:** `u` (user), `g` (group), `o` (others), `a` (all / todos)
 
-* **Operadores:** `+` (añadir), `-` (quitar), `=` (asignar exacto)
+- **Operadores:** `+` (añadir), `-` (quitar), `=` (asignar exacto)
 
 ```bash
-# Dar permiso de ejecución al dueño:
+# Dar permiso de ejecución al dueño (u):
 chmod u+x mi_script.sh
 
-# Quitar permisos de escritura al grupo y a otros:
+# Quitar permisos de escritura al grupo (go) y a otros:
 chmod go-w archivo.txt
 
-# Dar acceso de lectura a todo el mundo:
+# Dar acceso de lectura a todo el mundo (a):
 chmod a+r documento.txt
 ```
 
 ## Uso de `umask`
+
 `umask` funciona como una máscara de resta , define que permisos se le **quitan** a los permisos máximos del sistema
 
-> $$\text{Permisos finales} = \text{Permisos Máximos} - \text{Valor de umask}$$
+> $$\text{Permisos finales} = \text{Permisos Máximos} \ \& \ (\sim \text{valor de umask})$$
+
+Es importante no confundir conceptos. Si es verdad que la máscara **RESTA** los permisos pero la operación que se realiza para ello **NO** es una resta sino una operación lógica **AND** bit a bit entre el valor de especificado y el valor de **umask** invertida.
+
+También es importante saber que cuando hablamos de permisos el hecho de partir de una base de `777` solo aplica a los directorios (o programas que se ejecuten), es decir, para archivos de texto o datos ordinarios la base de permisos con la que se parte es de `666`
+
+Es decir, nosotros definimos una máscara que estará vigente mientras tengamos esa terminal abierta o cambiemos su valor y cualquier fichero que creemos desde entonces se le restarán los permisos que hayamos puesto en esa máscara.
 
 ### Ejemplo con `umask` 022:
 
@@ -122,19 +149,19 @@ chmod a+r documento.txt
 
 Para usar **umask** tenemos que configurarla primero, ya que los archivos creados antes de esta no se modificarán, si creamos otro en vez de crearse con los permisos de defecto (666) se le aplica **666-022 = 644**
 
-
 ## Ejercicios
+
 ### Ejercicio 1
 
 **1. Muestra el contenido del directorio actual con información extendida o larga de permisos**
 
-```bash 
+```bash
 ls -l // muestra permisos
 ```
 
 **2. Muestra los permisos del directorio actual, no de su contenido**
 
-Para que no nos muestre lo que hay dentro usamos `-d`, como también queremos mirar lospermisos lo tenemos que combinar con `-l`
+Para que no nos muestre lo que hay dentro usamos `-d`, como también queremos mirar los permisos lo tenemos que combinar con `-l`
 
 ```bash
 ls -ld
@@ -142,7 +169,7 @@ ls -ld
 
 **3. Crea los directorios público, privado y compartido en tu directorio personal**
 
-Como nos dice que debe ser en el directorio personal tenemos que usar `~`
+Como nos dice que debe ser en el directorio personal tenemos que usar `~` (así especificamos directamente la ruta en la queremos que se creen los directorios)
 
 ```bash
 mkdir ~/público ~/privado ~/compartido
@@ -158,9 +185,9 @@ ls -ld ~/público ~/privado ~/compartido
 
 **5. Configura los permisos del directorio público: Propietario (rwx), Grupo (r-x), Otros (---)**
 
-* **Propietario:** Lectura, escritura y acceso $\rightarrow$ rwx = $4+2+1 = 7$
-* **Grupo:** Solo acceder para leer $\rightarrow$ Lectura y acceso (r-x) = $4+0+1 = 5$
-* **Otros:** Ninguna acción $\rightarrow$ --- = $0$
+- **Propietario:** Lectura, escritura y acceso $\rightarrow$ rwx = $4+2+1 = 7$
+- **Grupo:** Solo acceder para leer $\rightarrow$ Lectura y acceso (r-x) = $4+0+1 = 5$
+- **Otros:** Ninguna acción $\rightarrow$ --- = $0$
 
 ```bash
 chmod 750 ~/público
@@ -168,10 +195,10 @@ chmod 750 ~/público
 
 **6. Configura los permisos del directorio privado: Propietario (rwx), Grupo (---), Otros (---)**
 
-* **Propietario:** Lectura, escritura y acceso $\rightarrow$ rwx = $7$
-* **Grupo:** Ninguna acción $\rightarrow$ --- = $0$
+- **Propietario:** Lectura, escritura y acceso $\rightarrow$ rwx = $7$
+- **Grupo:** Ninguna acción $\rightarrow$ --- = $0$
 
-* **Otros:** Ninguna acción $\rightarrow$ --- = $0$
+- **Otros:** Ninguna acción $\rightarrow$ --- = $0$
 
 ```bash
 chmod 700 ~/privado
@@ -179,11 +206,11 @@ chmod 700 ~/privado
 
 **7. Configura los permisos del directorio compartido: Propietario (rwx), Grupo (rwx), Otros (r-x)**
 
-* **Propietario:** Lectura, escritura y acceso $\rightarrow$ rwx = $7$
+- **Propietario:** Lectura, escritura y acceso $\rightarrow$ rwx = $7$
 
-* **Grupo:** Lectura, escritura y acceso $\rightarrow$ rwx = $7$
+- **Grupo:** Lectura, escritura y acceso $\rightarrow$ rwx = $7$
 
-* **Otros:** Solo acceder para leer $\rightarrow$ r-x = $5$
+- **Otros:** Solo acceder para leer $\rightarrow$ r-x = $5$
 
 ```bash
 chmod 775 ~/compartido
@@ -201,15 +228,16 @@ ls -ld ~/público ~/privado ~/compartido
 
 **Pasos previos:**
 
-![alt text](/imagenes/paso1.png)
+![alt text](imagenes/paso1.png)
 
 como nos dicen que tiene que tener texto hacemos un echo con la palabra y lo metemos en ficheros distintos que serán creados en ese instante
 
-***
+---
+
 **Apartado 1**
 
-*Usted pueda consultar el contenido de d, pero no pueda utilizar (no tenga
-acceso a) los ficheros que cuelgan de d*
+_Usted pueda consultar el contenido de d, pero no pueda utilizar (no tenga
+acceso a) los ficheros que cuelgan de d_
 
 básicamente nos está diciendo que no podemos ejecutar: `x` en el directorio `d` pero que si podemos mantener la lectura `r`
 
@@ -217,10 +245,13 @@ básicamente nos está diciendo que no podemos ejecutar: `x` en el directorio `d
 chmod 400 d
 ```
 
-***
+---
+
 **Apartado 2**
 
 Ver qué hay en `d`, usar sus archivos, pero solo poder leer `f` (**no f2**)
+
+(Para aclarar: d es el directorio que estamos usando de ejemplo en el ejercicio y f y f2 son ficheros creados de ejemplo también)
 
 ```bash
 chmod 500 d
@@ -228,7 +259,8 @@ chmod 400 d/f
 chmod 000 d/f2
 ```
 
-***
+---
+
 **Apartado 3**
 
 Le das solo Acceso/Ejecución (1) al directorio:
@@ -237,17 +269,22 @@ Le das solo Acceso/Ejecución (1) al directorio:
 chmod 100 d
 chmod 400 d/f
 ```
-***
+
+---
+
 **Apartado 4**
 
 Poder BORRAR los archivos de d, pero no poder leerlos ni editarlos
 
 Para borrar necesitas Escritura + Acceso (2+1=3) en el directorio. A los archivos les quitas todo (0):
+
 ```bash
 chmod 300 d
 chmod 000 d/f d/f2
 ```
-***
+
+---
+
 **Apartado 5**
 
 Poder LEER y EDITAR los archivos, pero NO poder borrarlos
@@ -260,34 +297,43 @@ chmod 600 d/f d/f2
 ```
 
 ---
+
 ### Ejercicio 3
-![alt text](/imagenes/pruebafich.png)
+
+![alt text](imagenes/pruebafich.png)
 **No, el propietario no puede leer el fichero**
 
-A pesar de que el grypo y el resto de usuarios si tiene permisos de lectura (`r`) se rechaza el acceso al propietario
+A pesar de que el grupo y el resto de usuarios si tiene permisos de lectura (`r`) se rechaza el acceso al propietario
 
 **¿Qué hace UNIX en estos casos?**
+
 1. **¿Eres el propietario?**
-    * **SI**: Si no tienes `r``no puedes leer
-    * Unix **no** pasa a mirar los permisos del grupo ni otros usuarios
+   - **SI**: Si no tienes `r``no puedes leer
+   - Unix **no** pasa a mirar los permisos del grupo ni otros usuarios
 
 2. **¿Eres del grupo?**
-    * **SI** aplica solo los permisos de `g`
+   - **SI** aplica solo los permisos de `g`
 3. **¿Eres de "Otros"?**
-    * **SI**: Slo mira a `o`
+   - **SI**: Solo mira a `o`
 
 ---
+
 ### Ejercicio 4
+
 Queremos que tenga permisos **rwxr-x---**
-    
-* **Propietario**: `rwx` 4 + 2 + 1 =7
-* **Grupo**: `r-x` 4+0 +1 = 5
-* **Otros**: `---` 0+0+0 = 0
+
+- **Propietario**: `rwx` 4 + 2 + 1 =7
+- **Grupo**: `r-x` 4+0 +1 = 5
+- **Otros**: `---` 0+0+0 = 0
 
 Nos queda -> **750**
+
+(Partimos de que los permisos máximos es de `777` porque estamos hablando de un directorio u/o archivo que se ejecute)
 
 umask = 777 - 750 = 027
 
 > Recordatorio : umask = permisos máximos (777) - Permisos Denegados (750)
+
+(Recordar que la operación interna de **umask** NO es una resta aritmetica aun que en la práctica funiciones como tal)
 
 ![alt text](imagenes/ej4.png)
