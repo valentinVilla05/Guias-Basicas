@@ -1,47 +1,60 @@
 # Ejercicios Extras Basados en La Práctica
+
 > La resolución de los ejercicios de cada bloque están al final del documento (se admiten soluciones alternativas)
-## Bloque 1: Operaciones y Registros 
+
+## Bloque 1: Operaciones y Registros
+
 **Ejercicio P1.1 (Cálculo combinado)**
 Calcula la siguiente expresión utilizando únicamente registros: $(12 - 4) \times 3$. Guarda el resultado final en a0 y muéstralo por consola
 
 ---
+
 **Ejercicio P1.2 (División e intercambio de resto/cociente)**
 Divide `35` entre `6`. Muestra primero por consola el **resto** y **después el cociente**
 
 ---
+
 **Ejercicio P1.3 (Manipulación de inmediatos superiores)**
 Sin usar la sección `.data`, asigna al registro `a0` el valor `0x12345000` en una sola instrucción y luego súmale `0x678`. Muestra el resultado por consola.
 
 ---
+
 **Ejercicio 1.4: Intercambio de Registros sin Memoria (Swap)**
 Inicializa t0 = 15 y t1 = 40. Intercambia sus valores de forma que t0 pase a ser 40 y t1 pase a ser 15 usando un tercer registro auxiliar (t2). Muestra t0 por consola
 
----------
+---
+
 **Ejercicio 1.5: Evaluación de Polinomio simple ($ax^2 + b$)** Dados $a = 2$, $x = 5$ y $b = 3$, calcula la expresión $2 \cdot 5^2 + 3$. Almacena el resultado en a0 y muéstralo
 
------
-**Ejercicio 1.6: Promedio Entero de 4 Valores** Calcula el promedio entero de los números 10, 23, 17 y 34. Acumula la suma en a0, efectúa la división en a0 e imprímelo**
+---
 
-----
+**Ejercicio 1.6: Promedio Entero de 4 Valores** Calcula el promedio entero de los números 10, 23, 17 y 34. Acumula la suma en a0, efectúa la división en a0 e imprímelo\*\*
+
+---
+
 **Ejercicio 1.7: Multiplicación Eficiente sin mul (Desplazamientos)**
 Asigna a t0 el valor 9. Multiplícalo por 8 sin usar la instrucción mul, únicamente usando desplazamiento a la izquierda (slli). Muestra el resultado en a0
 
-----
+---
+
 **Ejercicio 1.8: Descomposición en Minutos y Segundos**
 Dado un tiempo total de 185 segundos en el registro t0, calcula cuántos minutos completos y cuántos segundos restantes representa. Imprime primero los minutos y luego los segundos
 
 ---
+
 **Ejercicio 1.9: Formar una Máscara de Bits (Aislamiento de Byte)**
 Dado el registro t0 = 0xABCD1234, utiliza la instrucción andi (AND Inmediato) para aislar únicamente el último byte (0x34). Imprime el valor resultante en decimal
 
 ---
+
 **Ejercicio 1.10: Construcción de un Número de 32 bits Completo**
 Carga en a0 el valor exacto hexadecimal 0xDEADBEEF sin usar la sección .data.
 (Pista: lui carga los 20 bits superiores. addi suma un signo extendido de 12 bits, por lo que si el bit 11 del número inferior es 1, habrá un acarreo negativo que hay que compensar en el lui)
 
-----
+---
 
 ## 2: Carga, Almacenamiento y Punteros
+
 **Ejercicio 2.1: Lectura Básica y Suma Simple**
 Declara dos números enteros en memoria (`n1: .word 12` y `n2: .word 8`). Léelos desde la memoria RAM a dos registros, súmalos en a0 e imprime el resultado
 
@@ -69,14 +82,16 @@ Dado el vector `origen: .word 100, 200` en `.data`, copia el primer elemento al 
 **Ejercicio 2.10: Puntero de Lectura/Escritura Simultánea**
 Guarda un arreglo `serie: .word 3, 6, 9` en `.data`. Lee cada elemento con un puntero `t0`, doblaló (multiplícalo por 2) y sobrescribe la misma posición de memoria. Al finalizar, el arreglo en RAM debe ser `6, 12, 18`
 
-
 # RESOLUCIONES
+
 ## Bloque 1
-![alt text](/images/b1.png)
-![alt text](/images/b12.png)
+
+![alt text](images/b1.png)
+![alt text](images/b12.png)
 
 ## Bloque 2
-![alt text](/images/b21.png)
-![alt text](/images/b22.png)
-![alt text](/images/b23.png)
-![alt text](/images/b24.png)
+
+![alt text](images/b21.png)
+![alt text](images/b22.png)
+![alt text](images/b23.png)
+![alt text](images/b24.png)
