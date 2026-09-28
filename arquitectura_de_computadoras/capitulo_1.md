@@ -212,3 +212,23 @@ ecall
 ```
 
 Si los datos superan los 2KB el registro `gp` se inicializa con una dirección intermedia en lugar de con la de inicio de la sección de datos
+
+
+## Resumen
+| Instrucción | Significado | ¿Para qué sirve? | Ejemplo de uso | 
+| -- | -- | -- | -- |
+| `li` | Load Immediate | Poner un **número directo** en un registro | `li a0,5` (a0=5) | 
+| `la` | Load Addres | Carga la **dirección de memoria** de una etiqueda de `.data` o `.bss` | `la t0,numero` (t0=dir de número) | 
+| `lw` | Load Word | **Leer/Treaer un dato desde memoria RAM** a un registro | `lw a0,0(t0)` a0=lo q hay dentr de a ram | 
+| `sw` | Store Word | **Guardar/Escribir un registro** en memoria | `sw a0, 0(t2)` (guarda 0 en ram) | 
+| `add` | Add | Suma **dos registros** | `add a0,a1,t1` (a0=a1+t1) | 
+| `addi` | Add Immediate | Sumar **un registro y un número constante** | `addi a0,a0,5` (a0=a0+5) | 
+| `ecall` | Enviorment Call | Hacer una **llamada al sistema** (según el valor puesto en a7) | `li a7,1` + `ecall` |
+| `mv` | Move | **Copia el valor** de un registro a otro | `mv a0,t0` |
+| `sub` | Sustract | **Resta dos registros** | `sub a0,t0,t1` (a0=t0+t1) |
+| `mul` | Multiply | **Multiplica dos registros** | `mul a0,t0,t1` | a0=t0*t1 |
+| `div` | Divide | **Divide dos registros** | `div a0,t0,t1` (a0=t0/t1) | 
+| `rem` | Rest | **Obtiene el resto de dos registros** | `rem a0,t0,t1` (a0=t0%t1) | 
+| `and` / `andi` | And | **hace operación lógica Y** | `and a0,t0,t1` (a0=t0^t1) |
+| `or` / `ori` | Or | **hace operación lógica O** | `or a0,t0,t1` (a0=t0 v t1) | 
+| `beq` | Jump | **salta a etiqueta si `reg1==reg2` | `beq t0,zero,fin` |
