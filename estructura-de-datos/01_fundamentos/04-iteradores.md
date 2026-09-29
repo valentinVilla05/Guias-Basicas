@@ -25,7 +25,7 @@ Perderiamos eficacia al tener que rehacer los algorítmos de búsqueda o reorden
 
 ## Como se programa un iterador:
 
-Para entender qué hay debtri de un iterador podemos construir uo simplificado para una [`Lista Enlazada`](https://github.com/valentinVilla05/Guias-Basicas/blob/master/estructura-de-datos/02_Estructuras%20Lineales/03-listas-enlazadas.md) (_apartado 3 en estructuras lineales_) . Un iterador es una `clase` o `struct` que guarda la dirección de memoria actual y sobrecarga los operadores estándar de C++ (`_`,`++`,`!=`) para simular ser un puntero
+Para entender qué hay dentro de un iterador podemos construir lo simplificado para una [`Lista Enlazada`](https://github.com/valentinVilla05/Guias-Basicas/blob/master/estructura-de-datos/02_Estructuras%20Lineales/03-listas-enlazadas.md) (_apartado 3 en estructuras lineales_) . Un iterador es una `clase` o `struct` que guarda la dirección de memoria actual y sobrecarga los operadores estándar de C++ (`_`,`++`,`!=`) para simular ser un puntero
 
 ### Paso 1: Definir la estructura de nodo
 

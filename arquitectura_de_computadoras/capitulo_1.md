@@ -91,7 +91,9 @@ Cuando introducimos instrucciones en el editor, en el panel de la derecha aparec
 
 **Consola**
 Es la parte donde se muestra la información recibida por el programa . El resultado de la operación que queramos mostrar se debe almacenar en el registro `a0` y para mostrarlo en consola debemos llamar a la instrucción `ecall` que espera que se entregue en el registro `a7` el servicio que queramos ejecutar 
+
 ![SERVICIOS](/images/servicios.png)
+
 *Ejemplo*: Con el servicio `1`, valor asignado a `a7` se envia el **Número entero** almacenado en `a0`
 
 **Profudización en Instrucciones Aritméticas**
@@ -144,6 +146,7 @@ La longitud de las instrucciones en RISC a diferencias de los procesadores CISC 
 
 ## Instrucciones tipo R
 Todos los oprandos se encuentran alojados en registros -> `direccionamiento por registros`
+
 ![alt text](/images/tipoR.png)
 
 Los registros implicandos (`rs1`,`rs2` y `rd`) aporatn los operandos sobre los que se actuará y el destino almcenará el resultado. A cada uno le corresponde 5 bits (2⁵ = 32) ya que hay 32 registros 
