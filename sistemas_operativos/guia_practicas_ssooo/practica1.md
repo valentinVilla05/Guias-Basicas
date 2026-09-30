@@ -9,7 +9,7 @@
 - **Puntos de control (Snapshots)**: Si algo sale mal, restauramos el programa a su estado anterior
 - **Entorno de prueba**: es un espacio ideal para experimentar, programar y romper cosas sin riesgo
 
-## Instalación de Una máquina virtual
+## Instalación de una máquina virtual
 
 En nuestro caso vamos a usar **Oracle VirtualBox** que es un **programa hipervisor** gratuito que nos permitirá usar la máquina virtual
 
