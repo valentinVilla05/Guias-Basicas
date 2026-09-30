@@ -2,7 +2,7 @@
 
 ### Nivel de Abstracción
 
-![alt text](images/abstrac.png)
+![alt text](../images/abstrac.png)
 
 ### Conceptos Iniciales:
 
@@ -39,7 +39,7 @@
 
 * **Pipeline:** Dividir el procesador de una instrucción en etapas y solapar varias instrucciones a la vez. Mientras una instrucción está en una etapa, otra puede utilizar otra etapa del procesador. Puede hacer las CPUs rápidas
 
-![alt text](/images/pipeline.png)
+![alt text](../images/pipeline.png)
 
 * `IF`: Captar instrucción
 * `ID`: Decodificar / Leer registros
@@ -83,7 +83,7 @@ La emisión es el momento en el que una instrucción pasa de la etapa de decodif
 
 **Pipeline Ideal**
 
-![alt text](/images/pipeline_ideal.png)
+![alt text](../images/pipeline_ideal.png)
 
 * Una vez lleno el pipeline se emite una nueva instrucción en cada ciclo de reloj
 
@@ -97,12 +97,9 @@ La emisión es el momento en el que una instrucción pasa de la etapa de decodif
 
 
 ## RISC-V Segmentado
-5 etapas del RISC-V
-
-![alt text](images/etapas.png)
 
 ### Representación de las 5 etapas
-![alt text](images/etapas.png)
+![alt text](../images/etapas.png)
 
 **¿Qué sucede secuencialmente?¿Y Simultáneamente?**
 * **Simultáneamente**: Instrucciones diferentes están siendo procesadas durante el mismo ciclo 
@@ -115,7 +112,7 @@ La emisión es el momento en el que una instrucción pasa de la etapa de decodif
 * No existe solapamiento entre instrucciones
 * Una instrucción necesita `800 ps`
 
-![alt text](images/difsegmentada.png)
+![alt text](../images/difsegmentada.png)
 
 ## Ruta de Datos Encauzada y Control
 Un camino de datos necesita serparar las 5 etapas del camino de datos , cada etapa puede estar procesando una ejecución diferente (es decir, secuencialmente)
@@ -146,7 +143,7 @@ MEM/WB conserva el resultado que deberá escribirse en el banco de registros dur
 * Datos y señales de conttrol avanzan juntos por el cauzce
 * Cada etapa utiliza únicamente las señaeles de control que necesita
 
-![alt text](images/control.png)
+![alt text](../images/control.png)
 
 ## "Riesgos" - Situaciones Peligrosas
 > **Riesgo (hazard)**: Situación que impide que una instrucción avance en el ciclo previsto sin comprometerl a ejecución correcta
@@ -162,7 +159,7 @@ MEM/WB conserva el resultado que deberá escribirse en el banco de registros dur
 
 * Simbolizaremos la insercción de una burbuja como: 
 
-![alt text](images/burbuja.png)
+![alt text](../images/burbuja.png)
 
 ### Estructura de riesgos
 * `Riesgo estructural`: Dos o más instrucciones necesitan el mismo recurso **hardware**
@@ -309,7 +306,7 @@ lw t3,12(s0)
 ### Atención en las detenciones por carga de Datos
 Si después de una carga se utiliza una instrucción que utiliza como operando fuente el registro destino de la carga se produce una detención
 
-![alt text](images/detenciones.png)
+![alt text](../images/detenciones.png)
 
 Tenemos 4 situaciones con los pares de instrucciones `lw` y `add`
 
