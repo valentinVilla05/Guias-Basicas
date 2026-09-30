@@ -247,7 +247,6 @@ Si los datos superan los 2KB el registro `gp` se inicializa con una dirección i
 | `rem`          | Rest            | **Obtiene el resto de dos registros**                                 | `rem a0,t0,t1` (a0=t0%t1)                 |
 | `and` / `andi` | And             | **hace operación lógica Y**                                           | `and a0,t0,t1` (a0=t0^t1)                 |
 | `or` / `ori`   | Or              | **hace operación lógica O**                                           | `or a0,t0,t1` (a0=t0 v t1)                |
-| `beq`          | Jump            | \*\*salta a etiqueta si `reg1==reg2`                                  | `beq t0,zero,fin`                         |
 
 ### Ejercicios de capitulo 1
 
