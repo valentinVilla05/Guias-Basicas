@@ -51,7 +51,7 @@ Dado el registro t0 = 0xABCD1234, utiliza la instrucción andi (AND Inmediato) p
 Carga en a0 el valor exacto hexadecimal 0xDEADBEEF sin usar la sección .data.
 (Pista: lui carga los 20 bits superiores. addi suma un signo extendido de 12 bits, por lo que si el bit 11 del número inferior es 1, habrá un acarreo negativo que hay que compensar en el lui)
 
----
+
 
 ## 2: Carga, Almacenamiento y Punteros
 
@@ -86,12 +86,12 @@ Guarda un arreglo `serie: .word 3, 6, 9` en `.data`. Lee cada elemento con un pu
 
 ## Bloque 1
 
-![alt text](images/b1.png)
-![alt text](images/b12.png)
+![alt text](../images/b1.png)
+![alt text](../images/b12.png)
 
 ## Bloque 2
 
-![alt text](images/b21.png)
-![alt text](images/b22.png)
-![alt text](images/b23.png)
-![alt text](images/b24.png)
+![alt text](../images/b21.png)
+![alt text](../images/b22.png)
+![alt text](../images/b23.png)
+![alt text](../images/b24.png)
