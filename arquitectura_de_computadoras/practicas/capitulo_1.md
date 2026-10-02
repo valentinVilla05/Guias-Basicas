@@ -71,7 +71,7 @@ El **Editor** es la parte donde escribimos las instrucciones, cuenta con distint
 - **Notificación**: Se notifica la escritura, color de fondo ....
 - **Modificación**: permite cambiar su contenido
 
-> El registro **sp** actúa como puntero de pila. RISC-Vno cuenta con un registro específico para esta función como ocurre en otras arquitecturas de procesador
+> El registro **sp** actúa como puntero de pila. RISC-V no cuenta con un registro específico para esta función como ocurre en otras arquitecturas de procesador
 
 Cuando introducimos instrucciones en el editor, en el panel de la derecha aparece el código máquina que generan (en binario) o su versión ensamblada
 
@@ -80,26 +80,18 @@ Cuando introducimos instrucciones en el editor, en el panel de la derecha aparec
 **Controles de ejecución**
 ![Control](../images/contorl.png)
 
-**Consola**
-<<<<<<< HEAD
-Es la parte donde se muestra la información recibida por el programa . El resultado de la operación que queramos mostrar se debe almacenar en el registro `a0` y para mostrarlo en consola debemos llamar a la instrucción `ecall` que espera que se entregue en el registro `a7` el servicio que queramos ejecutar
+**Consola**: Es la parte donde se muestra la información recibida por el programa . El resultado de la operación que queramos mostrar se debe almacenar en el registro `a0` y para mostrarlo en consola debemos llamar a la instrucción `ecall` que espera que se entregue en el registro `a7` el servicio que queramos ejecutar
 
-![SERVICIOS](../images/servicios.png)
-
-# _Ejemplo_: Con el servicio `1`, valor asignado a `a7` se envia el **Número entero** almacenado en `a0`
-
-Es la parte donde se muestra la información recibida por el programa . El resultado de la operación que queramos mostrar se debe almacenar en el registro `a0` y para mostrarlo en consola debemos llamar a la instrucción `ecall` que espera que se entregue en el registro `a7` el servicio que queramos ejecutar.
 
 _Ejemplo_: Con el servicio `1`, valor asignado a `a7` se envia el **Número entero** almacenado en `a0`
-![SERVICIOS](../images/servicios.png)
 
-> > > > > > > a35c613bf12270c9347a8908d0e0aa16f9ed6fb5
+![SERVICIOS](../images/servicios.png)
 
 **Profudización en Instrucciones Aritméticas**
 
 - `sub` destino,minuendo,sustraendo
 
-  > destino = sustraendo-minuendo
+  > destino = minuendo-sustraendo
 
 - `mul` destino,multiplicando,multiplicador
 
@@ -118,7 +110,7 @@ _Ejemplo_: Con el servicio `1`, valor asignado a `a7` se envia el **Número ente
 
 ## Espacio de direccionamiento y mapa de memoria
 
-La ISA de RISC-v contempla un tamaño de palabra de 32 bits y un espacio de direccionamiento de 32 bits. Por lo tanto hay disponibles 2^32 posiciones de memoria , cada una tiene 1 byte (8 bits) de capacidad. Este espacio será necesario para almacenar código dle programa , datos, reservar zona para dispositivos de E/S.....
+La ISA de RISC-v contempla un tamaño de palabra de 32 bits y un espacio de direccionamiento de 32 bits. Por lo tanto hay disponibles **2^32** posiciones de memoria , cada una tiene `1 byte` (8 bits) de capacidad. Este espacio será necesario para almacenar código dle programa , datos, reservar zona para dispositivos de E/S.....
 
 **Partes del código**
 
@@ -144,7 +136,7 @@ La lectura de un dato que está almacenado en memoria conlleva asignar la direcc
 
 `la` rdir, simbolo -> actua como un puntero
 
-- Para ver como se lamacenan datos en memoria de forma más explícita podemos verlio en la pestaña de **memory**
+- Para ver como se almacenan datos en memoria de forma más explícita podemos verlio en la pestaña de **memory**
 
 ![alt text](../images/memory.png)
 
@@ -154,7 +146,7 @@ La longitud de las instrucciones en RISC a diferencias de los procesadores CISC 
 
 ## Instrucciones tipo R
 
-Todos los oprandos se encuentran alojados en registros -> `direccionamiento por registros`
+Todos los operandos se encuentran alojados en registros -> `direccionamiento por registros`
 ![alt text](../images/tipoR.png)
 
 Los registros implicandos (`rs1`,`rs2` y `rd`) aportan los operandos sobre los que se actuará y el destino almcenará el resultado. A cada uno le corresponde 5 bits (2⁵ = 32) ya que hay 32 registros
@@ -171,11 +163,11 @@ Asociadas a `direcionamiento inmediato`
 - En el tipo **I** el valor inmediato ocupa los 5 bits que le corresponden a `rs2` y los de `fund7` (12 en total)
   - Ejemplos de instrucciones tipo I: `adni`,`ori`,`xori`....
 
-> Consideraciones: RISC-V procesa los valores inmediatos como números enteros con signo. interpreta si el bit mayor es `1` o `0` , por lo que usa `11 bits` para su magnitud, pudiendo representar números entre [-2048,2047]
+> **Consideraciones:** RISC-V procesa los valores inmediatos como números enteros con signo. interpreta si el bit mayor es `1` o `0` , por lo que usa `11 bits` para su magnitud, pudiendo representar números entre [-2048,2047]
 
 En el tipo I también se emplea el **direccionamiento indexado** que consiste en tomar el contenido de un registro y sumarle el desplazamiento indicado por el valor inmediato para obtener una dirección de memoria resultante (como en `lw` a0,128,t0)
 
-- En el tipo **U** el valor inmediato tiene longitud de 20 bits porque el valor se interpreta como un entero sin signo. Además solo se cuenta con un registro como operando (`rd` que actua como destino)
+En el tipo **U** el valor inmediato tiene longitud de 20 bits porque el valor se interpreta como un entero sin signo. Además solo se cuenta con un registro como operando (`rd` que actua como destino)
   - Instrucciones tipo **U**: `lui` t0, valor o `auipc` rd, imm
 
 `auipc` permite usar el **direccionamiento relativo** donde uno de los operandos es fijo: `pc`
@@ -192,7 +184,7 @@ Vinculada con el **direccionamiento relativo** usado para salto condicional. Se 
 
 Se usan las instrucciones `lui` y `addi` para cargar en el registro `t0` que se usará como puntero
 
-Podemos descomponer una dirección de memoria mediante los operadores `%hi` y `%lo` (la primera de 20 bits y la seg unda de 12). Que nos sirve para leer datos como con la instrucción `lw`
+Podemos descomponer una dirección de memoria mediante los operadores `%hi` y `%lo` (la primera de 20 bits y la segunda de 12). Que nos sirve para leer datos como con la instrucción `lw`
 
 ## Uso de punteros
 
@@ -243,7 +235,7 @@ Si los datos superan los 2KB el registro `gp` se inicializa con una dirección i
 | `rem`          | Rest            | **Obtiene el resto de dos registros**                                 | `rem a0,t0,t1` (a0=t0%t1)                 |
 | `and` / `andi` | And             | **hace operación lógica Y**                                           | `and a0,t0,t1` (a0=t0^t1)                 |
 | `or` / `ori`   | Or              | **hace operación lógica O**                                           | `or a0,t0,t1` (a0=t0 v t1)                |
-| `beq`          | Jump            | \*\*salta a etiqueta si `reg1==reg2`**                                  | `beq t0,zero,fin`                         |
+| `beq`          | Jump            | **salta a etiqueta si `reg1==reg2`**                                  | `beq t0,zero,fin`                         |
 
 
 ### Ejercicios de capitulo 1
@@ -295,7 +287,7 @@ Por último mostramos el resultado por consola.
 
 ---
 
-**Ejercicio 1.3**. Muestra por la consola el resultado de multiplicar los números 5 y 7.
+**Ejercicio 1.3**. Muestra por la consola el resultado de multiplicar los números 5 y 7
 
 ```assembly
 .text
@@ -515,4 +507,3 @@ ecall
 ```
 
 En este ejercicio cargamos directamente el valor sin parar a leerlo en memoria
->>>>>>>> origin/master:arquitectura_de_computadoras/practicas/capitulo_1.md
