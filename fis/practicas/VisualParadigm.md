@@ -16,7 +16,6 @@
 ## Como conectar nuestra práctica con nuestros compañeros
 ### Conceptos a entender
 
-
 | Palabra | Qué significa  |
 |---|---|
 | **Checkout** | Descargar el proyecto del servidor a TU ordenador para empezar a trabajar. **Se hace UNA vez por persona** |
@@ -31,6 +30,41 @@ Para evitar conflictos: SIEMPRE TENEMOS QUE SEGUIR ESTE ORDEN:
 2.  TRABAJAR →  haces tus cambios
 3.  COMMIT   →  al terminar (subir lo tuyo, con un comentario claro)
 ```
+### Pasos:
+**Paso 0: Reparto de roles**
+
+**1.** Decidimos quien lo crea y lo sube al servidor (pasos 3 y 4)
+
+**2.** Se descargan el proyecto (paso 5)
+
+**Paso 1: Todos deben tener la app instalada y activada CON LA MISMA VERSIÓN**.
+
+**Paso 2:Iniciar sesión en el servidor del equipo**:
+1. Abre Visual Paradigm
+2. En la barra superior, pestaña Team.'
+3. Pulsa Login
+4. Introduce los datos de acceso al servidor (VPository) que os den (la cuenta/equipo de la universidad o del profesor)
+5. Si todo va bien, la ventana se cierra sin error y ya estás conectado
+
+```
+Team > Login
+```
+**Paso 3: Una persona crea el proyecto**
+
+Archivo > Nuevo > nombre, autores `UML`
+
+Project > Save (`practica1GXY.vpp` por ejemplo)
+
+**Paso 4: Subir el proyecto al servidor (Import Project)**
+```
+Team > Open Teamwork Client.. > Project > Import Project to Repository
+```
+
+**Paso 5: Las otras personas descargan el proyecto**
+1. Haz Login (paso 2)
+2. `Team` > `Open Teamwork Client`
+3. Aparecerá el proyecto , lo seleccionamos
+4. `Checkout`
 
 ## Análisis de la primera Práctica
 Esta práctica consiste en **analizar un proyecto de sofware y documentarlo**. Lo tenemos que hacer en estos 7 pasos 

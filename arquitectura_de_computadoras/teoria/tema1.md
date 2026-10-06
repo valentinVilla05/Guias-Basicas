@@ -13,7 +13,7 @@
 
 **Objetivos:** buscan **optimizar el rendimiento, incrementar velocidad y eficiencia en procesamiento de datos** y tareas a través de búsqueda del equilibrio entre hardware y software
 
-![alt text](images/organizacion.png)
+![alt text](../images/organizacion.png)
 
 **Avances fundamentales:** tanto en aspectos físicos como en lógicos hecho posible el acceso a los ordenadores al público general y ha mejorado su experiencia de uso  
 
@@ -35,7 +35,7 @@ Cada nivel de abstracción se caracteriza por:
 * Elementos de salida destinados al nivel superior  
 * Una metodología de análisis y síntesis de los elementos de salida en términos de los de entrada
 
-![alt text](images/estructura.png)
+![alt text](../images/estructura.png)
 
 Los niveles se representan como **capas que se apilan unas sobre otras**. **Las inferiores aportan funciones más a bajo nivel**, sobre cuyas abstracciones se construyen en capas superiores.
 
@@ -45,7 +45,7 @@ Los niveles se representan como **capas que se apilan unas sobre otras**. **Las 
 * **Análisis**: se parte de la implementación y determina las funciones de la capa inferior , su especificación
 
 ### **Niveles de descripción de interés:**
-![alt text](images/esc.png)
+![alt text](../images/esc.png)
 
 * **Físico, Electrónico y Lógico:** en asignaturas como Física y Electrónica digital  
 * **Transferencia de registros y Arquitectura de computadores**  
@@ -56,7 +56,7 @@ Los niveles se representan como **capas que se apilan unas sobre otras**. **Las 
 **Elementos de entrada:** registros, módulos combinacionales, buses y multiplexores  
 **Elementos de salida:** transferencia básicas en la ruta de datos construida con esas entradas
 
-![alt text](images/rm1.png)
+![alt text](../images/rm1.png)
 - **MAR**: Almacena la dirección de memoria que se va a leer o escribir  
 - **RI**: Contiene la instrucción máquina actual cargada desde memoria. Se extraen los campos de operación y direcciones  
 - **Secuenciador**: Genera la secuencia de microoperaciones ( μops ) que debe ejecutar la ALU ( Unidad de Control) . Se encarga de terminar cuál es la siguiente μop según las condiciones actuales  
@@ -69,7 +69,7 @@ Los niveles se representan como **capas que se apilan unas sobre otras**. **Las 
 **Elementos de entrada:** el datapath ofrecido por RT con su unidad de control  
 **Elementos de salida:** banco de registros, direccionamientos y repertorio de instrucciones.
 
-![alt text](images/isa.png)
+![alt text](./images/isa.png)
 
 **\-  CISC – Complex Instruction Set Computer**
 
@@ -118,7 +118,7 @@ Cuenta con distintas implementaciones según el datapath definido en el nivel RT
 
 **Slave**: unidad que participa en el uso de un bus sin controlarlo  
 
-![alt text](images/bus.png)
+![alt text](../images/bus.png)
 
 **Tipos de buses y sus funciones:**
 
@@ -141,7 +141,8 @@ Cuenta con distintas implementaciones según el datapath definido en el nivel RT
 ## **SISTEMAS DE MEMORIA**
 
 **Jerarquía de memoria:** la memoria se estructura en varios niveles que resultan transparentes para la CPU. Esta solo ve un espacio común y lineal de almacenamiento / recuperación de instrucciones y datos
-![alt text](/images/jerarqui.png)
+
+![alt text](../images/jerarqui.png)
 
 
 ### **Tipos de memoria:**
@@ -169,7 +170,7 @@ Cuenta con distintas implementaciones según el datapath definido en el nivel RT
 
 **Interrupción:** Señal que interrumpe el flujo de ejecución secuencial de instrucciones en la CPU a petición de un dispositivo externo. Es la base de E/S que permite atender periféricos lentos sin ralentizar la CPU
 
-![alt text](images/ess.png)
+![alt text](../images/ess.png)
 
 ### **Comunicación E/S**
 
@@ -198,17 +199,17 @@ Cuenta con distintas implementaciones según el datapath definido en el nivel RT
 
 **E/S solapada:** la CPU delega el control de la operación de E/S en circuitería especializada , permite continuar en paralelo la ejecución del programa  
 
-![alt text](images/solap.png)
+![alt text](../images/solap.png)
 
 ## **Categorización:**  
-![alt text](images/categ.png)
+![alt text](../images/categ.png)
 
 ## **Niveles de granularidad:**  
 **Granularidad:** determina el tamaño de la unidad de trabajo en paralelo, los elementos de hardware implicados y la frecuencia de sincronización entre ellos
 
 * La granularidad **más fina se implementa en la microarquitectura/arquitectura** hardware  por lo que es transparente para el software. **La más gruesa depende del software**: SO e infraestructura de comunicación
 
-![alt text](images/granula.png)
+![alt text](../images/granula.png)
 
 ## **Rendimiento:**  
 **Es la inversa del tiempo de ejecución (T) para completar una tarea**
@@ -222,7 +223,7 @@ Cuenta con distintas implementaciones según el datapath definido en el nivel RT
 
 > T= N \* CPI \* TC
 
-![alt text](images/inf.png)
+![alt text](../images/inf.png)
 
 ## **Rendimiento \- Rankings públicos**
 
@@ -233,7 +234,7 @@ Cuenta con distintas implementaciones según el datapath definido en el nivel RT
 
 **Parámetros del rendimiento**   
 
-![alt text](images/rendi.png)
+![alt text](../images/rendi.png)
 **Columnas:**
 
 * **Rank**: indica la posición del ranking  
@@ -261,11 +262,11 @@ G> 1 T_original > T_mejorada → mejor rendimiento
 ```
 Si f representa la fracción del tiempo de un programa dedicado a tareas que utilizan la parte mejorada de un sistema, la ganancia global estará limitada a la fracción de tiempo durante la cual se usa la parte no mejorada
 
-![alt text](images/comp.png)
+![alt text](../images/comp.png)
 
 La mejora de rendimiento (`G`) que se puede obtener cuando se mejora un componente de un sistema en un factor k está limitada por la fracción del tiempo de ejecución durante la que no se utiliza dicho componente, por mucho que se incremente k se alcanzará un límite sin mayor posibilidad de mejora 
 
-![alt text](images/curva.png)
+![alt text](../images/curva.png)
 
 ## **Áreas estratégicas – HiPEAC**
 
