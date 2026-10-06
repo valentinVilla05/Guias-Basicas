@@ -13,7 +13,7 @@ La información que nos va a devolver esto va a depender de la versión y distri
 NAME="CachyOS Linux"
 PRETTY_NAME="CachyOS"
 ID=cachyos
-ID_LIKE=arch
+ID_LIKE=arch3
 BUILD_ID=rolling
 ANSI_COLOR="38;2;23;147;209"
 HOME_URL="https://cachyos.org/"
@@ -140,3 +140,23 @@ Una diferencia sustantiva que podemos ver entre la sección 1 y la sección 2 es
    apartado 3.2. Anótala si la detectas ahora; si no, vuelve a este ejercicio al terminar el capítulo 3.
 
 `time` tiene la particularidad de que no es solo un programa sino que también es una **palabra reservada**. Es decir, según como lo invoquemos, ejecutamos **cosas distintas**.
+
+---
+
+Si no sabemos el nombre de alguna orden podemos usar las siguientes 2 herramientas:
+
+![buscar](imagenes_extra/buscar.png)
+
+- `whatis <comando>` Nos dice que hace el comando que le especificamos.
+- `apropos <comando>` Busca en las descripciones de todas as páginas del manual esta palabra.
+- `man -k sort` es equivalente a `apropos`
+
+---
+
+### Ejercicio L2
+
+1. Una orden que muestre las primeras líneas de un fichero y otra que muestre las últimas.
+
+![head](imagenes_extra/head.png)
+
+![tail](imagenes_extra/tail.png)
