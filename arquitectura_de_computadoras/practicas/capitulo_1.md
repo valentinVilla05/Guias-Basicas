@@ -82,7 +82,6 @@ Cuando introducimos instrucciones en el editor, en el panel de la derecha aparec
 
 **Consola**: Es la parte donde se muestra la información recibida por el programa . El resultado de la operación que queramos mostrar se debe almacenar en el registro `a0` y para mostrarlo en consola debemos llamar a la instrucción `ecall` que espera que se entregue en el registro `a7` el servicio que queramos ejecutar
 
-
 _Ejemplo_: Con el servicio `1`, valor asignado a `a7` se envia el **Número entero** almacenado en `a0`
 
 ![SERVICIOS](../images/servicios.png)
@@ -168,7 +167,8 @@ Asociadas a `direcionamiento inmediato`
 En el tipo I también se emplea el **direccionamiento indexado** que consiste en tomar el contenido de un registro y sumarle el desplazamiento indicado por el valor inmediato para obtener una dirección de memoria resultante (como en `lw` a0,128,t0)
 
 En el tipo **U** el valor inmediato tiene longitud de 20 bits porque el valor se interpreta como un entero sin signo. Además solo se cuenta con un registro como operando (`rd` que actua como destino)
-  - Instrucciones tipo **U**: `lui` t0, valor o `auipc` rd, imm
+
+- Instrucciones tipo **U**: `lui` t0, valor o `auipc` rd, imm
 
 `auipc` permite usar el **direccionamiento relativo** donde uno de los operandos es fijo: `pc`
 
@@ -236,7 +236,6 @@ Si los datos superan los 2KB el registro `gp` se inicializa con una dirección i
 | `and` / `andi` | And             | **hace operación lógica Y**                                           | `and a0,t0,t1` (a0=t0^t1)                 |
 | `or` / `ori`   | Or              | **hace operación lógica O**                                           | `or a0,t0,t1` (a0=t0 v t1)                |
 | `beq`          | Jump            | **salta a etiqueta si `reg1==reg2`**                                  | `beq t0,zero,fin`                         |
-
 
 ### Ejercicios de capitulo 1
 
