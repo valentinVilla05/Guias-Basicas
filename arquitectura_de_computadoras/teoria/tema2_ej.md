@@ -53,3 +53,39 @@ Registros adelantados por bypass:
 $*1$ : Ocurre exactamente igual que en ejercicio 1, `lw` es una operación de carga por lo que `s0` se actualiza en **MEM** , no se puede decodificar correctamente la instrucción en **add** 
 
 $*2$: Igual, estamos ante una instrucción de carga, **no suelta el dato hasta mem** por que no se puede Decodificar correctamente porque el dato `s1` no es correcto aún
+
+## Ejercicio 3
+| Instrucción | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 
+| -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
+| **lw `s0`,0(t0)** | IF | ID | EX | MEM | WB |
+| **add a1,a1,`s0`** ($*1$) | | IF | ID | - | EX | MEM | WB |
+| **addi t0,t0,4** | | | IF | - | ID | EX | MEM | WB |
+| **lw `s1`,0(t0)** | | | | - | IF | ID | EX | MEM | WB | 
+| **add a2,a2,`s1`** ($*2$)| | | | - | | IF | ID | - | EX  | MEM | WB | 
+| **mul a3,a1,a2** | | | | - | | | IF | - | ID | EX | EX ($*3$) | MEM | WB |
+| **addi t0,t0,4** | | | |  - | | | | - | IF | ID | `-` | EX ($*4$) | MEM | WB
+| **sub a4,a3,s0** | | | | - | | | | - | | IF | - | ID | E | MEM | WB | 
+| **add a5,a4,s1** | | | | - | | | | - | | | - | IF | ID | E | MEM | WB | 
+| **lw s2,0(t0)** | | | | - | | | | - | | | - | - | IF | ID | E | MEM | WB |
+
+$*1$: En este caso , la instrucción `lw` almacena en s0 el resultado en la etapa de `mem` por lo que no podremos pasar los datos de esta antes
+
+$*2$: Exactamente igual
+
+$*3$: La multiplicación es una operación más compleja que la suma y la resta, porl o que requirere **2 ciclos de reloj** en lugar de 1
+
+$*4$: La instrucción addi actualiza el registro temporal t0 tras la ejecución de esta por lo tanto tendremos que posponer las siguientes instrucciones
+
+## Ejercicio 4
+| Instrucción | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 
+| -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | 
+| **lui t0,0x10000** | IF | ID | EX | MEM | WB | 
+| **lw a0,0,t0** | | IF | ID | EX | MEM | WB | 
+| **addi a0,a0,1** | |  | IF | ID | - | `EX` | MEM | WB | 
+| **lw a1,4,t0** | | | | IF | - | ID | EX | MEM | WB | 
+| **addi a1,a1,4** | | | | | | IF | ID | - | `EX` | MEM | WB | 
+| **add a2,a0,a1** | | | | | | | IF | - | ID | EX | MEM | WB | 
+| **addi t0,t0,4** | | | | | | | | - | IF | ID | EX | MEM | WB | 
+| **blt t0,t1,bucle** | | | | | |  | | - |  | IF | ID | EX | MEM | WB  
+
+En ambas `EX` marcadas ocurre igual, en este caso la instrucción previa es lw que representa la carga , por lo que el registro de destino únicamente será actualizado tras `MEM`
