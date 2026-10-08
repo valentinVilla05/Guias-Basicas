@@ -19,7 +19,9 @@ UNIX permite dividir la jerarquía de directorios en varias partes (particiones 
   - `df -i`: Muestra el estado de los inodos (puedes quedarte por llenar el espacio)
 
 **Tipos de Sistemas de Ficheros**:
+
 **1. Reales (físicos)** : Guardan datos permanentemente en el disco (`ext4` en Linux , `NTFS` en Windows y `FAT32` en USBs)
+
 **2. Virtuales**: Existe solo en la memoria RAM (al apagar se borran) para dar información del sistema/kernel (`/proc`, `/sys`,`/tmp`)
 
 Por ejemplo:
@@ -27,7 +29,7 @@ Por ejemplo:
 
 Aquí he montado mi disco externo manualmente, para ello he ejecutado:
 
-1. `lsblk` para ver el nombre que el kernel le ha asignado a mi disco, enn este caso ha sido `sda`
+1. `lsblk` para ver el nombre que el kernel le ha asignado a mi disco, en este caso ha sido `sda`
 2. `sudo mkdir -p /mnt/DISCO_EXTERNO`: He creado el punto de montaje (se usa `/mnt/...` por convencion.
 3. `sudo mount /dev/sda /mnt/DISCO_EXTERNO/` Monto el disco en el punto que hemos creado.
 

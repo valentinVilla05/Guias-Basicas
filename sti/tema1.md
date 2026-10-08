@@ -82,7 +82,7 @@ Cada propiedad tiene sus propios ataques y contramedidas
 * **Riesgo**: Producto entre la magnitud del daño (d) y probabilidad de que ocurra (pd)  
   >	R \= d \* pd  
   
-  *un daño de baja magnitud pero con prob de ocurrencia alta puede suponer un daño mayor q uno potencial pero improbable* 
+  *un daño de baja magnitud pero con probabilidad de ocurrencia alta puede suponer un daño mayor que uno potencial pero improbable* 
 
 
 ### **1.2.1. Estrategias de gestión del riesgo**
@@ -101,9 +101,9 @@ Identificado y cuantificado un riesgo las estrategias son:
 
 Detrás de todo ataque hay un agente con motivaciones y capacidades concretas . Conocer el perfil del posible atacante es esencial para construir un modelo de amenazas.
 
-* **Aficionados y script kiddies:** Individuos con conocimientos limitados q usan herramientas y exploits desarrollados por terceros. Peligrosidad baja, número enorme  
+* **Aficionados y script kiddies:** Individuos con conocimientos limitados que usan herramientas y exploits desarrollados por terceros. Peligrosidad baja, número enorme  
     
-* **Personal Interno:** empleados o colaboradores (antiguos/actuales) con acceso al sistema. Una de las amenazas más difíciles de contrarrestar ya q viene de dentro. Sus acciones pueden ser tanto malintencionadas como fruto de negligencia  
+* **Personal Interno:** empleados o colaboradores (antiguos/actuales) con acceso al sistema. Una de las amenazas más difíciles de contrarrestar ya que viene de dentro. Sus acciones pueden ser tanto malintencionadas como fruto de negligencia  
     
 * **Cibercriminales:** Grupos organizados con ánimo de lucro, responsables de la mayor parte del ransomware, el fraude en línea y robo de credenciales. Operan como empresas con estructuras jerárquicas y modelos de negocio propios  
     
@@ -113,7 +113,7 @@ Detrás de todo ataque hay un agente con motivaciones y capacidades concretas . 
 
 ## **1.3. Amenaza, vulnerabilidad y exploit**
 
-* **Amenaza:** Situación de daño cuyo riesgo de producirse es significativo. Una amenaza existe cuando hay una combinación de vulnerabilidades en el sistema y agentes capaces de explotarlas, la prob de que se produzca daño NO es despreciable  
+* **Amenaza:** Situación de daño cuyo riesgo de producirse es significativo. Una amenaza existe cuando hay una combinación de vulnerabilidades en el sistema y agentes capaces de explotarlas, la probabilidad de que se produzca daño NO es despreciable  
     
 * **Vulnerabilidades:** Deficiencia de un sistema susceptible de producir (accidental o intencionalmente) un fallo en el mismo. Pueden residir en el diseño, implementación o forma de uso  
     
@@ -126,7 +126,7 @@ Un modelo clásico, debido a Pfleeger , clasifica las amenazas sobre un flujo de
 
 * **Interrupción:** un activo del sistema se destruye o queda inutilizable. Es un ataque contra la **disponibilidad**  
 * **Interceptación**: un agente no autorizado consigue acceso a un activo. Ataca contra la **confidencialidad**  
-* **Modificación:** un agente no autorizado no solo accede a un activo sino q lo altera. Ataca contra la **integridad**  
+* **Modificación:** un agente no autorizado no solo accede a un activo sino que lo altera. Ataca contra la **integridad**  
 * **Fabricación:** un agente no autorizado introduce objetos falsificados en el sistema. Ataca contra la **autenticidad**
 
 
@@ -229,7 +229,7 @@ La seguridad no es un estado fijo ni un producto, sino un **proceso continuo** q
 
 * **Ciclo de vida:** La protección no se añade al final, debe acompañar al sistema desde su concepción, desarrollo y despliegue hasta su retirada  
 * **Principios de diseño:** Se aplican pautas arquitectónicas para minimizar la cantidad de errores y limitar el impacto cuando estos ocurran  
-* **Problema de inversión:** Plantea la paradoja de por q las organizaciones suelen invertir menos de lo necesario en seguridad, aun siendo conscientes de los riesgos.  
+* **Problema de inversión:** Plantea la paradoja de por que las organizaciones suelen invertir menos de lo necesario en seguridad, aun siendo conscientes de los riesgos.  
 * **Cultura de resiliencia:** Tan importante como prevenir los fallos es preparar al sistema para asumir que fallará y ser capaz de responder y recuperarse
 
 ## **1.5.1. La seguridad no es un producto**

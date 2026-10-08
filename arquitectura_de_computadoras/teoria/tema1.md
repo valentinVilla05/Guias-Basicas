@@ -5,7 +5,7 @@
 | ¿qué hace la máquina? | ¿Cómo se implementa? | 
 | --  | -- |
 | Representa la perspectiva de la programación de sistemas | Representa el hardware | 
-| Conjunto de instrucciones (ISA) que define el lenguaje máquina | Foorma concreta en la que se implementan las instrucciones del hardware | 
+| Conjunto de instrucciones (ISA) que define el lenguaje máquina | Forma concreta en la que se implementan las instrucciones del hardware | 
 | Registros visibles para la instrucción del usuario | Unidades funcionales físicas (ALU, decodificadores) | 
 | Modo de direccionamiento de la memoria y de paralelisomo | Buses internos de comunicación y señales de control | 
 | Mecanismos de protección y direccionamiento virtual | Técnica física de la memoria y la lógica electrónica | 
@@ -69,7 +69,7 @@ Los niveles se representan como **capas que se apilan unas sobre otras**. **Las 
 **Elementos de entrada:** el datapath ofrecido por RT con su unidad de control  
 **Elementos de salida:** banco de registros, direccionamientos y repertorio de instrucciones.
 
-![alt text](./images/isa.png)
+![alt text](../images/isa.png)
 
 **\-  CISC – Complex Instruction Set Computer**
 
@@ -89,7 +89,7 @@ Los niveles se representan como **capas que se apilan unas sobre otras**. **Las 
 Cuenta con distintas implementaciones según el datapath definido en el nivel RT: secuencias, segmentado, superescalar, etc
 
 ## **Arquitectura Von Neumann [Arquitectura\_Von\_Neumann.mp4](https://drive.google.com/file/d/1uuC1vacy768TnJ2079TIiqgjljlFuqSz/view?usp=drive_link)**
-![alt text](/images/vonn.png)
+![alt text](../images/vonn.png)
 
 **Componentes principales:**
 

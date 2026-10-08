@@ -91,7 +91,7 @@ La emisión es el momento en el que una instrucción pasa de la etapa de decodif
 
 ### Definiciones Adicionales:
 
-* * **Latencia:** Tiempo total transcurrido desde que un elemento entra al sistema hasta que se completa. Es la suma de las duraciones de cada etapa individual y no disminuye por el uso del pipeline.
+* **Latencia:** Tiempo total transcurrido desde que un elemento entra al sistema hasta que se completa. Es la suma de las duraciones de cada etapa individual y no disminuye por el uso del pipeline.
 * **Throughput (Rendimiento)**: Cantidad de elementos completados por unidad de tiempo. En régimen permanente (pipeline lleno), la velocidad de salida la dicta únicamente el tiempo de procesamiento de la etapa más lenta.
 * **Ganancia (Speedup)**: Factor de mejora en rendimiento respecto a un procesamiento secuencial. Nunca alcanza el máximo teórico (igual al número de etapas) debido a las ineficiencias de inicio y fin: las fases de llenado y vaciado, donde no todas las etapas del pipeline operan al 100% de su capacidad.
 
@@ -115,7 +115,7 @@ La emisión es el momento en el que una instrucción pasa de la etapa de decodif
 ![alt text](../images/difsegmentada.png)
 
 ## Ruta de Datos Encauzada y Control
-Un camino de datos necesita serparar las 5 etapas del camino de datos , cada etapa puede estar procesando una ejecución diferente (es decir, secuencialmente)
+Un camino de datos necesita separar las 5 etapas del camino de datos , cada etapa puede estar procesando una ejecución diferente (es decir, secuencialmente)
 
 > Se utilizan registros (pipeline registers) para llevar los datos de la instrucción entre las etapas
 
@@ -146,14 +146,14 @@ MEM/WB conserva el resultado que deberá escribirse en el banco de registros dur
 ![alt text](../images/control.png)
 
 ## "Riesgos" - Situaciones Peligrosas
-> **Riesgo (hazard)**: Situación que impide que una instrucción avance en el ciclo previsto sin comprometerl a ejecución correcta
+> **Riesgo (hazard)**: Situación que impide que una instrucción avance en el ciclo previsto sin comprometer la ejecución correcta
 
 **Consecuencia**: Puede ser necesario detener temporalmente el cauce ocasionando una pérdida de rendimiento
 
 ### Detención o Inserción de Burbuja
 * Cuando se encuentra el riesgo, **se impide temporamente que una o varias instrucciones avancen**
 
-> Una detección o inserción de una burbuja es un ciclo en el que una etapa no realiza trabajo útil. El procesador introduce detenciones para obtener un resutlado correcto
+> Una detección o inserción de una burbuja es un ciclo en el que una etapa no realiza trabajo útil. El procesador introduce detenciones para obtener un resultado correcto
 
 * Estas implican retrasos de la ejecución de instrucciones y reducción del rendimiento global
 
@@ -182,7 +182,7 @@ MEM/WB conserva el resultado que deberá escribirse en el banco de registros dur
 
 
 ## Reordenamiento de Código
-El compilador **puede cambiar el orden de las instrucciones** para reducir las detenciones del cauce siemrpe que no cambie el resultado del programa
+El compilador **puede cambiar el orden de las instrucciones** para reducir las detenciones del cauce siempre que no cambie el resultado del programa
 
 * Las **instrucciones independientes** pueden cambiar de posición
 * Las **instrucciones dependientes** deben mantener el orden necesario para obtener un resultado correcto
@@ -212,7 +212,7 @@ Se realiza siempre independientemente de la condición
     * Llamadas a funciones
     * Retornos
 
->PC se acutaliza con la dirección de destino del salto
+>PC se actualiza con la dirección de destino del salto
 
 * **Saltos Condicionales**
     * Si la condición es verdadera
@@ -267,7 +267,7 @@ Cada iteracción necesita comprobar si el bucle debe continuar
 
 **Técnica para reducir coste de bucles**:
     
-* **Desenrollado de bucles**: Consiste en realizar varias iteraciones del bucle dentro de uuna única iteración del nuevo código
+* **Desenrollado de bucles**: Consiste en realizar varias iteraciones del bucle dentro de una única iteración del nuevo código
 
 * **Objetivo**:
     * Reducir el número de saltos
@@ -334,8 +334,8 @@ Se descarta
 
 * **Coste de la ejecución especulativa**: Puede mejorar el rendimiento pero también:
 
-**1. Utiliza recursos del procesador**
+        **1. Utiliza recursos del procesador**
 
-**2. Consume energía**
+        **2. Consume energía**
 
-**3. Puede ejecutar instrucciones cuyos resultados terminarán siendo descartados**
+        **3. Puede ejecutar instrucciones cuyos resultados terminarán siendo descartados**

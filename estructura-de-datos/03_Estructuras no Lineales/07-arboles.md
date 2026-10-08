@@ -122,7 +122,7 @@ Está bajo una **regla de orden escricta** para garantizar búsquedas rápidas
 
 **Regla del ABB** para cualquier nodo x
 * Todas las claves en su subárbol izquierdo son **estrictamente menores** que x
-* Todoas las claves en su subárbol derecho son **esctrictamente mayores** que x
+* Todas las claves en su subárbol derecho son **esctrictamente mayores** que x
 * **NO** se permiten elementos duplicados
 
 ![arbol_abb](../assets/img/regla_abb.gif)

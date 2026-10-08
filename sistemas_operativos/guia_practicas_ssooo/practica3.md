@@ -308,7 +308,7 @@ A pesar de que el grupo y el resto de usuarios si tiene permisos de lectura (`r`
 **¿Qué hace UNIX en estos casos?**
 
 1. **¿Eres el propietario?**
-   - **SI**: Si no tienes `r``no puedes leer
+   - **SI**: Si no tienes `r` no puedes leer
    - Unix **no** pasa a mirar los permisos del grupo ni otros usuarios
 
 2. **¿Eres del grupo?**
@@ -334,6 +334,6 @@ umask = 777 - 750 = 027
 
 > Recordatorio : umask = permisos máximos (777) - Permisos Denegados (750)
 
-(Recordar que la operación interna de **umask** NO es una resta aritmetica aun que en la práctica funiciones como tal)
+(Recordar que la operación interna de **umask** NO es una resta aritmetica aunque en la práctica funcione como tal)
 
 ![alt text](imagenes/ej4.png)
