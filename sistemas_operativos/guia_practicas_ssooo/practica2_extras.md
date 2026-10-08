@@ -114,6 +114,19 @@ Ejemplo: a la izquierda se usa `man printf` y a la derecha `man 3 printf`
 
 Al especificar la versión nos devuelve la función de la biblioteca estándar de C con su información.
 
+Cabe resaltar que cuando usamos el manual (`man`) lo que nos entrega el sistema es un paginador (el paginador de Ubuntu es `less`), por lo que las teclas de naegación son las mismas que para `less`.
+
+| **Tecla**   | **Efecto**                        |
+| ----------- | --------------------------------- |
+| Espacio / B | Avanzar / Retroceder una pantalla |
+| /<patron>   | Buscar hacia delante              |
+| n / N       | Siguiente / anterior coincidencia |
+| g / G       | Ir al principio / final           |
+| h           | Ayuda del propio paginador        |
+| q           | Salir                             |
+
+Por ejemplo, para encontrar la descripción de la opción -F de `ls`, ponemos: `man 1 ls` y buscamos `/-F`
+
 ---
 
 ### Ejercicio L1
@@ -160,3 +173,105 @@ Si no sabemos el nombre de alguna orden podemos usar las siguientes 2 herramient
 ![head](imagenes_extra/head.png)
 
 ![tail](imagenes_extra/tail.png)
+
+2. Una orden que elimine líneas duplicadas consecutivas.
+
+![uniq](imagenes_extra/uniq.png)
+
+3. Una orden que muestre el contenido de un fichero en octal o hexadecimal.
+
+![hex](imagenes_extra/hex.png)
+
+4. Una orden que informe del tipo de contenido de un fichero a partir de su contenido, no de su extensión.
+
+![file](imagenes_extra/file.png)
+
+---
+
+### Ejercicio L3
+
+1. Abre man 1 ls y localiza, mediante búsqueda dentro del paginador, la descripción de la opción -F . Transcribe qué carácter añade a cada tipo de fichero. En Ubuntu 24.04 la página sólo enumera los caracteres ( \*/=>@| ) sin decir a qué tipo corresponde cada uno: completa la respuesta experimentalmente, creando un directorio, un fichero ejecutable y un enlace simbólico ( ln -s ) y observando la salida de ls -F . En Ubuntu 26.04 la página sí lo explica.
+
+![tipos](imagenes_extra/cadaTipo.png)
+
+| Carácter | Tipo de fichero                          |
+| -------- | ---------------------------------------- |
+| `/`      | Directorio                               |
+| `*`      | Fichero regular ejecutable               |
+| `@`      | Enlace simbolico                         |
+| `\|`     | FIFO (tuberia con nombre)                |
+| `=`      | socket                                   |
+| `>`      | _door_ (esto NO apareccerá en linux)     |
+| (nada)   | fichero regular sin permiso de ejecución |
+
+Vamos a ver paso a paso que hemos hecho:
+
+`mkdir prueba && cd prueba` --> Creamos el directorio 'prueba' y accedemos a el
+
+`mkdir directorio` --> Creamos otro directorio dentro de 'prueba' llamado 'directorio'.
+
+`touch ejecutable` --> Creamos un archivo llamado 'ejecutable'
+
+`chmod +x ejecutable` --> Le damos permmiso de ejecución al archivo que acabamos de crear
+
+`touch normal` --> Creamos un archivo llamado 'normal'
+
+`ln -s normal enlace` --> Creamos un enlace simbolico a 'normal' llamado 'enlace'
+
+`mkfifo tuberia` --> Creamos un FIFO, que es una tuberia con nombre
+
+`ls -F` --> Listamos todos los ficheros creados con su tipo
+
+2. En la misma página, localiza qué dice sobre el orden en que se listan los ficheros cuando no se indica ninguna opción de ordenación. La página no explica de qué depende ese orden alfabético: búscalo en man 7 locale (categoría LC_COLLATE ) y, en Ubuntu 24.04, también en el aviso final de man 1 sort . Cita la variable de entorno que lo determina.
+
+![lsSort](imagenes_extra/lsSort.png)
+
+La descripción de la orden dice que lista la información sobre los ficheros y que ordena las entradas alfabéticamente si no se usa ninguna de las opciones `-cftuvSUX` ni `--sort`.
+
+![LC_COLLATE](imagenes_extra/LC_COLLATE.png)
+
+Esa categoría define las reglas de **colación** (_**collation**_), es decir, el orden en que se comparan y ordenan las cadenas. La página explica además que las categorías (LC_COLLATE, LC_CTYPE, etc.) se toman de variables de entorno con este orden de prioridad:
+
+- `LC_ALL`, si está definida (anula todo lo demás).
+- La variable de la categoría concreta, aquí `LC_COLLATE`.
+- `LANG`, como valor por defecto.
+
+![LC_ALL](imagenes_extra/LC_ALL.png)
+
+3. Averigua, en `man 1 man` , qué hace la opción -P y cómo se indicaría a man que utilizase cat en lugar del paginador
+
+![man-P](imagenes_extra/man-P.png)
+
+Indica a `man` qué programa usar para mostrar la página de manual. Por defecto usa pager (normalmente less). La opción tiene prioridad sobre la variable de entorno $MANPAGER, que a su vez tiene prioridad sobre $PAGER.
+
+---
+
+Es importante saber que NO todas las órdenes que usamos en la consola son programas, algunas son **órdenes internas** y las ejecuta el própio intérprete sin crear procesos de por medio. Para saber si una óden es función interna o no usamos `type`, por ejemplo:
+
+![type](imagenes_extra/types.png)
+
+---
+
+### Ejercicio L4
+
+1. Clasifica como interna o externa: `cd` , `pwd` , `echo` , `ls` , `test` , `kill` , `time`.
+
+| Internas | Externas |
+| -------- | -------- |
+| `cd`     | `ls`     |
+| `pwd`    | `time`   |
+| `echo`   |          |
+| `test`   |          |
+| `kill`   |          |
+
+2. Al menos tres de ellas existen simultáneamente como orden interna y como programa en el sistema de ficheros. Identifícalas con type -a e indica la ruta del programa.
+
+![ambas](imagenes_extra/typesAmbas.png)
+
+3. Ejecuta help echo y man 1 echo. Describe una diferencia entre ambas versiones de la orden. ¿Cuál de las dos se ejecuta cuando escribes echo en el terminal?
+
+`help echo` documenta la versión interna de bash, y `man 1 echo` la del programa externo de coreutils (/usr/bin/echo). Una diferencia observable: la página de man describe las opciones `--help` y `--version`, que el echo interno no tiene, y help echo detalla las secuencias de escape de -e (\n, \t, \c...).
+
+4. Razona por qué cd no puede ser un programa externo. Si todavía no dispones de argumentos para responder, deja el ejercicio abierto y complétalo tras el capítulo 7, indicando entonces expresamente que lo resuelves con lo aprendido allí.
+
+Un programa externo se ejecuta en un proceso hijo de la shell, y cada proceso tiene su propio directorio de trabajo. Si `cd` fuera un programa, cambiaría el directorio del hijo, que terminaría justo después, y la shell seguiría en el mismo directorio. Para que `cd` tenga efecto, debe ejecutarse dentro del propio proceso de la shell, y por eso es interna.
