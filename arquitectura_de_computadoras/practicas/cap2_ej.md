@@ -7,24 +7,20 @@ resultado por la consola**
 
 ```asm
 .text
+li a0,0 # inicializamos a0 a 0
+li t0,1 # contador
+li t1,1000 # t1=1000 el límite hasta donde queremos sumar
 
-li a0,0 # Inicializamos el acumulador a 0 
-li t0,1 # To será el contador que usaremos, en este caso inicializamos a 1
-li t1,1000 # t1 es el límite (queremos llegar hasta este número)
-
-bucle:
-    bgt t0,t1,fin # bgt significa saltar si es mayor (be greater than)
-    add a0,a0,t0 # vamos sumando en el acumulador
-    addi t0,t0,1 # vamos sumando en el contador
-    j bucle # vuelve al inicio del bucle (j= JUMP)
-    
-fin:
+bucleEJ1:
+    add a0,a0,t0 
+    addi t0,t0,1 # vamos incrementando el contador
+    ble t0,t1,bucleEJ1 # mientras que t0 <= 10000 se repite el bucle  
     li a7,1
     ecall
 
     li a7,10
     ecall
-    
+
 ```
 
 **2.2 Sumar los valores impares entre 1 y 1000 en el registro a0 y mostrar el resultado
@@ -33,20 +29,18 @@ por la consola**
 (Exactamente igual que el anterior pero tenemos que añadir la línea marcada)
 ```asm
 .text
-li a0,0
-li t0,1
-li t1,1000
+li a0,0 # acumulador
+li t0,1 # primer impar
+li t1,1000 # límite
 
-bucle2:
-    bgt t0,t1,fin2 # salta si t0 > 1000
-    add a0,a0,t0 
-    addi t0,t0,2 # Vamos sumando el contador de 2 en 2 para que sea impar
-    j bucle2
+bucleEJ2:
+    add a0,a0,t0
+    addi t0,t0,2 # incrementamos en los impares
+    ble t0,t1,bucleEJ2
     
-fin2:
     li a7,1
     ecall
-
+    
     li a7,10
     ecall
 ```

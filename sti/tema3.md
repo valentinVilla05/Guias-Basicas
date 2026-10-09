@@ -14,7 +14,7 @@ La criptografía dejó de ser un arte empírico para convertirse en una **discip
 
 ## 2. **El principio de Kerckhoffs y la “Seguridad por Oscuridad”**
 
-Confiar en la seguridad a traǘes de la oscuridad (`security through obscurity`) –**creer que un sistema es seguro porque se mantiene en secreto en su algoritmo – es una premisa falsa y peligrosa**. Cualquier persona puede diseñar un algoritmo que no sea capaz de romper ella misma, pero por eso solo demuestra ignorancia sobre sus propias debilidades
+Confiar en la seguridad a través de la oscuridad (`security through obscurity`) –**creer que un sistema es seguro porque se mantiene en secreto en su algoritmo – es una premisa falsa y peligrosa**. Cualquier persona puede diseñar un algoritmo que no sea capaz de romper ella misma, pero por eso solo demuestra ignorancia sobre sus propias debilidades
 
 >  Principio de Kerckhoffs (1883): La seguridad de un criptosistema no debe depender del secreto del algoritmo, sino únicamente del secreto de la clave. Se debe asumir que el atacante conoce completamente el funcionamiento del sistema; lo único que desconoce es la clave concreta utilizada. 
 
@@ -29,7 +29,7 @@ Confiar en la seguridad a traǘes de la oscuridad (`security through obscurity`)
 * **Átomos en el Universo observable:** \= 2^255
 
 Un criptosistema con una clave de **256 bits** `2^256` combinaciones ofrece un espacio de claves mayor que el número de átomos del Universo observable. Esto convierte un ataque por **fuerza bruta** en algo **físicamente imposible** bajo la física clásica.
-
+ 
 ## **4. Definición Formal de Criptosistema**
 
 Un criptosistema es una quíntupla **$(M, C, K, E, D)$**:

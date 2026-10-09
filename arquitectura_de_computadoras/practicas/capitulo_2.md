@@ -14,7 +14,7 @@ A las instrucciones anteriores de la tabla le añadiremos otras 8 más que será
 | `bne` rs1, rs2, imm  | salta si rs1 $\neq$ rs2              |
 | `bge` rs1, rs2, imm  | salta si rs1 $\geq$ rs2              |
 | `bgeu` rs1, rs2, imm | igual que `bge` pero sin signo       |
-| `blt` rs1, rs2, imm  | salta si rs1 < rs2                   |
+| `blt` rs1, rs2, imm  | salta si rs1 $<=$ rs2                   |
 | `bltu` rs1, rs2, imm | Igual que la anterior pero sin signo |
 
 > Rango de los saltos: los condicionales usan un desplazamiento de 12 bits (≈ ±4 KB) y `jal` uno de 20 bits (≈ ±1 MB).
@@ -27,9 +27,9 @@ que toman los mismos argumentos que las instrucciones previas, y `beqz`, `bnez`,
 
 La seudoinstrucción `bnez` compara el contenido de `a0` con el registro `zero` y si no coinciden , ejecuta el salto de forma que el bucle se repetirá hasta que `a0` contenga `0`
 
-![condicional](../images/condicional.png)
+![alt text](../images/corre.png)
 
-Ejemplo de `if/else`: se ejecuta `a0 = a1 - a2` si `a1 > a2` y `a0 = a2 - a1` en caso contrario. Se salta a `mayora2` cuando `a2 >= a1`, y `j fin` evita ejecutar también el `else`.
+Ejemplo de `if/else`: se ejecuta `a0 = a1 - a2` si `a1 >= a2` y `a0 = a2 - a1` en caso contrario. Se salta a `mayora2` cuando `a2 >= a1`, y `j fin` evita ejecutar también el `else`.
 
 **Bucle** (cuenta atrás de 10 a 1):
 
@@ -145,6 +145,7 @@ Como vemos/veremos en teoría, evitar saltos es importante en un procesador segm
 ### ---Recordatorio---
 
 **Complemento a uno**: invierte todos los bits
+
 **Complemento a dos**: invirtiendo todos los bits y sumando 1
 
 ## Almacenamiento temporal de datos en la pila
@@ -159,6 +160,7 @@ Una función puede modificar cualquiera de sus registros temporales: `t0` a `t6`
 En Ripes, al pasar el ratón sobre un registro aparece `Saver: Caller` o `Saver: Callee`.
 
 **Pasos**
+
 **1. Reservar en la pila el espacio necesario**: como crece hacia **abajo** tenemos que restar el valor a `sp` y siempre ha de ser un múltiplo de 16
 
 **2. Guardar el contenido de los registros apropiados en el espacio reservado de la pila**: Se usa el registro sp y un desplazamiento
@@ -177,7 +179,9 @@ Ejemplo `pow(base, exp)`: la función usa 5 registros (`ra`, `gp`, `s0`, `s1`, `
 
 El número de registros de la CPU es limitado por lo que será preciso recurrir a la memoria para almacenar datos, (se usará en funciones con muchos parámetros)
 
-Hasta 8 registros de `a0` a `a7` están destinados a facilitar la transferencia de parámetros al invocar a una función y del noveno argumento en adelante se pasan por la pila. **SE USAN EN ORDEN**; si solo necesitamos 2 -> `a0` y `a1`
+Hasta 8 registros de `a0` a `a7` están destinados a facilitar la transferencia de parámetros al invocar a una función y del noveno argumento en adelante se pasan por la pila. 
+
+**SE USAN EN ORDEN**; si solo necesitamos 2 -> `a0` y `a1`
 
 ![funcionAvg](../images/avg.png)
 

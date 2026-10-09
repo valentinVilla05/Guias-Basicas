@@ -14,7 +14,7 @@
 ## Segmentación de las UF en la etapa EX
 * La segmentación es una técnica por la que se divide la ejecución de instrucciones en una **unidad funcional** (`UF`) en varias etapas más simples para mejorar su rendimiento
 
-* Gracias a la segmentación se permite la coexistencia de **datos de distintas operaciones** de varias instrucciones en las ddiferentes etapas en la misma UF
+* Gracias a la segmentación se permite la coexistencia de **datos de distintas operaciones** de varias instrucciones en las diferentes etapas en la misma UF
 
 * Nos centraremos en la segmentación de las `UF` **de la etapa EX** en la que varias UF pueden operar en paralelo sobre datos de distintas instrucciones
 
@@ -43,7 +43,7 @@
 | **S4** |  |  |  |  `X` | 
 
 ### Conceptos sobre Latencias
-* **Latencia de Inicio**: Númer ode ciclos que tarda una operación para ser completada pasando por todas las etapas
+* **Latencia de Inicio**: Número de ciclos que tarda una operación para ser completada pasando por todas las etapas
 
 * **Latencia**: tiempo (nº de ciclos) que es necesario esperar antes de introducir una nueva operación en el cauce de la unidad funcional
 
@@ -90,6 +90,7 @@
 * **Latencia Media (`LM`)** : suma de las latencias de un ciclo entre el número de operaciones
 
 *Ejemplos*
+
     * LM(1,3)= (1+3)/2 = 2
     * LM(3) = 3/1 = 3
 
