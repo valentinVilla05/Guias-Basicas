@@ -76,7 +76,6 @@ addi a7, zero, 1
 ecall
 
 rem a0, t0, t1
-addi a7, zero, 1
 ecall
 
 ```
@@ -155,7 +154,7 @@ tresValores: .word 10, 15, 20
 
 .bss
 
-resultado: .word 0
+resultado: .word 0, 0, 0
 
 .text
 
@@ -197,7 +196,7 @@ valores: .word 23, 4
 
 .bss
 
-resultados: .word 0
+resultados: .word 0, 0
 
 .text
 
