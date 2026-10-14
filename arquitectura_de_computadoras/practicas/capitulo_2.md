@@ -209,3 +209,164 @@ Un compilador en C produce el código ensamblador preciso para ir ajustando el r
 ![alt text](../images/imfacto.png)
 
 Las tres primeras líneas hacen `stack frame` y guardan en la pila la dirección de retorno y valor actual del parámetro de entrada. Después se actualiza ese parámetro y con un condicional se determina si ha alcanzado el caso base. Se produce una nueva llamada a la misma función si no se da el caso. Al llegar al caso base se recupera de la pila el parámetro y se hace la operación correspondiente
+
+# RESUMEN DE LAS INSTRUCCIONES RISC-V
+
+## 1. Saltos condicionales
+
+| Instrucción | Operandos | ¿Qué hace? | Ejemplo / Notas |
+|---|---|---|---|
+| `beq` | `rs1, rs2, etiqueta` | Salta si `rs1 == rs2`. | `beq t0, t1, fin` |
+| `bne` | `rs1, rs2, etiqueta` | Salta si `rs1 != rs2`. | `bne a0, zero, bucle` |
+| `blt` | `rs1, rs2, etiqueta` | Salta si `rs1 < rs2` (con signo). | `blt a0, t0, menor` |
+| `bltu` | `rs1, rs2, etiqueta` | Salta si `rs1 < rs2` (sin signo). | Comparación sin signo. |
+| `bge` | `rs1, rs2, etiqueta` | Salta si `rs1 >= rs2` (con signo). | `bge a2, a1, mayor` |
+| `bgeu` | `rs1, rs2, etiqueta` | Salta si `rs1 >= rs2` (sin signo). | Comparación sin signo. |
+
+### Seudoinstrucciones de salto
+
+| Seudoinstrucción | Se traduce como | ¿Qué hace? |
+|---|---|---|
+| `beqz rs, etiqueta` | `beq rs, zero, etiqueta` | Salta si `rs == 0`. |
+| `bnez rs, etiqueta` | `bne rs, zero, etiqueta` | Salta si `rs != 0`. |
+| `bgtz rs, etiqueta` | `blt zero, rs, etiqueta` | Salta si `rs > 0`. |
+| `bgt rs1, rs2, etq` | `blt rs2, rs1, etq` | Salta si `rs1 > rs2`. |
+| `ble rs1, rs2, etq` | `bge rs2, rs1, etq` | Salta si `rs1 <= rs2`. |
+
+---
+
+## 2. Saltos incondicionales y funciones
+
+Cambian el flujo de ejecución sin comprobar ninguna condición.
+
+| Instrucción | Operandos | ¿Qué hace? | ¿Para qué se usa? |
+|---|---|---|---|
+| `jal` | `rd, etiqueta` | Guarda `pc + 4` en `rd` y salta a `etiqueta`. | Llamadas a funciones o saltos con retorno. |
+| `jalr` | `rd, rs, imm` | Guarda `pc + 4` en `rd` y salta a la dirección `rs + imm`, poniendo a cero el bit menos significativo. | Saltos a direcciones almacenadas en registros y retornos. |
+| `j` | `etiqueta` | Equivale a `jal zero, etiqueta`. | Saltar sin guardar dirección de retorno. |
+| `call` | `etiqueta` | Llama a una función y guarda la dirección de retorno en `ra`. | Ejecutar una subrutina. |
+| `ret` | Ninguno | Equivale a `jalr zero, ra, 0`. | Volver de una función. |
+
+---
+
+## 3. Operaciones lógicas (manipulación de bits)
+
+| Instrucción | Operandos | Operación |
+|---|---|---|
+| `and` | `rd, rs1, rs2` | `rd = rs1 AND rs2` (bit a bit). |
+| `andi` | `rd, rs1, imm` | `rd = rs1 AND imm`. |
+| `or` | `rd, rs1, rs2` | `rd = rs1 OR rs2` (bit a bit). |
+| `ori` | `rd, rs1, imm` | `rd = rs1 OR imm`. |
+| `xor` | `rd, rs1, rs2` | `rd = rs1 XOR rs2` (bit a bit). |
+| `xori` | `rd, rs1, imm` | `rd = rs1 XOR imm`. |
+| `sll` | `rd, rs1, rs2` | Desplazamiento lógico a la izquierda. |
+| `slli` | `rd, rs1, imm` | Desplazamiento lógico a la izquierda usando un inmediato. |
+| `srl` | `rd, rs1, rs2` | Desplazamiento lógico a la derecha. |
+| `srli` | `rd, rs1, imm` | Desplazamiento lógico a la derecha usando un inmediato. |
+| `sra` | `rd, rs1, rs2` | Desplazamiento aritmético a la derecha. |
+| `srai` | `rd, rs1, imm` | Desplazamiento aritmético a la derecha usando un inmediato. |
+
+### Diferencias entre desplazamientos
+
+- `sll`: desplaza los bits a la izquierda e introduce ceros por la derecha.
+- `srl`: desplaza los bits a la derecha e introduce ceros por la izquierda.
+- `sra`: desplaza los bits a la derecha conservando el bit de signo.
+
+---
+
+## 4. Instrucciones de comparación (Set Less Than)
+
+Guardan `1` si la condición es verdadera y `0` si es falsa.
+
+| Instrucción | Operandos | Condición evaluada | Resultado en `rd` |
+|---|---|---|---|
+| `slt` | `rd, rs1, rs2` | `rs1 < rs2` (con signo). | `1` si es menor; `0` si no. |
+| `sltu` | `rd, rs1, rs2` | `rs1 < rs2` (sin signo). | `1` si es menor; `0` si no. |
+| `slti` | `rd, rs1, imm` | `rs1 < imm` (con signo). | `1` si es menor; `0` si no. |
+| `sltiu` | `rd, rs1, imm` | Comparación menor que inmediata sin signo. | `1` si es menor; `0` si no. |
+
+### Ejemplo
+
+```asm
+slt t0, a0, a1
+Si a0 < a1, se guarda 1 en t0. Si no, se guarda 0.
+```
+
+## 5. Memoria, pila y sistema
+
+| Instrucción | Operandos | ¿Qué hace? | Uso habitual |
+|---|---|---|---|
+| `lw` | `rd, imm(rs)` | Lee 4 bytes de memoria en la dirección `rs + imm` y los guarda en `rd`. | `lw ra, 0(sp)` (cargar desde la pila). |
+| `sw` | `rs2, imm(rs1)` | Escribe 4 bytes de `rs2` en la dirección `rs1 + imm`. | `sw ra, 0(sp)` (guardar en la pila). |
+| `ecall` | Ninguno | Solicita un servicio al sistema operativo o simulador, según el valor de `a7`. | Imprimir en pantalla, leer datos o salir del programa. |
+
+### Ejemplos
+
+```asm
+lw t0, 0(sp)      # Carga una palabra desde la dirección apuntada por sp
+sw ra, 0(sp)      # Guarda ra en la dirección apuntada por sp
+ecall             # Solicita un servicio al sistema
+```
+> Importante: **lw** y **sw** no modifican automáticamente sp. Para gestionar la pila, normalmente se utiliza **addi** para actualizar el puntero
+
+
+## 6. Otras seudoinstrucciones útiles
+
+| Seudoinstrucción | Se traduce como | Función |
+|---|---|---|
+| `li rd, imm` | `addi rd, zero, imm` / `lui` (según el valor) | Carga una constante en un registro. |
+| `mv rd, rs` | `addi rd, rs, 0` | Copia el valor del registro `rs` en `rd`. |
+| `la rd, etiqueta` | Varias instrucciones | Carga la dirección de memoria de una variable o cadena. |
+| `not rd, rs` | `xori rd, rs, -1` | Complemento a uno: invierte todos los bits de `rs`. |
+| `neg rd, rs` | `sub rd, zero, rs` | Complemento a dos: cambia el signo del valor de `rs`. |
+| `nop` | `addi zero, zero, 0` | No realiza ninguna operación útil. |
+
+### Ejemplos
+
+```asm
+li a7, 10         # Carga una constante en a7
+mv t0, a0         # Copia el valor de a0 en t0
+la a0, mensaje    # Carga la dirección de mensaje en a0
+not t0, t1        # Invierte todos los bits de t1
+neg t0, t1        # Cambia el signo de t1 y guarda el resultado en t0
+nop               # No realiza ninguna operación útil
+```
+## 7. Resumen rápido para memorizar
+
+| ¿Qué quiero hacer? | Instrucción | ¿Qué hace? |
+|---|---|---|
+| Saltar si dos registros son iguales. | `beq` | Salta si `rs1 == rs2`. |
+| Saltar si dos registros son diferentes. | `bne` | Salta si `rs1 != rs2`. |
+| Saltar si un registro es menor que otro (con signo). | `blt` | Salta si `rs1 < rs2`. |
+| Saltar si un registro es menor que otro (sin signo). | `bltu` | Compara los valores sin signo. |
+| Saltar si un registro es mayor o igual que otro (con signo). | `bge` | Salta si `rs1 >= rs2`. |
+| Saltar si un registro es mayor o igual que otro (sin signo). | `bgeu` | Compara los valores sin signo. |
+| Saltar directamente a una etiqueta. | `j etiqueta` | Salta sin comprobar ninguna condición. |
+| Llamar a una función. | `call etiqueta` | Salta a una función y guarda la dirección de retorno. |
+| Volver de una función. | `ret` | Regresa al punto desde donde se llamó a la función. |
+| Comparar dos registros y guardar el resultado. | `slt` / `sltu` | Guarda `1` si el primero es menor y `0` si no. |
+| Hacer una operación AND entre bits. | `and` / `andi` | Conserva los bits que son `1` en ambos operandos. |
+| Hacer una operación OR entre bits. | `or` / `ori` | Pone `1` si alguno de los bits es `1`. |
+| Hacer una operación XOR entre bits. | `xor` / `xori` | Pone `1` si los bits son diferentes. |
+| Desplazar bits a la izquierda. | `sll` / `slli` | Desplaza los bits a la izquierda e introduce ceros. |
+| Desplazar bits a la derecha introduciendo ceros. | `srl` / `srli` | Desplaza los bits a la derecha sin conservar el signo. |
+| Desplazar bits a la derecha conservando el signo. | `sra` / `srai` | Desplaza los bits a la derecha conservando el bit de signo. |
+| Leer una palabra de memoria. | `lw` | Carga 4 bytes de memoria en un registro. |
+| Escribir una palabra en memoria. | `sw` | Guarda 4 bytes de un registro en memoria. |
+| Cargar una constante en un registro. | `li` | Guarda un valor inmediato en un registro. |
+| Copiar el valor de un registro. | `mv` | Copia el valor de un registro a otro. |
+| Cargar una dirección de memoria. | `la` | Guarda la dirección de una variable o cadena en un registro. |
+| Invertir todos los bits. | `not` | Cambia los `0` por `1` y los `1` por `0`. |
+| Cambiar el signo de un número. | `neg` | Calcula el opuesto del valor. |
+| No realizar ninguna operación útil. | `nop` | No modifica ningún registro ni dato útil. |
+| Solicitar un servicio al sistema. | `ecall` | Ejecuta un servicio, como imprimir o finalizar el programa. |
+
+### Diferencia entre comparaciones con signo y sin signo
+
+- **Con signo:** `blt`, `bge`, `slt`, `slti`. Interpretan los valores como números positivos o negativos.
+- **Sin signo:** `bltu`, `bgeu`, `sltu`, `sltiu`. Interpretan los valores como números no negativos, sin bit de signo.
+
+### Diferencia entre saltar y comparar
+
+- **Saltos:** `beq`, `bne`, `blt`, `bge`, etc. Cambian el flujo del programa si se cumple una condición.
+- **Comparaciones:** `slt`, `sltu`, `slti`, `sltiu`. No saltan; guardan `1` o `0` en un registro.
