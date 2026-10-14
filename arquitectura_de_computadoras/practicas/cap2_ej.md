@@ -50,39 +50,27 @@ Consulta las llamadas del sistema de Ripes para saber cómo imprimir el carácte
 Para consultar las llamadas recordemos que tenemos que ir a `help` > `system calls` y podemos ver que para los chars tenemos que usar el valor `11`
 
 ```asm
-.data
-cod: .string "Código "
-car: .string "  - Carácter "
-sep: .string ", "
-salto: .string \n
-.text
-li t0,40
-li t1,122
-la t2,cod
-la t3,car
-la t4,sep
-la t5,salto
-bucle3:
-    beq t0,t1,fin3
-    li a7,4 # sirve para que se muestre un string
-    mv a0,t2
+    li s0, 40
+    li s1, 122
+bucle:
+    bgt s0, s1, fin
+    mv a0, s0
+    li a7, 1 # Numero
     ecall
-    mv a0,t0 # movemos el número
-    li a7,1 # imprime el número actual
+    li a0, 32 # Espacio
+    li a7, 11
     ecall
-    mv a0,t3 # para mostrar carácter
-    li a7,4
+    mv a0, s0
+    li a7, 11 # Caracter
     ecall
-    mv a0,t0 # para mostrar el número como un caracter
-    li a7,11
+    li a0, 10 # Salto de linea
+    li a7, 11
     ecall
-    addi t0,t0,1
-    li a7,4
-    mv a0,t5  # opcional pero es para verlo más limpio con un salto de línea
-    ecall
-    j bucle3
-fin3:
-    li a7,10
+    addi s0, s0, 1
+    j bucle
+
+fin:
+    li a7, 10
     ecall
 ```
 
