@@ -18,6 +18,8 @@
 
   - **RPM (.rpm)**: Usado por Red Hat, Fedora, Rocky Linux, openSUSE, etc.
 
+  - No conviene mezclar RPM y dpkg en el mismo sistema, porque tienen bases de datos separadas y cada uno ignora lo que instaló el otro
+
 - **Sistemas Modernos Autónomos (Snap, Flatpak, AppImage):** Incluyen sus propias dependencias y se ejecutan en entornos aislados (sandboxing). Evitan conflictos de dependencias a costa de consumir más disco y memoria
 
 ## 2. Depósitos o Repositorios de Software
@@ -26,14 +28,14 @@ Catálogos o servidores de confianza con paquetes e índices actualizados
 
 ### Categorías de Paquetes en Ubuntu
 
-| Categoría      | Soporte canonical | Licencia | Descripción                                         |
-| -------------- | ----------------- | -------- | --------------------------------------------------- |
-| **Main**       | Sí                | Libre    | Software principal y oficialmente soportado         |
-| **Restricted** | Sí                | No libre | Controladores/dirves propietarios y sofware de pago |
-| **Universe**   | No                | Libre    | Mantenido por la comunidad                          |
-| **Multiverse** | No                | No libre | Restringido por derechos de autor o licencias       |
+| Categoría      | Soporte canonical | Licencia | Descripción                                           |
+| -------------- | ----------------- | -------- | ----------------------------------------------------- |
+| **Main**       | Sí                | Libre    | Software principal y oficialmente soportado           |
+| **Restricted** | Sí                | No libre | Controladores/drivers propietarios y software de pago |
+| **Universe**   | No                | Libre    | Mantenido por la comunidad                            |
+| **Multiverse** | No                | No libre | Restringido por derechos de autor o licencias         |
 
-Por otro lado tenemos **backports** de `noble-backports` que contiene paquetes de otras cuatro categorias y APT no instalana **nada** de él salvo que se pida expresamente. Aquí hay versiones más recientes adaptadas de lanzamientos posteriores de Ubuntu.
+Por otro lado tenemos **backports** de `noble-backports` que contiene paquetes de otras cuatro categorias y APT no instalada **nada** de él salvo que se pida expresamente. Aquí hay versiones más recientes adaptadas de lanzamientos posteriores de Ubuntu.
 
 ### Configuración de Repositorios en Debian/Ubuntu
 
@@ -84,7 +86,8 @@ El comando `dpkg -l` lista los paquetes y su estado mediante un código de 3 car
   - `i` (install): Debe ser instalado
   - `r` (remove): Debe eliminarse (manteniendo configuración)
   - `p` (purge): Debe eliminarse completamente (con configuración)
-  - `h` (hold): Retenido/bloqueado contra modificadciones
+  - `h` (hold): Retenido/bloqueado contra modificaciones
+  - `u` (unknown): Desconocido
 
 - **2 Estado Actual (Segundo carácter):**
   - `i` (installed): Correctamente instalado
@@ -92,10 +95,11 @@ El comando `dpkg -l` lista los paquetes y su estado mediante un código de 3 car
   - `U` (unpacked): Desempaquetado pero sin configurar
   - `F`/`H`: instalación o configuración incompleta/fallida
   - `n` (Not installed): No instalado
+  - `W` o `t`: Triggers pendientes
 
 - **3 Estado de Error (Tercer carácter):**
   - ` ` (espacio): Sin errores
-  - `R` (Reinst-required): rquiere reinstalación obligatoria
+  - `R` (Reinst-required): requiere reinstalación obligatoria
 
 ## 6. Comandos Clave de Referencia Rápida
 
@@ -114,6 +118,12 @@ El comando `dpkg -l` lista los paquetes y su estado mediante un código de 3 car
   - `sudo apt install -f`: Corregir dependencias rotas
 
   - `sudo apt-mark hold <paquete>`: Bloquear la actualización de un paquete
+
+  - `apt policy`: Muestra de dónde puede instalarse un paquete y con qué versión. Sin argumentos, lista los repositorios configurados con su prioridad.
+
+  - `apt list --upgradable`: Lista los paquetes instalados para los que hay una versión más nueva en los repositorios.
+
+  - `apt-mark unhold` / `showhold`: `hold` congela un paquete en su versión actual, de modo que upgrade y full-upgrade no lo tocan. Es útil cuando una versión nueva te rompería algo. En `dpkg -l` aparece con h en el primer carácter. `unhold` revierte el bloqueo y el paquete vuelve a actualizarse con normalidad.
 
 ## 7. Inspección y Consulta de Paquetes Instalados
 
@@ -226,10 +236,11 @@ Se realiza ejecutando dos acciones en secuencia estricta:
 
 ```bash
 sudo apt update
+sudo apt upgrade
 sudo apt full-upgrade    # O 'sudo apt-get dist-upgrade'
 ```
 
-1. `sudo apt update`: Actualiza el índice local. Descarga la lista más reciente de paquetes y versiones disponibles desde los repositorios `/etc/apt/sources.list`. No instala ni modifica software.
+1. `sudo apt update`: Actualiza el índice local. Descarga la lista más reciente de paquetes y versiones disponibles desde los repositorios `/etc/apt/sources.list.d/ubuntu.sources`. No instala ni modifica software.
 
 2. `sudo apt upgrade`: Actualiza los paquetes a versiones nuevas sin instalar paquetes adicionales ni eliminar ninguno
 
@@ -245,8 +256,8 @@ sudo apt full-upgrade    # O 'sudo apt-get dist-upgrade'
 | 4    | Comprobar instalación                 | `dpkg -l zsh`                 | Estado: `ii` (instalación correcta).                                        |
 | 5    | Ver binarios creados                  | `ls -al /bin/zsh*`            | Muestra `/usr/bin/zsh` y enlace/script de compatibilidad.                   |
 | 6    | Desinstalar conservando configuración | `sudo apt remove zsh`         | Estado `rc` (los archivos de configuración de `/etc/zsh` siguen presentes). |
-| 7    | Limpieza                              | `sudo apt purge zsh`          | Elimina `zsh-common`                                                        |
-| 8    | Limpieza total (purga)                | `sudo apt autoremove --purge` | Retira `zsh-common` pero este se queda en estado `rc`                       |
+| 7    | Purgar el paquete                     | `sudo apt purge zsh`          | `zsh` deja de aparecer como `rc`; `zsh-common` sigue instalado              |
+| 8    | Limpiar dependencias huérfanas        | `sudo apt autoremove --purge` | Retira y purga `zsh-common` junto con su configuración de `/etc/zsh`        |
 
 ## Ejercicios
 
@@ -261,7 +272,7 @@ sudo apt upgrade -y
 
 (apt update sincroniza la lista local con los servidores remotos y -y upgrade acepta la actualización automáticamente)
 
-> En distribuciones como la de ubuntu 26.04 `neofetch` ha sido remplazada por `fastfetch`
+> En distribuciones como la de ubuntu 26.04 `neofetch` ha sido reemplazada por `fastfetch`
 
 Instalamos los paquetes que queremos, podemos instalarlos todos de una sola orden así:
 
@@ -285,7 +296,7 @@ ii  tree  2.1.1-1  amd64  displays an image of a directory tree
 
 `ii`: La primera `i` significa que se deseaba instalar y la segunda `i` (Installed) confirma que se había instalado
 
-También podemos comprobarlos todos de una órden así:
+También podemos comprobarlos todos de una orden así:
 
 ![dpkg](imagenes/dpkg.png)
 
@@ -328,7 +339,7 @@ Valor típico: `111 kB`
 Miramos en `Section`
 
 - Se dice solo `utils` -> Pertenece a Main -> Si está en canonical
-- Si dijese: `universe/utils` -> Pertenece a Universe -> no lo mantiene canonical
+- Nos dice: `universe/utils` -> Pertenece a Universe -> no lo mantiene Canonical
 
 - **En qué sitio web puedes consultar más información sobre el proyecto ( apartado Homepage)**
 
@@ -431,7 +442,7 @@ apt policy curl
 
 ![policy](imagenes/policyCurl.png)
 
-Resultado: Muestra el servidor de Ubuntu y el componente `main` o `noble-updates/main` si recibió alguna actualización
+Resultado: Muestra el servidor de Ubuntu y el componente `main` o `noble-security/main` si recibió alguna actualización
 
 Cómo se utiliza (man) y prueba de ejecución
 
@@ -448,7 +459,6 @@ curl wttr.in/Jaen
 ```
 
 (`curl` hace una petición HTTP al servicio web `wttr.in` y muestra en la terminal la previsión del tiempo para Jaén en formato texto)
-(Pongo la foto porque está guapardo)
 
 ![curl](imagenes/curl.png)
 
