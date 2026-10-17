@@ -179,7 +179,8 @@ MEM/WB conserva el resultado que deberá escribirse en el banco de registros dur
 **Posibles Soluciones**:
 
     * Detener temporalmente una instrucción
-    * Incluir instrucciones Nops
+    * Incluir 
+    instrucciones Nops
     * Duplicar o aumentar los recursos hardware
     * Diseñar el procesador para permitir accesos simultáneos
 
