@@ -48,7 +48,7 @@ Cuando Insertamos un dato y este rompe el equilibrio $(bal = +- 2)$, se arregla 
     * Solución: Hacemos primero una rotación a la derecha en el hijo y luego una a la izquierda en el padre
 ![Rot_dob_der](../assets/img/rotacion_doble_der_izq.gif)
 
-### Impelmentación en C++: Rotaciones y Reajuste de Balances
+### Implementación en C++: Rotaciones y Reajuste de Balances
 El clálculo para actualizar la variable `bal` de los nodos rotados sin tener que recalcular la altura completa de los subárboles se hace así:
 ```cpp
 template<typename T>
