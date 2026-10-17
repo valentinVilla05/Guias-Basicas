@@ -429,6 +429,8 @@ Resultado:
 apt policy curl
 ```
 
+![policy](imagenes/policyCurl.png)
+
 Resultado: Muestra el servidor de Ubuntu y el componente `main` o `noble-updates/main` si recibió alguna actualización
 
 Cómo se utiliza (man) y prueba de ejecución
@@ -446,6 +448,9 @@ curl wttr.in/Jaen
 ```
 
 (`curl` hace una petición HTTP al servicio web `wttr.in` y muestra en la terminal la previsión del tiempo para Jaén en formato texto)
+(Pongo la foto porque está guapardo)
+
+![curl](imagenes/curl.png)
 
 4. Repetimos el proceso con `bat` (comando `batcat`)
 
@@ -467,22 +472,22 @@ Archivos:
 `/usr/bin/batcat` $\rightarrow$ Ejecutable principal (en Ubuntu se llama `batcat`)
 `/usr/share/man/man1/batcat.1.gz` $\rightarrow$ Página del manual
 
+![bat](imagenes/bat.png)
+
 Para qué sirve
 
 ```bash
 apt show bat
 ```
 
+![showBat](imagenes/showBat.png)
+
 Línea: `Description`: sirve para mostrar el contenido de ficheros de texto (como el comando `cat`), pero añadiendo resaltado de sintaxis con colores y números de línea
 
 Qué tamaño ocupa una vez instalado
-
-```bash
-apt show bat
-```
-
 Miramos: `Installed-Size`
-Valor típico: `6.5 MB - 8 MB`
+
+Valor: ` 5.344 kB`
 
 ¿Está mantenido directamente por Canonical?
 Miramos la línea `Section` ejecutando `apt show bat`
@@ -492,10 +497,6 @@ Muestra: `Section: universe/utils`
 Lleva el prefijo `universe/` -> Pertenece a Universe -> NO lo mantiene Canonical directamente (lo mantiene la comunidad)
 
 Sitio web del proyecto
-
-```bash
-apt show bat
-```
 
 Miramos `Homepage`
 
@@ -561,7 +562,7 @@ apt show fastfetch
 ```
 
 Miramos: `Installed-Size`
-Valor típico: `3.8 MB`
+Valor: `3.8 MB`
 
 ¿Está mantenido directamente por Canonical?
 Miramos la línea `Section` ejecutando `apt show fastfetch`
@@ -602,6 +603,9 @@ fastfetch
 ```
 
 (Dibuja el logo de Ubuntu en ASCII junto a los datos técnicos del ordenador y del sistema operativo)
+(Ejemplo de fastfetch en otra distribución a Ubuntu)
+
+![fast](imagenes/fastfetch.png)
 
 **3.- Elimina alguno de ellos y verifica que ya no está instalado o si ha dejado archivos de configuración. En ese caso, indica al gestor de paquetes que los elimine también.**
 
