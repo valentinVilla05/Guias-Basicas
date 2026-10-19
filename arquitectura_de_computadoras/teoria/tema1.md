@@ -2,14 +2,14 @@
 
 - **Computador digital:** Máquina capaz de **aceptar unos datos de entrada,** efectuar con ellos **operaciones lógicas y aritméticas** y proporcionar la info por un medio de **salida**
 
-| ¿Qué hace la máquina?                                          | ¿Cómo se implementa?                                                    |
-| -------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Representa la perspectiva de la programación de sistemas       | Representa el hardware                                                  |
+| ¿Qué hace la máquina?                                          | ¿Cómo se implementa?                                                   |
+| -------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Representa la perspectiva de la programación de sistemas       | Representa el hardware                                                 |
 | Conjunto de instrucciones (ISA) que define el lenguaje máquina | Forma concreta en la que se implementan las instrucciones del hardware |
-| Registros visibles para la instrucción del usuario             | Unidades funcionales físicas (ALU, decodificadores)                     |
-| Modo de direccionamiento de la memoria y de paralelisomo       | Buses internos de comunicación y señales de control                     |
-| Mecanismos de protección y direccionamiento virtual            | Técnica física de la memoria y la lógica electrónica                    |
-| Independiente de la tecnología del hardware                    | Se puede cambiar la organización sin cambiar la arquitectura (ISA)      |
+| Registros visibles para la instrucción del usuario             | Unidades funcionales físicas (ALU, decodificadores)                    |
+| Modo de direccionamiento de la memoria y de paralelisomo       | Buses internos de comunicación y señales de control                    |
+| Mecanismos de protección y direccionamiento virtual            | Técnica física de la memoria y la lógica electrónica                   |
+| Independiente de la tecnología del hardware                    | Se puede cambiar la organización sin cambiar la arquitectura (ISA)     |
 
 **Objetivos:** buscan **optimizar el rendimiento, incrementar velocidad y eficiencia en procesamiento de datos** y tareas a través de búsqueda del equilibrio entre hardware y software
 
@@ -70,7 +70,7 @@ Los niveles se representan como **capas que se apilan unas sobre otras**. **Las 
 **Elementos de entrada:** El datapath ofrecido por RT con su unidad de control  
 **Elementos de salida:** Banco de registros, direccionamientos y repertorio de instrucciones.
 
-![alt text](./images/isa.png)
+![alt text](../images/isa.png)
 
 **\- CISC – Complex Instruction Set Computer**
 
@@ -91,7 +91,7 @@ Los niveles se representan como **capas que se apilan unas sobre otras**. **Las 
 
 ## **Arquitectura Von Neumann [Arquitectura_Von_Neumann.mp4](https://drive.google.com/file/d/1uuC1vacy768TnJ2079TIiqgjljlFuqSz/view?usp=drive_link)**
 
-![alt text](/images/vonn.png)
+![alt text](../images/vonn.png)
 
 **Componentes principales:**
 
