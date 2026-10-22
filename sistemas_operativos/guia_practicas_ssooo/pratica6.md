@@ -2,269 +2,426 @@
 
 ## 1. Introducción
 
-* **Multiusuario**: Linux permite que múltiples usuarios trabajen de forma simultánea.
+- **Multiusuario**: Linux permite que múltiples usuarios trabajen de forma simultánea.
 
-* **Tipos de usuarios:**
+- **Cuenta de usuario**: Identidad creada en el sistema. Puede representar a una persona o una identidad de la máquina (un servicio, el sistema, el administrador).
 
-    * **Administrador (root)**: Control total del sistema. Por seguridad, solo debe usarse para tareas administrativas concretas
+- **Tipos de usuarios:**
+  - **Administrador (root)**: Control total del sistema. Por seguridad, solo debe usarse para tareas administrativas concretas
 
-    * **Usuarios finales / de servicio**: Cuentas estándar para personas o procesos/servicios del sistema
+  - **Usuarios finales / de servicio**: Cuentas estándar para personas o procesos/servicios del sistema
+
+  - **Cuenta del sistema/servivio** (`bin` `daemon`, `www-data`...): las crea el sistema o las aplicaciones. No tienen contraseña y no están pensadas para iniciar sesión (cuenta _nologin_)
 
 ## 2. Usuarios, Grupos, UIDs y GIDs
+
+Cada usuario tiene un nombre único y simbólico. Internamente Linux lo representa con un número, su UID.
+
+Linux admite casi cualquier carácter, pero se recomienda:
+
+- Usar solo **letras**, **números**, **guion bajo** (\_) y **punto** (.).
+- **Empezar siempre por una letra** (`u45` es válido, `45u` no).
+- **Máximo 32 caracteres**. Algunas utilidades antiguas truncan a 8, aunque hoy es habitual usar nombres más largos.
+- **Usar minúsculas**: Linux distingue mayúsculas de minúsculas (juan y Juan son usuarios distintos).
+- Seguir un criterio fijo (inicial del nombre + apellido: `fconde`, `f.conde`, `fconde01`) facilita localizar las cuentas.
+
 ### Identificadores (UID y GID)
 
 Linux identifica internamente a usuarios y grupos mediante números, no por sus nombres simbólicos:
 
-* **UID (User ID)**: Identificador único de usuario
+- **UID (User ID)**: Identificador único de usuario
 
-* **GID (Group ID)**: Identificador único de grupo
+- **GID (Group ID)**: Identificador único de grupo
 
 ### Rangos de IDs (definidos en `/etc/login.defs`)
 
-* `0`: Reservado para el usuario/grupo root.
+- `0`: Reservado para el usuario/grupo root.
 
-* `1` a `99` (o hasta 999 según distribución): Cuentas del sistema/especiales (`bin`, `daemon`, `apache`)
+- `1` a `99` (o hasta 999 según distribución): Cuentas del sistema/especiales (`bin`, `daemon`, `apache`)
+  - No tienen contraseña ni permiten inicio de sesión (nologin)
 
-    * No tienen contraseña ni permiten inicio de sesión (nologin)
+  - Asumen privilegios específicos de root para servicios concretos
 
-    * Asumen privilegios específicos de root para servicios concretos
-
-* `1000` en adelante (Ubuntu): Usuarios ordinarios/normales
+- `1000` en adelante (Ubuntu): Usuarios ordinarios/normales
 
 > **Regla de asignación**: Al crear usuarios, se asigna el siguiente ID disponible. Si se elimina una cuenta, su ID no se reutiliza automáticamente para evitar que el nuevo usuario herede la propiedad de archivos antiguos
 
+Los IDs de las cuentas especiales **no están estandarizados** entre distribuciones (por ejemplo, daemon no tiene el mismo UID en Red Hat que en Debian). Por eso es preferible usar siempre nombres y no números.
+
 ### Grupos
 
-* Mapean conjuntos de usuarios para gestionar permisos sobre archivos y acceso al hardware
+Los grupos **no son cuentas**: son una forma de organizar conjuntos de cuentas y, sobre todo, **de asignar permisos** a varios usuarios a la vez.
 
-* **Grupo Primario**: Asignado por defecto al crear archivos/procesos. Es obligatorio tener al menos uno para poder hacer login
+- Mapean conjuntos de usuarios para gestionar permisos sobre archivos y acceso al hardware
 
-* **Grupos Secundarios**: Grupos adicionales a los que pertenece el usuario
+- **Grupo Primario**: Asignado por defecto al crear archivos/procesos. Es obligatorio tener al menos uno para poder hacer login
 
-* **Comando newgrp `<grupo>`**: Cambia temporalmente el grupo primario activo durante la sesión
+- **Grupos Secundarios**: Grupos adicionales a los que pertenece el usuario. Le dan acceso a los archivos de esos grupos según sus permisos.
+
+- **Comando `newgrp <grupo>`**: abre una nueva shell en la que el grupo indicado pasa a ser el grupo primario activo. Los archivos que se creen en esa shell pertenecerán a ese grupo. Con `exit` se vuelve a la shell anterior. Si el usuario no es miembro del grupo, el sistema pide la contraseña del grupo (hoy casi en desuso).
+
+```bash
+newgrp adm      # los archivos nuevos tendrán como grupo "adm"
+exit            # vuelve al grupo primario habitual
+```
 
 ## 3. Archivos Clave de Configuración
 
-| Archivo | Acceso | Función y Estructura Principal |
-|---|---|---|
-| `/etc/passwd` | Lectura pública | Información de usuarios (7 campos): `usuario:x:UID:GID:GECOS:home:shell` |
-| `/etc/shadow` | Solo root | Contraseñas cifradas de usuarios y políticas de caducidad (9 campos). |
-| `/etc/group` | Lectura pública | Lista de grupos (4 campos): `grupo:x:GID:miembros` |
-| `/etc/gshadow` | Solo root | Contraseñas cifradas y administradores de grupos. |
-| `/etc/login.defs` | Sistema | Define variables por defecto (`UID_MIN`, `UID_MAX`, etc.). |
-| `/etc/skel` | Plantilla | Archivos base (`.bashrc`, `.profile`) que se copian al HOME del nuevo usuario. |
+| Archivo                            | Acceso          | Función y Estructura Principal                                                 |
+| ---------------------------------- | --------------- | ------------------------------------------------------------------------------ |
+| `/etc/passwd`                      | Lectura pública | Información de usuarios (7 campos): `usuario:x:UID:GID:GECOS:home:shell`       |
+| `/etc/shadow`                      | Solo root       | Contraseñas cifradas de usuarios y políticas de caducidad (9 campos).          |
+| `/etc/group`                       | Lectura pública | Lista de grupos (4 campos): `grupo:x:GID:miembros`                             |
+| `/etc/gshadow`                     | Solo root       | Contraseñas cifradas y administradores de grupos.                              |
+| `/etc/login.defs`                  | Sistema         | Define variables por defecto (`UID_MIN`, `UID_MAX`, etc.).                     |
+| `/etc/default/useradd`             | Lectura pública | Valores por defecto de `superadd` (shell, base del HOME, plantilla)            |
+| `/etc/skel`                        | Plantilla       | Archivos base (`.bashrc`, `.profile`) que se copian al HOME del nuevo usuario. |
+| `/etc/shells`                      | Lectura pública | Shells válidas instaladas en el sistema                                        |
+| `/etc/sudoers` y `/etc/sudoers.d/` | Solo root       | Quién puede usar `sudo` y para qué                                             |
+
+---
+
+Ejemplo del `/etc/passwd` , con 7 campos separados por :
+
+```bash
+fconde:x:1000:1000:Francisco de Asís Conde Rodríguez,,,:/home/fconde:/bin/bash
+```
+
+| Nº  | Campo                                            | En el ejemplo                          |
+| --- | ------------------------------------------------ | -------------------------------------- |
+| 1   | Nombre de usuario                                | `fconde`                               |
+| 2   | Contraseña (`x` = está cifrada en `/etc/shadow`) | `x`                                    |
+| 3   | UID                                              | `1000`                                 |
+| 4   | GID del grupo primario                           | `1000`                                 |
+| 5   | GECOS: nombre completo y datos de contacto       | `Francisco de Asís Conde Rodríguez,,,` |
+| 6   | Directorio HOME                                  | `/home/fconde`                         |
+| 7   | Shell por defecto (debe estar en /etc/shells)    | `/bin/bash`                            |
+
+---
+
+Ejemplo de `/etc/group`:
+
+```
+developer:x:1002:
+adm:x:4:syslog,procopia
+```
+
+| Nº  | Campo                                |
+| --- | ------------------------------------ |
+| 1   | Nombre del grupo                     |
+| 2   | Contraseña (`x` = en `/etc/gshadow`) |
+| 3   | GID                                  |
+| 4   | Miembros, separados por comas        |
+
+> Los usuarios para los que un grupo es el **primario** no aparecen en el campo 4. Por eso `grep usuario /etc/group` no basta para conocer todos sus grupos: hay que usar `id` o `groups`.
+
+---
+
+Ejemplo de `/etc/shadow`
+
+Una línea por usuario, con 9 campos. Solo root puede leerlo.
+
+```
+frank:$6$i9gjM4Md...:18029:0:99999:7:::
+```
+
+| Nº  | Campo                                                                                     | Opción de `chage` |
+| --- | ----------------------------------------------------------------------------------------- | ----------------- |
+| 1   | Nombre de usuario                                                                         |                   |
+| 2   | Contraseña cifrada                                                                        | `passwd`          |
+| 3   | Fecha del último cambio (días desde 01/01/1970). `0` = debe cambiarla en el próximo login | `-d`              |
+| 4   | Días mínimos entre cambios                                                                | `-m`              |
+| 5   | Días máximos de validez                                                                   | `-M`              |
+| 6   | Días de aviso antes de que caduque                                                        | `-W`              |
+| 7   | Días de inactividad tras caducar antes de bloquear                                        | `-I`              |
+| 8   | Fecha de caducidad de la cuenta (días desde 01/01/1970)                                   | `-E`              |
+| 9   | Reservado                                                                                 |                   |
+
+**Valores especiales del campo 2:**
+
+- `!` delante del hash: cuenta **bloqueada** (se puede desbloquear, el hash se conserva).
+- `!` solo, sin hash: cuenta bloqueada y **sin contraseña** (es lo que deja `useradd` hasta que se ejecuta `passwd`).
+- `*`: no se puede iniciar sesión con contraseña (típico de cuentas de sistema).
+- El prefijo del hash indica el algoritmo: `$1$` MD5, `$5$` SHA-256, `$6$` SHA-512, `$y$` yescrypt (el de las versiones modernas de Ubuntu).
+
+---
+
+En cuanto a `/etc/gshadow`:
+
+4 campos: nombre del grupo, contraseña cifrada (si empieza por `!`, nadie puede entrar con `newgrp`), **administradores** del grupo (pueden añadir y quitar miembros con `gpasswd`) y miembros.
+
+---
+
+Para el resto de ficheros:
+
+- **`/etc/login.defs`**: valores por defecto al crear usuarios: rangos de UID/GID (`UID_MIN`, `SYS_UID_MIN`...), caducidad de contraseñas (`PASS_MAX_DAYS`, `PASS_MIN_DAYS`, `PASS_WARN_AGE`), si se crea un grupo privado por usuario (`USERGROUPS_ENAB`), algoritmo de cifrado, etc.
+- **`/etc/default/useradd`**: shell por defecto, directorio base del HOME, plantilla (`SKEL`), días de inactividad. En Ubuntu suele traer `SHELL=/bin/sh`. Se consulta con `useradd -D`.
+- **`/etc/skel/`**: contiene los ficheros que se copian al HOME de cada usuario nuevo (`.bashrc`, `.profile`, `.bash_logout`).
 
 ### Ficheros de entorno del usuario (en su `$HOME`)
 
-* `.bashrc`: Se ejecuta en cada shell interactivo (alias, prompt, variables locales)
+Son ficheros ocultos (empiezan por punto; se ven con `ls -a`) que se copian desde `/etc/skel` al crear el usuario. Definen variables, alias, el prompt, etc.
 
-* `.profile` / `.bash_profile`: Se ejecuta solo una vez al iniciar sesión (ej. variable PATH)
+| Fichero                          | Cuándo se ejecuta                                                 | Uso típico                       |
+| -------------------------------- | ----------------------------------------------------------------- | -------------------------------- |
+| `~/.profile` o `~/.bash_profile` | Solo al **iniciar sesión** (shell de login)                       | Variables de entorno como `PATH` |
+| `~/.bashrc`                      | En **cada shell interactivo** (nueva ventana de terminal, SSH...) | Alias, prompt, preferencias      |
+| `~/.bash_logout`                 | Al **cerrar la sesión**                                           | Tareas de limpieza               |
+
+- En un shell de login, bash lee primero `/etc/profile` y después **el primero que exista** de `~/.bash_profile`, `~/.bash_login` y `~/.profile`.
+- En Ubuntu, el `.profile` por defecto carga después el `.bashrc`.
+- Relación con `su`: `su usuario` abre un shell interactivo normal (lee `.bashrc`); `su - usuario` abre un shell de **login** (lee `.profile`).
 
 ## 4. Gestión de Cuentas: `useradd` vs `adduser`
 
 ### Comando `useradd` (Utilidad estándar de bajo nivel)
 
-* **Sintaxis:** `useradd` [opciones] nombreusuario
+- **Sintaxis:** `useradd` [opciones] nombreusuario
 
 **Parámetros más comunes:**
 
-* `-m`: Crea automáticamente el directorio `$HOME` (copiando `/etc/skel`)
-
-* `-k /ruta`: Especifica un directorio plantilla alternativo a `/etc/skel`
-
-* `-c "texto"`: Comentario para el campo GECOS (nombre completo, `etc.`)
-
-* `-d /ruta`: Especifica una ruta personalizada para el directorio `HOME`
-
-* `-g <grupo>`: Asigna el grupo primario
-
-* `-G <g1,g2>`: Asigna grupos secundarios (separados por comas)
-
-* `-s /shell`: Define la shell por defecto (ej. `/bin/bash`, `/sbin/nologin`, `/bin/false`)
-
-* `-e YYYY-MM-DD`: Fecha de expiración de la cuenta
-
-* `-u <UID>`: Asigna un UID específico. (Con `-o` permite duplicar un UID existente)
-
-* `-r`: Crea una cuenta de sistema (UID menor a UID_MIN)
+| Opción          | Función                                                                                 |
+| --------------- | --------------------------------------------------------------------------------------- |
+| `-m`            | Crea el HOME copiando `/etc/skel`. Sin ella la cuenta no tiene directorio propio        |
+| `-k /ruta`      | (con `-m`) usa otra plantilla en lugar de `/etc/skel`                                   |
+| `-M`            | No crea el HOME (cuentas de sistema)                                                    |
+| `-d /ruta`      | HOME personalizado (por defecto `/home/usuario`)                                        |
+| `-c "texto"`    | Campo GECOS (nombre completo)                                                           |
+| `-s /shell`     | Shell por defecto                                                                       |
+| `-g grupo`      | Grupo primario                                                                          |
+| `-G g1,g2`      | Grupos secundarios (separados por comas, sin espacios)                                  |
+| `-N`            | No crea el grupo privado; asigna el grupo genérico `users` (GID 100)                    |
+| `-u UID`        | UID concreto. Con `-o` permite repetir un UID existente (dos nombres, un mismo usuario) |
+| `-r`            | Cuenta de sistema (UID menor que `UID_MIN`)                                             |
+| `-e YYYY-MM-DD` | Fecha de caducidad de la cuenta (cuentas temporales)                                    |
+| `-f días`       | Días tras caducar la contraseña antes de deshabilitar la cuenta (`-1` = nunca)          |
+| `-p hash`       | Contraseña ya cifrada. Poco útil salvo en scripts: es mejor usar `passwd`               |
 
 > Paso obligatorio tras **useradd**: Ejecutar **passwd <usuario>** para establecer su contraseña; de lo contrario, la cuenta permanece bloqueada
 
+> **Seguridad**: un intruso suele crear una cuenta con UID 0 (equivale a root). Conviene revisar de vez en cuando `/etc/passwd` buscando UIDs 0 sospechosos.
+
 ### Diferencia principal: `useradd` vs `adduser`
 
-* `useradd`: Binario nativo GNU/Linux. Mantiene el mismo comportamiento en todas las distribuciones, pero no crea el directorio HOME por defecto (requiere la opción -m)
+- `useradd`: Binario nativo GNU/Linux. Mantiene el mismo comportamiento en todas las distribuciones, pero no crea el directorio HOME por defecto (requiere la opción -m)
 
-* `adduser`: Script en Perl (propio de distribuciones basadas en Debian/Ubuntu). Es un asistente interactivo de más alto nivel que crea el directorio HOME, copia plantillas y pide la contraseña automáticamente
+- `adduser`: Script en Perl (propio de distribuciones basadas en Debian/Ubuntu). Es un asistente interactivo de más alto nivel que crea el directorio HOME, copia plantillas y pide la contraseña automáticamente
+
+|                   | `useradd`                                           | `adduser`                                         |
+| ----------------- | --------------------------------------------------- | ------------------------------------------------- |
+| Qué es            | Binario estándar de GNU/Linux                       | Script en Perl de Debian/Ubuntu que usa `useradd` |
+| Disponibilidad    | Todas las distribuciones                            | Solo Debian y derivadas                           |
+| HOME              | Solo con `-m`                                       | Lo crea siempre                                   |
+| Contraseña        | Hay que ejecutar `passwd`                           | La pide de forma interactiva                      |
+| Shell por defecto | La de `/etc/default/useradd` (en Ubuntu, `/bin/sh`) | La de `/etc/adduser.conf` (`/bin/bash`)           |
 
 ## 5. Comandos Útiles de Consulta
 
-* `id [usuario]`: Muestra el UID, GID primario y grupos secundarios de un usuario
+- `id [usuario]`: Muestra el UID, el GID primario y los grupos secundarios de un usuario (o del actual si no se indica ninguno)
 
-* `finger [usuario]`: Muestra información detallada del usuario (incluyendo el campo GECOS)
+```bash
+id                 # usuario actual
+id root            # uid=0(root) gid=0(root) grupos=0(root)
+id -u              # solo el UID
+id -g              # solo el GID primario
+id -nG             # nombres de todos los grupos
+```
+
+- `finger [usuario]`: Muestra información detallada del usuario (incluyendo el campo GECOS)
+
+| Orden                   | Qué muestra                                                                                |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| `id [usuario]`          | UID, GID primario y grupos secundarios                                                     |
+| `groups [usuario]`      | Nombres de los grupos del usuario                                                          |
+| `whoami`                | Usuario con el que estás trabajando                                                        |
+| `who`                   | Usuarios conectados ahora mismo                                                            |
+| `getent passwd usuario` | Entrada del usuario (consulta todas las fuentes del sistema, no solo el fichero)           |
+| `getent group grupo`    | Entrada del grupo                                                                          |
+| `finger usuario`        | Datos del usuario, incluido el campo GECOS (hay que instalarlo: `sudo apt install finger`) |
 
 ### Modificar Cuentas: `usermod`
+
 Permite editar parámetros de cuentas ya creadas
 
-* **Sintaxis: `usermod [opciones] nombreusuario`**
+- **Sintaxis: `usermod [opciones] nombreusuario`**
 
 **Opciones clave:**
-* `-l nuevonombre`: Cambia el nombre de usuario de la cuenta
 
-* `-d /ruta [-m]`: Cambia el directorio HOME. La opción -m mueve los archivos del HOME antiguo al nuevo
+| Opción           | Función                                                                                                                         |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `-l nuevonombre` | Cambia el nombre de usuario                                                                                                     |
+| `-d /ruta [-m]`  | Cambia el HOME. Con `-m` mueve también los archivos del antiguo                                                                 |
+| `-s /shell`      | Cambia la shell                                                                                                                 |
+| `-c "texto"`     | Cambia el campo GECOS                                                                                                           |
+| `-g grupo`       | Cambia el grupo primario                                                                                                        |
+| `-G g1,g2 [-a]`  | Establece los grupos secundarios (Sin -a, sobrescribe y elimina la lista de grupos previos. Usa siempre -aG para añadir grupos) |
+| `-e YYYY-MM-DD`  | Cambia la fecha de caducidad de la cuenta                                                                                       |
+| `-L` / `-U`      | Bloquea / desbloquea la cuenta                                                                                                  |
+| `-u UID [-o]`    | Cambia el UID                                                                                                                   |
 
-* `-g <grupo>`: Cambia el grupo primario
+Puntos a tener en cuenta:
 
-* `-G <g1,g2> [-a]`: Asigna grupos secundarios
-
-> Atención: Sin -a, sobrescribe y elimina la lista de grupos previos. Usa siempre -aG para añadir grupos
-
-* `-u <UID> [-o]`: Cambia el UID. (Si se cambia, se debe actualizar la propiedad de sus archivos con chown -R usuario /home/usuario)
-
-* `-L / -U`: Bloquea (-L) o desbloquea (-U) la cuenta.
+- **`-l` solo cambia el nombre de login**. El HOME y el grupo privado conservan el nombre antiguo. Hay que renombrarlos aparte (`usermod -d /home/nuevo -m` y `groupmod -n`).
+- **`-u` no cambia los archivos que ya existen**. Hay que corregir la propiedad con `chown -R usuario /home/usuario` y buscar el resto con `find / -uid UIDantiguo`.
+- **Los cambios de grupo se aplican al iniciar una sesión nueva**. Una sesión ya abierta conserva los grupos antiguos.
 
 > Buenas prácticas: Antes de modificar un usuario, ejecuta who para comprobar que no esté conectado, ya que alterar la cuenta en uso puede causar fallos de sesión
 
 ### Control de Contraseñas: `passwd`
-Permite cambiar la contraseña y gestionar el estado de la cuenta
 
-* **Sintaxis: `passwd [opciones] nombreusuario`**
+Sin opciones cambia la contraseña. Un usuario normal solo cambia la suya (pide la actual); root puede cambiar la de cualquiera sin conocer la anterior. Las contraseñas no se muestran al teclearlas.
 
-**Opciones administrativas (requieren `sudo/root`):**
+- **Sintaxis: `passwd [opciones] nombreusuario`**
 
-* `-l`: Bloquea la cuenta (añade un ! al inicio del hash en `/etc/shadow`)
+| Opción (requieren root o `sudo`) | Función                                                         |
+| -------------------------------- | --------------------------------------------------------------- |
+| `-l`                             | Bloquea la cuenta (añade `!` al hash en `/etc/shadow`)          |
+| `-u [-f]`                        | Desbloquea. En una cuenta sin contraseña hace falta `-f`        |
+| `-d`                             | **Elimina la contraseña** (cuenta sin clave). Úsalo con cuidado |
+| `-e`                             | Caduca la contraseña: obliga a cambiarla en el próximo login    |
+| `-S`                             | Muestra el estado de la contraseña                              |
 
-* `-u [-f]`: Desbloquea la cuenta. Con -f fuerza el desbloqueo si no tiene clave
+**Estado con `passwd -S`:**
 
-* `-d`: Elimina la contraseña de la cuenta (la deja en blanco)
-
-* `-S`: Muestra el estado de la contraseña (P = con clave, L = bloqueada/sin clave)
+| Código | Significado       |
+| ------ | ----------------- |
+| `P`    | Contraseña válida |
+| `L`    | Cuenta bloqueada  |
+| `NP`   | Sin contraseña    |
 
 ### Expiración y Caducidad: `chage`
-Gestiona el envejecimiento de la contraseña y la caducidad de la cuenta
 
-* **Sintaxis: `chage [opciones] nombreusuario`**
+Gestiona el envejecimiento de las contraseñas y la caducidad de la cuenta
 
-    * `-l`: Muestra la información de expiración de la cuenta/contraseña. (Opción accesible por el usuario normal sobre su propia cuenta)
-
-    * `-m <días>`: Días mínimos entre cambios de contraseña (0 = sin límite).
-
-    * `-M <días>`: Días máximos de validez de la contraseña (por defecto 99999)
-
-    * `-W <días>`: Días de antelación para avisar al usuario de que la clave va a caducar (por defecto 7)
-
-    * `-I <días>`: Días de inactividad tras la caducidad antes de bloquear la cuenta
-
-    * `-E YYYY-MM-DD`: Fecha exacta en que la cuenta dejará de estar activa
-
-    * `-d <días>`: Modifica la fecha del último cambio de clave
+- **Sintaxis: `chage [opciones] nombreusuario`**
+  | Opción | Función |
+  |---|---|
+  | `-l` | Muestra la información de caducidad |
+  | `-m días` | Mínimo de días entre cambios de contraseña (0 = sin límite) |
+  | `-M días` | Máximo de días de validez (por defecto 99999, es decir, nunca caduca) |
+  | `-W días` | Días de aviso antes de que caduque (por defecto 7) |
+  | `-I días` | Días de inactividad tras caducar antes de bloquear la cuenta |
+  | `-E YYYY-MM-DD` | Fecha en que la cuenta deja de estar activa (`-1` = nunca) |
+  | `-d días` | Fija el día del último cambio de contraseña (`0` = cambiarla en el próximo login) |
 
 ### Eliminación de Cuentas: `userdel`
-* **Sintaxis: `userdel [-r [-f]] nombreusuario`**
-* **Sin opciones**: Borra la cuenta del sistema, pero conserva su directorio HOME y archivos
-* `-r`: Elimina la cuenta y su directorio HOME junto con el buzón de correo
-* `-rf`: Fuerza la eliminación del HOME aunque contenga archivos que pertenezcan a otros usuarios
 
-> Respaldo previo: Para buscar y copiar todos los archivos del usuario antes de borrarlo:
-**sudo find / -user usuario1 -exec cp {} /root/usuario1 \;**
-(Si ya se eliminó la cuenta sin **-r**, usa **find / -uid <ID_antiguo>**)
+- **Sintaxis: `userdel [-r [-f]] nombreusuario`**
 
+- **Sin opciones**: borra la cuenta pero **conserva su HOME y sus archivos** (quedan con el UID antiguo, lo que puede dar confusión).
+- **`-r`**: borra también el HOME y el buzón de correo.
+- **`-rf`**: fuerza el borrado del HOME aunque contenga archivos de otros usuarios. También permite borrar una cuenta con sesión abierta, así que hay que usarlo con cuidado.
+- `userdel` se niega a borrar un usuario que tenga procesos en ejecución. Comprueba antes con `who` y `pgrep -u usuario`.
+- Si el grupo privado del usuario no tiene más miembros, `userdel` lo borra también.
+- Los archivos del usuario fuera de su HOME (por ejemplo, en `/tmp`) no se borran con `-r`. Se localizan con `find / -user usuario` o, si la cuenta ya no existe, con `find / -uid ID`.
 
 ## 6. Elevación y Cambio de Privilegios: `su` vs `sudo`
+
 ### Comando `su` (Switch User)
+
 Cambia la sesión de usuario activa en la terminal sin cerrar sesión
 
-* `su usuario`: Cambia al usuario especificado pero mantiene las variables de entorno y el directorio de trabajo del usuario original
+- `su usuario`: Cambia al usuario especificado pero mantiene las variables de entorno y el directorio de trabajo del usuario original. Es decir, no cierra la sesión.
 
-* `su - usuario`: Cambia al usuario cargando su entorno completo (cambia al directorio **$HOME** del nuevo usuario y ejecuta sus scripts de inicio `.profile/.bashrc`)
+> En Ubuntu la cuenta root está bloqueada, así que `su -` (sin usuario) falla por no tener contraseña. Por eso se usa `sudo -i`.
+
+- `su - usuario`: Cambia al usuario cargando su entorno completo (cambia al directorio **$HOME** del nuevo usuario y ejecuta sus scripts de inicio `.profile/.bashrc`)
 
 ### Comando `sudo` (Switch User Do)
+
 Permite ejecutar comandos individuales con privilegios de `root` (o de otro usuario) de forma segura y auditada
 
-* **Ventajas sobre `su`**: No requiere compartir la contraseña de root; cada usuario usa la suya
+- **Ventajas sobre `su`**: No requiere compartir la contraseña de root; cada usuario usa la suya
 
-* **Funcionamiento en Ubuntu**: La cuenta de root está bloqueada por defecto. Las tareas de administración se realizan anteponiendo sudo a las órdenes o abriendo un shell administrativo con sudo `-i`
+- **Funcionamiento en Ubuntu**: La cuenta de root está bloqueada por defecto. Las tareas de administración se realizan anteponiendo sudo a las órdenes o abriendo un shell administrativo con sudo `-i`
 
-* **Archivo de configuración (`/etc/sudoers`):**
+- **Archivo de configuración (`/etc/sudoers`):**
+  - Se debe editar únicamente con el comando `visudo`
 
-    * Se debe editar únicamente con el comando `visudo`
+  - Permite definir grupos y usuarios con permiso para usar `sudo`
 
-    * Permite definir grupos y usuarios con permiso para usar `sudo`
+  - Para añadir reglas propias es mejor crear un fichero en `/etc/sudoers.d/` con `sudo visudo -f /etc/sudoers.d/nombre`.
 
-    * **Sintaxis clave:**
+  - **Sintaxis clave:**
+    - `root ALL=(ALL:ALL) ALL` → Acceso total ilimitado
 
-        * `root ALL=(ALL:ALL) ALL` → Acceso total ilimitado
+    - `%sudo ALL=(ALL:ALL) ALL` → Permite a los miembros del grupo `sudo` ejecutar cualquier comando
 
-        * `%sudo ALL=(ALL:ALL) ALL` → Permite a los miembros del grupo `sudo` ejecutar cualquier comando
+    - `%admin ALL=(ALL) ALL` → Permite privilegios de administración al grupo admin
 
-        * `%admin ALL=(ALL) ALL` → Permite privilegios de administración al grupo admin
+    - Formato de una regla: `quién  dónde=(como_quién:como_grupo)  qué_órdenes`
 
 ## 7. Configurando grupos
+
 ### 1. Crear Grupos: `groupadd`
 
-* Permite añadir nuevos grupos al sistema (requiere permisos de `root` o `sudo`)
+- Permite añadir nuevos grupos al sistema (requiere permisos de `root` o `sudo`)
+  - **Sintaxis: `groupadd [opciones] nombregrupo`**
 
-    * **Sintaxis: `groupadd [opciones] nombregrupo`**
+- **Opciones principales:**
 
-* **Opciones principales:**
-
-* `-g GID`: Asigna un ID de grupo específico. Si se omite, se asigna el siguiente número disponible mayor que GID_MIN (definido en `/etc/login.defs`)
-
-* `-o`: Se usa junto con `-g` para forzar la asignación de un `GID` que ya está en uso por otro grupo (colisión de GIDs)
-
-* `-r`: Crea un grupo de sistema (con un `GID` inferior a `GID_MIN`)
+| Opción   | Función                                                            |
+| -------- | ------------------------------------------------------------------ |
+| `-g GID` | GID concreto (si se omite, el siguiente libre mayor que `GID_MIN`) |
+| `-o`     | (con `-g`) permite repetir un GID existente                        |
+| `-r`     | Grupo de sistema (GID menor que `GID_MIN`)                         |
 
 ```bash
 sudo groupadd proyecto1
 ```
 
 ### 2. Modificar Grupos: `groupmod` y `gpasswd`
+
 Cambiar nombre e ID del grupo: `groupmod`
 
-* **Sintaxis: `groupmod [opciones] nombregrupo`**
+- **Sintaxis:** `groupmod [opciones] nombregrupo`
 
-* `-n nuevonombre`: Renombra el grupo
+- `-n nuevonombre`: Renombra el grupo
 
-* `-g GID [-o]`: Cambia el GID asignado al grupo
+- `-g GID [-o]`: Cambia el GID asignado al grupo
+
+> Cambiar el GID **no actualiza** los archivos que ya tenían el GID antiguo (hay que localizarlos con `find -gid` y corregirlos con `chgrp`). Usar `-o` crea una colisión de GIDs y es peligroso.
 
 ### Gestionar miembros del grupo: gpasswd vs usermod
+
 Para añadir usuarios a un grupo existen dos opciones en línea de comandos:
 
 **1. Mediante `usermod`:**
 
-* `sudo usermod -aG grp1,grp2 usuario`: Añade (`-a`) al usuario a los grupos secundarios sin borrar su membresía en otros grupos existentes
+- `sudo usermod -aG grp1,grp2 usuario`: Añade (`-a`) al usuario a los grupos secundarios sin borrar su membresía en otros grupos existentes
 
 > Atención: Si se omite el parámetro **-a**, el usuario es eliminado de todos los grupos a los que pertenecía que no estén explícitamente en la lista
 
 **2. Mediante gpasswd (Método recomendado por ser menos propenso a errores):**
 
-* `-a usuario`: Añade un usuario al grupo de forma segura
+| Opción de `gpasswd` | Función                                                                    |
+| ------------------- | -------------------------------------------------------------------------- |
+| `-a usuario`        | Añade un miembro                                                           |
+| `-d usuario`        | Quita un miembro                                                           |
+| `-A u1,u2`          | Define los **administradores** del grupo (**sustituye** la lista anterior) |
+| `-M u1,u2`          | Define los **miembros** del grupo (**sustituye** la lista anterior)        |
+| `-r`                | Elimina la contraseña del grupo                                            |
+| `-R`                | Impide el uso de `newgrp` con ese grupo                                    |
+| (sin opciones)      | Establece la contraseña del grupo                                          |
 
-* `-d usuario`: Elimina a un usuario de un grupo
-
-* `-A u1,u2...`: Define la lista de administradores del grupo (usuarios que pueden añadir/quitar miembros o cambiar la clave del grupo)
-
-* `-M u1,u2...`: Define la lista completa de miembros del grupo
-
-* `-r`: Elimina la contraseña del grupo
-
-* `-R`: Invalida el uso de `newgrp` para ese grupo
-
-
-> Contraseñas de Grupo y **newgrp**: Si se ejecuta **gpasswd** sin opciones, permite asignar una clave al grupo. Se usaba históricamente para permitir el acceso mediante **newgrp** a usuarios ajenos. En distribuciones modernas (como Ubuntu) las contraseñas de grupo están prácticamente en desuso y **newgrp** se emplea para cambiar temporalmente el grupo primario activo
+**Contraseñas de Grupo** y **newgrp**: Si se ejecuta **gpasswd** sin opciones, permite asignar una clave al grupo. Se usaba históricamente para permitir el acceso mediante **newgrp** a usuarios ajenos. En distribuciones modernas (como Ubuntu) las contraseñas de grupo están prácticamente en desuso y **newgrp** se emplea para cambiar temporalmente el grupo primario activo
 
 ### 3. Comprobación de Grupos de un Usuario
-* **Comando `groups`**: groups nombreusuario
 
-* **Comando id**: id nombreusuario
+- **Comando `groups`**: groups nombre_usuario
 
-* **Filtro en `/etc/group`**: cat `/etc/group | grep nombreusuario`
+- **Comando id**: id nombre_usuario
+
+- **Filtro en `/etc/group`**: cat `/etc/group | grep nombreusuario`
 
 ### 4. Eliminar Grupos: `groupdel`
-* **Sintaxis: `sudo groupdel nombregrupo`**
+
+- **Sintaxis: `sudo groupdel nombregrupo`**
 
 > **Restricción**: El sistema no permitirá borrar un grupo si es el grupo primario de algún usuario. Primero debe cambiarse el grupo primario del usuario con `usermod -g`
 
 ### Procedimiento Post-Eliminación (Archivos Huérfanos)
+
 Al eliminar un grupo, sus archivos asociados quedan asignados a un `GID` huérfano. Para corregirlo:
 
 **1. Buscar archivos asignados al GID eliminado:**
@@ -301,13 +458,14 @@ sudo usermod -a -G babbage alovelace
 
 # 6. Establecer políticas de expiración
 # Expiración de cuenta: 15/12/2025 | Días min clave: 10 | Días máx clave: 20
-sudo chage -E 2025-12-15 -m 10 -M 20 alovelace
+sudo chage -E 2025-12-15 -m 10 -M 20 alovelace # en este caso el usuario ya se crearía caducado
 
 # 7. Verificar la configuración final del usuario
 sudo chage -l alovelace
 ```
 
-## Ejercicios 
+## Ejercicios
+
 **1. Revisa el archivo /etc/passwd y escribe la lista de los usuarios definidos en el mismo que tengan como shell /bin/false. ¿Qué tipo de usuarios son? ¿Por qué tienen esa shell asignada?**
 
 ```bash
@@ -386,15 +544,19 @@ Para comprobar los grupos del usuario actual ($USER):
 ```bash
 id
 ```
+
 Muestra el UID, GID primario y la lista de todos los GIDs secundarios asociados al usuario actual
 
 2. Forma 2 (Comando groups):
+
 ```bash
 groups
 ```
+
 mprime directamente los nombres de todos los grupos a los que pertenece la cuenta en la sesión activa
 
 3. Forma 3 (Filtrando /etc/group)
+
 ```bash
 cat /etc/group | grep "$USER"
 ```
@@ -410,6 +572,7 @@ sudo usermod -aG nombregrupo nombreusuario
 ```
 
 2. Usando gpasswd:
+
 ```bash
 sudo gpasswd -a nombreusuario nombregrupo
 ```
@@ -437,13 +600,12 @@ Permite que un usuario que **no es miembro** de un grupo pueda unirse o cambiars
 
 **9. Si se pudiese eliminar un grupo que sea el grupo primario de algún usuario, el sistema quedaría en una situación de funcionamiento inaceptable. ¿Cual es esa situación de funcionamiento? ¿Por qué ocurre esto?**
 
-* **Situación de funcionamiento**: Un usuario no podría volver a hacer login en el sistema (o si ya está conectado, no podría crear archivos ni ejecutar subprocesos correctamente)
+- **Situación de funcionamiento**: Un usuario no podría volver a hacer login en el sistema (o si ya está conectado, no podría crear archivos ni ejecutar subprocesos correctamente)
 
-* **Por qué ocurre esto**: En Unix/Linux, todo usuario requiere obligatoriamente tener un grupo primario asignado. Cada vez que el usuario crea un archivo o proceso, el sistema necesita asociar un GID primario a ese objeto. Si se borrase el grupo primario, el usuario quedaría huérfano de GID primario en `/etc/passwd`, provocando un fallo de autenticación en la rutina de inicio de sesión (`login`)
+- **Por qué ocurre esto**: En Unix/Linux, todo usuario requiere obligatoriamente tener un grupo primario asignado. Cada vez que el usuario crea un archivo o proceso, el sistema necesita asociar un GID primario a ese objeto. Si se borrase el grupo primario, el usuario quedaría huérfano de GID primario en `/etc/passwd`, provocando un fallo de autenticación en la rutina de inicio de sesión (`login`)
 
 **10. Averigua, ejecutando una orden, qué UID y GID mínimo y máximo se han definido en Linux Ubuntu (debes usar un pipeline)**
 
 ```bash
 grep -E '^(UID|GID)_(MIN|MAX)' /etc/login.defs | grep -v '#'
 ```
-
