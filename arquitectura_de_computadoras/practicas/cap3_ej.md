@@ -88,7 +88,8 @@ CPI optimizado: $\frac{83}{59} \approx \mathbf{1.41}$.
 **Mejora de rendimiento del código reordenado (en C3):**
 $$\text{Speedup} = \frac{93}{83} \approx \mathbf{1.12\times} \quad (\text{un } 12\% \text{ de mejora})$$
 
-**Ejercicio 3.2. Toma el código del ejercicio 2.6 de la práctica anterior y repite los pasos indicados para el 3.1.**
+----
+### **Ejercicio 3.2. Toma el código del ejercicio 2.6 de la práctica anterior y repite los pasos indicados para el 3.1.**
 
 código del ejercicio 2.6
 ```asm
@@ -148,7 +149,7 @@ $$\text{Speedup}_{C3/C2} = \frac{71}{52} \approx \mathbf{1.365\times} \quad (\te
 
 d) Identificación de detenciones y reordenación de código
 
-**Identificación del riesgo:
+**Identificación del riesgo:**
 En el bucle `bucle6`, la instrucción `add a0,a0,a2` utiliza inmediatamente el registro a2 que acaba de ser cargado por `lw a2,0(t0)`. Como el dato de memoria no está disponible hasta el final de MEM, la unidad de reenvío no puede evitar provocar 1 ciclo de detención (load-use hazard stall) en cada una de las 5 iteraciones (5 ciclos de parada en total)
 
 **Código reordenado (optimizado):**
@@ -162,4 +163,199 @@ Intercalamos las instrucciones independientes de incremento (`addi`) entre la ca
 * **Mejora de rendimiento del código reordenado (en C3):**
 
 $$\text{Speedup} = \frac{52}{47} \approx \mathbf{1.106\times} \quad (\text{un } 10.6\% \text{ de mejora})$$
+
+---
+### Ejercicio 3.3. Toma el código del ejercicio 2.11 de la práctica anterior y repite los pasos indicados para el 3.1.
+
+**código del ejercicio 2.11**
+
+```asm
+
+.data
+vectorCont: .word 6,1,6,7,2,3,6,-3,6,1,-2,3,-5,2,6
+fin:
+
+.text
+la t0,vectorCont
+la t1,fin
+li a0,0 # contador de apariciones
+lw t3,0(t0) # valor buscado
+bucle11:
+    beq t0,t1,fin11
+    lw t4,0(t0) # obtenemos el primer valor
+    beq t3,t4,aparece
+    addi t0,t0,4
+    j bucle11
+
+aparece:
+    addi a0,a0,1
+    addi t0,t0,4
+    j bucle11
+fin11:
+    li a7,1
+    ecall
+
+```
+
+**Análisis del comportamiento del programa:**
+
+* **Vector**: Consta de 15 elementos. El valor buscado es lw t3, 0(t0) $\rightarrow$ 6
+
+* **Ocurrencias del valor 6**: Se encuentra en los índices 0, 2, 6, 8 y 14 (coincide 5 veces $\rightarrow$ salta a aparece)
+
+* **No coincidencias**: Los 10 elementos restantes no coinciden (salta a bucle11 con j bucle11)
+
+* **Conteo de instrucciones reales ejecutadas ($I$):**
+    * **Inicialización**: 5 instrucciones (la $\times 2 \rightarrow$ 4 inst. reales + 1 li + 1 lw = 6 instrucciones físicas)
+    
+    * **Iteraciones**: Para las 15 iteraciones del bucle se ejecutan un total de 80 instrucciones
+    
+    * **Salida**: 3 instrucciones (li a7, 1, ecall y la comprobación final de beq).
+    
+    * **Total de instrucciones ejecutadas ($I$)**: 89 instrucciones.
+
+**a) Configuración C1: Monociclo (Single-cycle processor)**
+
+![alt text](../images/mono3.png)
+
+> Explicación: En la arquitectura monociclo (C1), cada instrucción se completa en un único ciclo de reloj (CPI = 1). El procesador ejecuta 89 instrucciones en **89 ciclos**
+
+**b) Configuración C2: Segmentado de 5 etapas sin reenvío (5-Stage processor w/o forwarding unit)**
+
+![alt text](../images/D1.png)
+> AAl segmentar el cauce en 5 etapas pero carecer de unidad de adelantamiento (forwarding unit), el hardware congela el cauce e inserta ciclos de detención (stalls) cada vez que una instrucción necesita un dato producido por una instrucción anterior que aún no ha llegado a la etapa de escritura en el banco de registros. los saltos condicionales e incondicionales (beq, j) introducen penalizaciones por riesgos de control. Esto eleva los ciclos a **171** y el CPI a **1.92**
+
+Cálculo de Rendimiento respecto a C1:$$\text{Speedup}_{C2/C1} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{C2}} = \frac{89}{171} \approx \mathbf{0.520\times}$$
+
+
+**c) Configuración C3: Segmentado de 5 etapas con reenvío (5-Stage processor)**
+![alt text](../images/D2.png)
+
+La inclusión de la unidad de reenvío (forwarding unit) permite enviar los resultados de las etapas EX o MEM directamente a la ALU en la etapa EX sin esperar a la etapa WB. Esto elimina la mayoría de las detenciones por dependencias de datos puras. Sin embargo, persisten las penalizaciones por desvíos de control en los saltos (beq, j) y la parada obligatoria por riesgo de carga-uso (load-use hazard) entre lw y beq, fijando los ciclos en 152 y el CPI en 1.71
+
+**Cálculos de Rendimiento:**
+
+Respecto a C1 (Single-cycle):$$\text{Speedup}_{C3/C1} = \frac{89}{152} \approx \mathbf{0.586\times}$$
+
+Respecto a C2 (Sin forwarding):$$\text{Speedup}_{C3/C2} = \frac{171}{152} \approx \mathbf{1.125\times} \quad (\text{un } 12.5\% \text{ más rápido})$$
+
+**d) Identificación de detenciones y reordenación de código**
+
+**1. Identificación del Riesgo**
+* **Riesgo de Carga-Uso (Load-Use Hazard):**
+
+En bucle11, la instrucción `lw t4, 0(t0)` obtiene el dato de memoria en la etapa MEM. La instrucción posterior `beq t3, t4`, aparece necesita comparar inmediatamente t4. La unidad de adelantamiento no puede evitar insertar 1 ciclo de parada por iteración.
+
+* **2. Código Reordenado**
+
+Se reorganiza el bucle intercalando la actualización del puntero `addi t0, t0, 4` entre la carga lw y la instrucción condicional beq para aprovechar el ciclo de espera:
+
+![alt text](../images/D3.png)
+
+* **3. Nuevos Resultados Estimados en C3 (5-Stage Processor)**
+
+![alt text](../images/M11.png)
+
+Mejora de rendimiento del código reordenado (en C3):$$\text{Speedup} = \frac{\text{Ciclos}_{\text{C3 original}}}{\text{Ciclos}_{\text{C3 optimizado}}} = \frac{152}{137} \approx \mathbf{1.109\times} \quad (\text{un } 10.9\% \text{ de mejora})$$
+
+
+#### Resumen / Comparación Final
+| Configuración / Versión | Ciclos | CPI | Speedup vs C1 | Speedup vs C2 | 
+| -- | -- | -- | -- | -- | 
+| **C1: Single-cycle** | 89 | 1.00 | 1.00x | - | 
+| **C2: 5-Stage w/o forwarding** | 171 | 1.92 | 0.52x | 1.00x | 
+| **C3: 5-Stage w/ forwarding (Original)** | 152 | 1.71 | 0.59x | 1.125x | 
+| **C3: 5-Stage w/ forwarding (Reordenado)** | 137 | 1.54 | 0.65x | 1.25x | 
+
+### Ejercicio 3.4. Toma el código del ejercicio 2.1 de la práctica anterior. Activa la configuración 5-stage processor w/o forwarding or hazard unit. Modifica el código introduciendo las instrucciones nop que garanticen una correcta ejecución del programa
+
+**Código del Ejercicio 2.1**
+```asm
+.text
+li t0,1
+li t1,1000
+li a0,0
+
+bucle1:
+    add a0,a0,t1
+    beq t0,t1,fin1 # si t0=t1 salta a fin1
+    addi t1,t1,-1
+    j bucle1
+fin1:
+    li a7,1
+    ecall
+```
+
+**Análisis de Ejecución del Programa:**
+
+* **Propósito:** Calcula la suma acumulada de los números desde 1000 hasta 1 ($1000 + 999 + \dots + 1 = 500500$)
+
+* **Iteraciones:** El bucle se ejecuta exactamente 1000 veces.
+
+* **Recuento de instrucciones ejecutadas ($I$)**:
+
+* Inicialización: 3 instrucciones (li t0, 1, li t1, 1000, li a0, 0).
+* Bucle (1000 iteraciones): $1000 \times 4 \text{ inst.} = 4000$ instrucciones (add, beq, addi, j)
+* Salida (tras salir por beq): 2 instrucciones (li a7, 1, ecall)
+* Total de instrucciones ejecutadas ($I$): 4005 instrucciones
+
+**a) Configuración C1: Monociclo (Single-cycle processor)**
+
+![alt text](../images/EEE.png)
+
+**Explicación:**
+En la arquitectura monociclo (C1), cada instrucción se ejecuta en un único ciclo de reloj completo ($CPI = 1$). Dado que no existen la segmentación ni los riesgos de datos o de control, el procesador ejecuta las 4003 instrucciones en exactamente **4003 ciclos**.
+
+**b) Configuración C2: Segmentado de 5 etapas sin reenvío (5-Stage processor w/o forwarding unit)**
+
+![alt text](../images/E2.png)
+
+**Explicación:**
+Al activar la segmentación en 5 etapas sin unidad de adelantamiento (*forwarding unit*), el procesador debe insertar ciclos de parada (*stalls*) cuando existen dependencias de datos y asumir las penalizaciones por desvío de control producidas por las instrucciones de salto condicional (`beq`) e incondicional (`j`). Esto eleva la ejecución a **6011 ciclos** con un **CPI de 1.50**.
+
+**Cálculo de Rendimiento respecto a C1:**
+$$\text{Speedup}_{C2/C1} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{C2}} = \frac{4003}{6011} \approx \mathbf{0.666\times}$$
+
+**c) Configuración C3: Segmentado de 5 etapas con reenvío (5-Stage processor)**
+
+![alt text](../images/E3.png)
+
+**Explicación:**
+Al incorporar la unidad de reenvío (*forwarding unit*), el hardware envía los resultados de la ALU en las etapas EX o MEM directamente como operandos a las instrucciones siguientes, resolviendo los riesgos de datos puros. Sin embargo, en este código concreto la ganancia es de solo 2 ciclos (pasando de 6011 a **6009 ciclos**, con un **CPI de 1.50**), debido a que la gran mayoría de la penalización proviene de los riesgos de control provocados por la combinación de las instrucciones `beq` y `j` en cada una de las 1000 iteraciones del bucle.
+
+**Cálculos de Rendimiento:**
+* **Respecto a C1 (Single-cycle):**
+  $$\text{Speedup}_{C3/C1} = \frac{4003}{6009} \approx \mathbf{0.666\times}$$
+
+* **Respecto a C2 (Sin forwarding):**
+  $$\text{Speedup}_{C3/C2} = \frac{6011}{6009} \approx \mathbf{1.0003\times}$$
+
+**d) Identificación de detenciones y reordenación de código**
+
+**1. Identificación del Riesgo y Redundancia**
+* **Riesgo de Control por Saltos:** En cada iteración se ejecutan dos saltos consecutivos (`beq` para la condición y `j` para volver al inicio del bucle). El salto incondicional `j` añade una penalización inútil por ciclo de desvío.
+* **Optimización:** Es posible eliminar por completo la instrucción `j` reestructurando la condición del bucle con un salto condicional directo `bne`.
+
+**Mejora en el código**
+```assembly
+.text
+li t0, 0
+li t1, 1000
+li a0, 0
+
+bucle1:
+    add a0, a0, t1
+    addi t1, t1, -1      # Decrementa el contador
+    bne t1, t0, bucle1   # Salta directamente mientras t1 != 0 (elimina la instrucción j)
+
+fin1:
+    li a7, 1
+    ecall
+```
+
+* **Efecto de la optimización:** Al eliminar la instrucción j bucle1, se ahorra 1 instrucción por iteración (1000 instrucciones menos en total) y sus correspondientes penalizaciones por desvío de control
+
+Instrucciones ejecutadas ($I$): 3003Ciclos totales ($C$): 4009CPI optimizado: $\frac{4009}{3003} \approx \mathbf{1.33}$Mejora de rendimiento del código reordenado (en C3):$$\text{Speedup} = \frac{\text{Ciclos}_{\text{C3 original}}}{\text{Ciclos}_{\text{C3 optimizado}}} = \frac{6009}{4009} \approx \mathbf{1.498\times} \quad (\text{un } 49.8\% \text{ de mejora})$$
+
+### Ejercicio 3.5. Toma el código del ejercicio 2.2 de la práctica anterior y repite el trabajo indicado para el 3.4.
 
