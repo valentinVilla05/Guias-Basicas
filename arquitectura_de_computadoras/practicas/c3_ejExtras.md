@@ -456,3 +456,373 @@ nop
 sw a2,0(a3)
 ecall
 ```
+
+# Examen 3
+## Ejercicio 1 – Archivos Eje1.s y P3.pdf
+
+Escribe un programa en ensamblador RISC-V ajustado a los siguientes requerimientos:
+
+* **Datos de entrada**: Un vector de 10 valores correspondientes al consumo eléctrico en kWh de distintos sensores:
+
+`consumos: .word 15, 82, 45, 120, 60, 30, 95, 10, 75, 50`
+
+* **Criterio de filtrado**:
+
+1. Si el consumo está en el rango $[40, 80]$ (ambos inclusive, es decir $40 \le C \le 80$), se considera **Consumo Moderado**. Cada elemento en este rango suma 1 punto al resultado final.
+
+2. Si el consumo es estrictamente mayor que 80 ($C > 80$), se considera **Consumo Alto**. Cada elemento en este rango suma 2 puntos al resultado final.
+
+3. Los consumos menores de 40 ($C < 40$) se ignoran (suman 0)
+
+* **Resultado**: Reserva memoria en `.data` para la variable `puntuacion: .word 0` y guarda ahí el total acumulado al terminar de recorrer el vector.
+
+* **Consola:** Imprime el valor final por consola usando la llamada al sistema (ecall servicio 1)
+
+## Ejercicio 2: Rendimiento Comparativo (P3.pdf)
+
+Ejecuta tu código en las tres configuraciones básicas en Ripes y completa la tabla en
+
+| Configuración de CPU | Ciclos | Instrucciones | CPI | Tiempo Relativo (Ciclos Eq. C1) | Speedup (vs. C1) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **C1: Single-cycle processor** | *Anota* | *Anota* | 1.00 | $\text{Ciclos} \times 5$ | **1.00x** (Base) |
+| **C2: 5-stage w/o forwarding unit** | *Anota* | *Anota* | *Anota* | $\text{Ciclos}$ | *Calcula* |
+| **C3: 5-stage processor (Full)** | *Anota* | *Anota* | *Anota* | $\text{Ciclos}$ | *Calcula* |
+
+## Ejercicio 3: Optimización por Reordenamiento sin NOPs (Eje2.s y P3.pdf)
+
+| Configuración C2 | Ciclos | Instrucciones | CPI | Speedup (vs. C1) | Mejora respecto a C2 Original |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **C2: Original (con stalls)** | *Anota* | *Anota* | *Anota* | *Calcula* | 1.00x (Base) |
+| **C2: Reordenado (sin stalls)** | *Anota* | *Anota* | *Anota* | *Calcula* | *Calcula* |
+
+## Ejercicio 4: Inserción Manual de NOPs (Eje3.s y P3.pdf)
+
+### Resolución
+
+```asm
+.data
+consumos: .word 15, 82, 45, 120, 60, 30, 95, 10, 75, 50
+puntuacion: .word 0
+
+.text
+la a1,consumos
+li a2,10 # tamaño del vector
+li t1,40 # límite inferior
+li t2,80 # límite superior
+li a0,0 # para contar los elementos y guardarlo en puntuación
+bucle:
+    beqz a2,fin
+    lw t3,0(a1)
+    bgeu t3,t1,mayor
+    j siguiente
+mayor:
+    bgtu t3,t2,mayor2
+    addi a0,a0,1
+    j siguiente
+mayor2:
+    addi a0,a0,2
+    j siguiente
+siguiente:
+    addi a1,a1,4
+    addi a2,a2,-1
+    j bucle
+fin:
+    la a3,puntuacion
+    sw a0,0(a3)
+    li a7,1
+    ecall
+```
+
+### Parte 2
+| Configuración de CPU | Ciclos | Instrucciones | CPI | Tiempo Relativo (Ciclos Eq. C1) | Speedup (vs. C1) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **C1: Single-cycle processor** | 96 | 96 | 1.00 | $96 \times 5$ = 480 | **1.00x** (Base) |
+| **C2: 5-stage w/o forwarding unit** | 190 | 96 | 1.98 | 190 | 2.5263x |
+| **C3: 5-stage processor (Full)** | 174 | 96 | 1.81 | 1.74 | 2.7586x |
+
+### Parte 3
+Una posible optimización es esta:
+
+```asm
+.data
+consumos: .word 15, 82, 45, 120, 60, 30, 95, 10, 75, 50
+puntuacion: .word 0
+
+.text
+la a1,consumos
+li a2,10 # tamaño del vector
+li t1,40 # límite inferior
+li t2,80 # límite superior
+li a0,0 # para contar los elementos y guardarlo en puntuación
+bucle:
+    beqz a2,fin
+    lw t3,0(a1)
+    addi a1,a1,4
+    addi a2,a2,-1
+    bltu t3,t1,bucle
+    addi a0,a0,1
+    bleu t3,t2,bucle
+    addi a0,a0,1
+    j bucle
+fin:
+    la a3,puntuacion
+    sw a0,0(a3)
+    li a7,1
+    ecall
+```
+
+| Configuración C2 | Ciclos | Instrucciones | CPI | Speedup (vs. C1) | Mejora respecto a C2 Original |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **C2: 5-stage w/o forwarding unit** | 190 | 96 | 1.98 | 190 | 2.5263x | 
+| **C2: Reordenado (sin stalls)** | 119 | 82 | 1.45 | 3.455x | 1.6x |
+
+### Parte 4:
+
+Introduciendo los nops sobre el código original quedaría algo similar a esto:
+
+```asm
+.data
+consumos: .word 15, 82, 45, 120, 60, 30, 95, 10, 75, 50
+puntuacion: .word 0
+
+.text
+lui a1,%hi(consumos)
+li a2,10 # tamaño del vector
+li t1,40 # límite inferior
+li t2,80 # límite superior
+addi a1,a1,%lo(consumos)
+li a0,0 # para contar los elementos y guardarlo en puntuación
+bucle:
+    nop
+    beqz a2,fin
+    lw t3,0(a1)
+    nop
+    nop
+    bgeu t3,t1,mayor
+    j siguiente
+mayor:
+    bgtu t3,t2,mayor2
+    addi a0,a0,1
+    j siguiente
+mayor2:
+    addi a0,a0,2
+    j siguiente
+siguiente:
+    addi a1,a1,4
+    addi a2,a2,-1
+    j bucle
+fin:
+    lui a3,%hi(puntuacion)
+    li a7,1
+    addi a3,a3,%lo(puntuacion)
+    nop
+    sw a0,0(a3)
+    ecall
+```
+
+## Examen 4:
+### Ejercicio 1 – Archivos Eje1.s y P3.pdf
+
+Escribe un programa en ensamblador RISC-V ajustado a las siguientes especificaciones:
+
+* **Datos de entrada**: Un vector de 10 lecturas de sensor en la sección .data:
+`sensores: .word -5, 12, -8, 25, 0, -15, 30, 4, -2, 18`
+
+* **Especificación del Algoritmo:**
+Recorre el vector e implementa las siguientes reglas:
+
+**1. Valores Negativos ($< 0$)**: Se consideran ruido. Debes contar cuántos hay y guardar ese total en la variable `ruido: .word 0`.
+
+**2. Valores Positivos Pares ($> 0$ y par)**: Se consideran lecturas estables. Debes sumar sus valores en un acumulador y guardar el resultado total en `suma_pares: .word 0`.
+**3. Valores Impares o Cero:** Se ignoran para la suma, pero se procesan (no detienen el bucle).
+
+* **Consola**: Al finalizar, imprime por consola la suma total de los pares usando la llamada al sistema (`ecall` servicio 1)
+
+### Ejercicio 2: Análisis de Rendimiento Comparativo (P3.pdf)
+Ejecuta tu código del Ejercicio 1 en las 3 configuraciones básicas en Ripes y completa la tabla comparativa:
+
+| Configuración de CPU | Ciclos | Instrucciones | CPI | Tiempo Relativo (Ciclos Eq. C1) | Speedup (vs. C1) |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **C1: Single-cycle processor** | *Anota* | *Anota* | 1.00 | $\text{Ciclos} \times 5$ | **1.00x** (Base) |
+| **C2: 5-stage w/o forwarding unit** | *Anota* | *Anota* | *Anota* | $\text{Ciclos}$ | *Calcula* |
+| **C3: 5-stage processor (Full)** | *Anota* | *Anota* | *Anota* | $\text{Ciclos}$ | *Calcula* |
+
+### Ejercicio 3: Optimización por Reordenamiento sin Stalls (Eje2.s y P3.pdf)
+En la configuración C2 (5-stage w/o forwarding unit), reordena las instrucciones de lectura para ocultar la latencia del lw t2, 0(a1).
+
+Aprovecha los 2 ciclos de latencia de la memoria adelantando el incremento del puntero (`addi a1, a1, 4`) y el decremento del contador (`addi a2, a2, -1`) justo después de la carga para no sufrir ningún stall por riesgo de datos RAW.
+
+Plantilla para la Tabla del Ejercicio 3:
+| Configuración C2 | Ciclos | Instrucciones | CPI | Speedup (vs. C1) | Mejora respecto a C2 Original |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **C2: Original (con paradas)** | *Anota* | *Anota* | *Anota* | *Calcula* | 1.00x (Base) |
+| **C2: Reordenado (sin paradas)** | *Anota* | *Anota* | *Anota* | *Calcula* | *Calcula* |
+
+### Ejercicio 4: Inserción Manual de NOPs (Eje3.s y P3.pdf)
+
+
+### Resolución
+
+```asm
+.data
+sensores:   .word -5, 12, -8, 25, 0, -15, 30, 4, -2, 18
+ruido:      .word 0
+suma_pares: .word 0
+
+.text
+la a1,sensores
+li a0,0 # para los menores de 0
+li t0,0 # para la suma de pares
+li a2,10 # cantidad de elementos en el vector
+li t1,0 # para delimitar los inferiores
+
+bucle:
+    beqz a2,fin
+    lw t2,0(a1)
+    blt t2,t1,menores
+    bgt t2,t1,mayores
+    j siguiente
+menores:
+    addi a0,a0,1
+    j siguiente
+mayores:
+    andi t3,t2,1
+    bnez t3,siguiente
+    add t0,t0,t2
+    j siguiente
+    
+siguiente:
+    addi a1,a1,4
+    addi a2,a2,-1
+    j bucle
+    
+fin:
+    la a3, ruido
+    sw a0, 0(a3)        # Guarda el contador de ruido en memoria (4)
+    
+    la a4, suma_pares
+    sw t0, 0(a4)        # Guarda la suma de pares en memoria (64)
+    
+    mv a0, t0           # Mueve el 64 a a0 para imprimir solo la suma
+    li a7, 1
+    ecall               # Imprime 64 en consola
+```
+
+### Parte 2
+| Configuración de CPU | Ciclos | Instrucciones | CPI | Tiempo Relativo (Ciclos Eq. C1) | Speedup (vs. C1) |
+|:---|---:|---:|---:|---:|---:|
+| C1: Single-cycle processor | 105 | 105 | 1.00 | 525 | 1.00x (Base) |
+| C2: 5-stage w/o forwarding unit | 206 | 105 | 1.96 | 2062 | 2.55x |
+| C3: 5-stage processor (Full) | 183 | 105 | 1.74 | 1832 | 2.87x |
+### Parte 3
+
+```asm
+.data
+sensores: .word -5, 12, -8, 25, 0, -15, 30, 4, -2, 18
+ruido: .word 0
+suma_pares: .word 0
+
+.text
+la a1,sensores
+li a0,0 # para los menores de 0
+li t0,0 # para la suma de pares
+li a2,10 # cantidad de elementos en el vector
+li t1,0 # para delimitar los inferiores
+
+bucle:
+    beqz a2,fin
+    lw t2,0(a1)
+    addi a1,a1,4
+    addi a2,a2,-1
+    beqz t2,bucle
+    bgt t2,t1,mayores
+    addi a0,a0,1
+    j bucle
+mayores:
+    andi t3,t2,1
+    bnez t3,bucle
+    add t0,t0,t2
+    j bucle
+    
+fin:
+    la a3, ruido
+    sw a0, 0(a3)
+    la a4, suma_pares
+    sw t0, 0(a4)
+    li a7,1
+    ecall
+    
+    mv a0,t0
+    li a7,1
+    ecall
+```
+
+| Configuración C2 | Ciclos | Instrucciones | CPI | Speedup (vs. C1 Monociclo) | Mejora respecto a C2 Original |
+|:---|---:|---:|---:|---:|---:|
+| C2: Original (con paradas/stalls) | 206 | 105 | 1.96 | 2.55x | 1.00x (Base) |
+| C2: Reordenado (sin paradas) | 123 | 105 | 1.17 | 4.27x | 1.67x |
+
+### Parte 4
+Introduciendo los nops sobre el código original nos quedaría algo así: 
+
+```asm
+.data
+sensores:   .word -5, 12, -8, 25, 0, -15, 30, 4, -2, 18
+ruido:      .word 0
+suma_pares: .word 0
+
+.text
+lui a1,%hi(sensores)
+li a0,0 # para los menores de 0
+li t0,0 # para la suma de pares
+li a2,10 # cantidad de elementos en el vector
+addi a1,a1,%lo(sensores)
+li t1,0 # para delimitar los inferiores
+
+bucle:
+    nop
+    beqz a2,fin
+    lw t2,0(a1)
+    nop
+    nop
+    blt t2,t1,menores
+    bgt t2,t1,mayores
+    j siguiente
+menores:
+    addi a0,a0,1
+    j siguiente
+mayores:
+    andi t3,t2,1
+    nop
+    nop
+    bnez t3,siguiente
+    add t0,t0,t2
+    j siguiente
+    
+siguiente:
+    addi a1,a1,4
+    addi a2,a2,-1
+    j bucle
+    
+fin:
+    lui a3, %hi(ruido)
+    li a7, 1
+    lui a4,%hi(suma_pares)
+    addi a3,a3,%lo(ruido)
+    addi a4,a4,%lo(suma_pares)
+    nop
+    nop
+    sw a0, 0(a3)        # Guarda el contador de ruido en memoria (4)
+    mv a0, t0           # Mueve el 64 a a0 para imprimir solo la suma    
+    nop
+    nop
+    sw t0, 0(a4)        # Guarda la suma de pares en memoria (64)
+    
+    ecall               # Imprime 64 en consola
+```
+
+| Configuración | Ciclos | Instrucciones | CPI | Speedup (vs. C1 Monociclo) | Explicación del Resultado |
+|:---|---:|---:|---:|---:|:---|
+| C2 Original (Stalls de HW) | 206 | 105 | 1.96 | 2.55x | El hardware detiene el cauce automáticamente ante riesgos RAW. |
+| Eje 4 (NOPs manuales sin HW) | 218 | 154 | 1.42 | 2.41x | Relleno manual por software mediante instrucciones `nop`. |
+
