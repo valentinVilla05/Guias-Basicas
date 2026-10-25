@@ -20,7 +20,7 @@ Cada usuario tiene un nombre único y simbólico. Internamente Linux lo represen
 Linux admite casi cualquier carácter, pero se recomienda:
 
 - Usar solo **letras**, **números**, **guion bajo** (\_) y **punto** (.).
-- **Empezar siempre por una letra** (`u45` es válido, `45u` no).
+- **Recomendación: empezar siempre por una letra** (`u45` es válido, `45u` no).
 - **Máximo 32 caracteres**. Algunas utilidades antiguas truncan a 8, aunque hoy es habitual usar nombres más largos.
 - **Usar minúsculas**: Linux distingue mayúsculas de minúsculas (juan y Juan son usuarios distintos).
 - Seguir un criterio fijo (inicial del nombre + apellido: `fconde`, `f.conde`, `fconde01`) facilita localizar las cuentas.
@@ -67,17 +67,17 @@ exit            # vuelve al grupo primario habitual
 
 ## 3. Archivos Clave de Configuración
 
-| Archivo                            | Acceso          | Función y Estructura Principal                                                 |
-| ---------------------------------- | --------------- | ------------------------------------------------------------------------------ |
-| `/etc/passwd`                      | Lectura pública | Información de usuarios (7 campos): `usuario:x:UID:GID:GECOS:home:shell`       |
-| `/etc/shadow`                      | Solo root       | Contraseñas cifradas de usuarios y políticas de caducidad (9 campos).          |
-| `/etc/group`                       | Lectura pública | Lista de grupos (4 campos): `grupo:x:GID:miembros`                             |
-| `/etc/gshadow`                     | Solo root       | Contraseñas cifradas y administradores de grupos.                              |
-| `/etc/login.defs`                  | Sistema         | Define variables por defecto (`UID_MIN`, `UID_MAX`, etc.).                     |
-| `/etc/default/useradd`             | Lectura pública | Valores por defecto de `superadd` (shell, base del HOME, plantilla)            |
-| `/etc/skel`                        | Plantilla       | Archivos base (`.bashrc`, `.profile`) que se copian al HOME del nuevo usuario. |
-| `/etc/shells`                      | Lectura pública | Shells válidas instaladas en el sistema                                        |
-| `/etc/sudoers` y `/etc/sudoers.d/` | Solo root       | Quién puede usar `sudo` y para qué                                             |
+| Archivo                            | Acceso                              | Función y Estructura Principal                                                 |
+| ---------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------ |
+| `/etc/passwd`                      | Legible por root y grupo **shadow** | Información de usuarios (7 campos): `usuario:x:UID:GID:GECOS:home:shell`       |
+| `/etc/shadow`                      | Solo root                           | Contraseñas cifradas de usuarios y políticas de caducidad (9 campos).          |
+| `/etc/group`                       | Lectura pública                     | Lista de grupos (4 campos): `grupo:x:GID:miembros`                             |
+| `/etc/gshadow`                     | Solo root                           | Contraseñas cifradas y administradores de grupos.                              |
+| `/etc/login.defs`                  | Sistema                             | Define variables por defecto (`UID_MIN`, `UID_MAX`, etc.).                     |
+| `/etc/default/useradd`             | Lectura pública                     | Valores por defecto de `superadd` (shell, base del HOME, plantilla)            |
+| `/etc/skel`                        | Plantilla                           | Archivos base (`.bashrc`, `.profile`) que se copian al HOME del nuevo usuario. |
+| `/etc/shells`                      | Lectura pública                     | Shells válidas instaladas en el sistema                                        |
+| `/etc/sudoers` y `/etc/sudoers.d/` | Solo root                           | Quién puede usar `sudo` y para qué                                             |
 
 ---
 
@@ -162,11 +162,11 @@ Para el resto de ficheros:
 
 Son ficheros ocultos (empiezan por punto; se ven con `ls -a`) que se copian desde `/etc/skel` al crear el usuario. Definen variables, alias, el prompt, etc.
 
-| Fichero                          | Cuándo se ejecuta                                                 | Uso típico                       |
-| -------------------------------- | ----------------------------------------------------------------- | -------------------------------- |
-| `~/.profile` o `~/.bash_profile` | Solo al **iniciar sesión** (shell de login)                       | Variables de entorno como `PATH` |
-| `~/.bashrc`                      | En **cada shell interactivo** (nueva ventana de terminal, SSH...) | Alias, prompt, preferencias      |
-| `~/.bash_logout`                 | Al **cerrar la sesión**                                           | Tareas de limpieza               |
+| Fichero                          | Cuándo se ejecuta                                         | Uso típico                       |
+| -------------------------------- | --------------------------------------------------------- | -------------------------------- |
+| `~/.profile` o `~/.bash_profile` | Solo al **iniciar sesión** (shell de login)               | Variables de entorno como `PATH` |
+| `~/.bashrc`                      | En **cada shell interactivo** (nueva ventana de terminal) | Alias, prompt, preferencias      |
+| `~/.bash_logout`                 | Al **cerrar la sesión**                                   | Tareas de limpieza               |
 
 - En un shell de login, bash lee primero `/etc/profile` y después **el primero que exista** de `~/.bash_profile`, `~/.bash_login` y `~/.profile`.
 - En Ubuntu, el `.profile` por defecto carga después el `.bashrc`.
@@ -186,7 +186,7 @@ Son ficheros ocultos (empiezan por punto; se ven con `ls -a`) que se copian desd
 | `-k /ruta`      | (con `-m`) usa otra plantilla en lugar de `/etc/skel`                                   |
 | `-M`            | No crea el HOME (cuentas de sistema)                                                    |
 | `-d /ruta`      | HOME personalizado (por defecto `/home/usuario`)                                        |
-| `-c "texto"`    | Campo GECOS (nombre completo)                                                           |
+| `-c "texto"`    | Campo GECOS (nombre completo). Se queda vacio si no se usa `-c`                         |
 | `-s /shell`     | Shell por defecto                                                                       |
 | `-g grupo`      | Grupo primario                                                                          |
 | `-G g1,g2`      | Grupos secundarios (separados por comas, sin espacios)                                  |
@@ -205,7 +205,7 @@ Son ficheros ocultos (empiezan por punto; se ven con `ls -a`) que se copian desd
 
 - `useradd`: Binario nativo GNU/Linux. Mantiene el mismo comportamiento en todas las distribuciones, pero no crea el directorio HOME por defecto (requiere la opción -m)
 
-- `adduser`: Script en Perl (propio de distribuciones basadas en Debian/Ubuntu). Es un asistente interactivo de más alto nivel que crea el directorio HOME, copia plantillas y pide la contraseña automáticamente
+- `adduser`: Script en Perl (propio de distribuciones basadas en Debian/Ubuntu). Es un asistente interactivo de más alto nivel que crea el directorio HOME, copia plantillas y pide la contraseña automáticamente y los datos de GECOS
 
 |                   | `useradd`                                           | `adduser`                                         |
 | ----------------- | --------------------------------------------------- | ------------------------------------------------- |
@@ -309,7 +309,8 @@ Gestiona el envejecimiento de las contraseñas y la caducidad de la cuenta
 - **Sintaxis: `userdel [-r [-f]] nombreusuario`**
 
 - **Sin opciones**: borra la cuenta pero **conserva su HOME y sus archivos** (quedan con el UID antiguo, lo que puede dar confusión).
-- **`-r`**: borra también el HOME y el buzón de correo.
+- **`-r`**: borra el directorio personal completo, incluidos archivos de otros usuarios.
+- **`f`** fuerza el borrado aunque haya sesión abierta o el HOME lo comparta otra cuenta.
 - **`-rf`**: fuerza el borrado del HOME aunque contenga archivos de otros usuarios. También permite borrar una cuenta con sesión abierta, así que hay que usarlo con cuidado.
 - `userdel` se niega a borrar un usuario que tenga procesos en ejecución. Comprueba antes con `who` y `pgrep -u usuario`.
 - Si el grupo privado del usuario no tiene más miembros, `userdel` lo borra también.
