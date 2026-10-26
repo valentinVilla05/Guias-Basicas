@@ -179,7 +179,7 @@ int Avl<T>::inserta(Nodo<T>* &c, T &dato) {
 ![Secuencia2](../assets/img/avl_secuencia_7_16_15.gif)
 
 - Al insertar `7` Desequilibrio en 5 : Rotación Izquierda
-- Al insertar `13` no hay ningún problema
+- Al insertar `16` no hay ningún problema
 - Al insertar `15`: Inserción en hijo izq(`15`) del hijo derecho (`16`) del nodo `7`
 
 ## Borrado en Árboles AVL
