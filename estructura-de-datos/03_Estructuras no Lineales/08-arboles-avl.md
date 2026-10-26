@@ -38,19 +38,31 @@ Cuando Insertamos un dato y este rompe el equilibrio $(bal = +- 2)$, se arregla 
    _ Solución: El nodo hijo sube a ser el padre y el padre original baja a la derecha
    ![arbol_AVL](../assets/img/arbol_avl.gif)
 
-2. **Rotación Simple a la Izquierda**
+2. **Rotación Doble Izquierda-Derecha**
+   _ Ocurre cuando insertamos en el hijo derecho del hijo izquierdo $bal(k_3) = 2$, $bal(k_1) = -1$)
+   _ Solución: tenemos que rotar a la izquierda en el hijo y luego una a la derecha en el padre
+   ![Rot_doble](../assets/img/rotacion_doble_izq_der.gif)
+3. **Rotación Doble Derecha-Izquierda**
+   _ Ocurre cuando insertamos en el hijo izquierdo del hijo derecho $bal(k_1) = -2$, $bal(k_3) = 1$).
+   _ Solución: Hacemos primero una rotación a la derecha en el hijo y luego una a la izquierda en el padre
+   ![Rot_dob_der](../assets/img/rotacion_doble_der_izq.gif)
+
+4. **Rotación Simple a la Izquierda**
    _ Ocurre cuando insertamos un nodo derecho en otro nodo derecho $bal(a) = -2$, $bal(der(a)) = -1$).
    _ Solución: El nodo hijo sube a ser el padre y el padre baja a la izquierda
    ![Rotación_izq](../assets/img/rotacion_simple_izquierda.gif)
 
-3. **Rotación Doble Izquierda-Derecha**
-   _ Ocurre cuando insertamos en el hijo derecho del hijo izquierdo $bal(k_3) = 2$, $bal(k_1) = -1$)
-   _ Solución: tenemos que rotar a la izquierda en el hijo y luego una a la derecha en el padre
-   ![Rot_doble](../assets/img/rotacion_doble_izq_der.gif)
-4. **Rotación Doble Derecha-Izquierda**
-   _ Ocurre cuando insertamos en el hijo izquierdo del hijo derecho $bal(k_1) = -2$, $bal(k_3) = 1$).
-   _ Solución: Hacemos primero una rotación a la derecha en el hijo y luego una a la izquierda en el padre
-   ![Rot_dob_der](../assets/img/rotacion_doble_der_izq.gif)
+Para recordar los diferentes tipos de rotaciones que hay tengamos en cuenta esta imagen de los 4 casos:
+
+![rotaciones](../assets/img/casosRotaciones.png)
+
+**Caso 1** --> Rotación simple a la derecha
+
+**Caso 2** --> Rotacion doble Izquierda - Derecha
+
+**Caso 3** --> Rotacion doble Derecha - Izquierda
+
+**Caso 4** --> Rotación simple a la izquierda
 
 ### Implementación en C++: Rotaciones y Reajuste de Balances
 
@@ -153,7 +165,7 @@ int Avl<T>::inserta(Nodo<T>* &c, T &dato) {
 
 ## **Ejemplos**:
 
-### Insercción de `3,2,1,4,5,6`
+### Inserción de `3,2,1,4,5,6`
 
 ![secuencia](../assets/img/avl_secuencia_3_2_1_4_5_6.gif)
 
