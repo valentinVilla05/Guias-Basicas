@@ -826,3 +826,164 @@ fin:
 | C2 Original (Stalls de HW) | 206 | 105 | 1.96 | 2.55x | El hardware detiene el cauce automáticamente ante riesgos RAW. |
 | Eje 4 (NOPs manuales sin HW) | 218 | 154 | 1.42 | 2.41x | Relleno manual por software mediante instrucciones `nop`. |
 
+## Examen 5:
+
+### Ejercicio 1 – 2/10 puntos - Archivos Eje1_Avanzado.s y P3.pdf
+Escribe un programa ajustado a las siguientes directivas: En el segmento de datos se tiene un conjunto de mediciones de consumo eléctrico expresadas en kilovatios/hora (kWh), almacenadas como números enteros de 32 bits con signo:
+
+$$\text{Vector de consumos: } [5, 10, 45, 80, 95, -3, 81, 12]$$
+
+El programa deberá contar **cuántos consumos son anomalías severas** (se considera anomalía severa todo consumo estrictamente **menor que 10 kWh o estrictamente mayor que 80 kWh**), y el resultado deberá almacenarse en memoria, en un espacio reservado a tal efecto en el segmento de datos sin inicializar, como un número entero de 32 bits.
+
+Crea un documento y adjunta en él una captura de pantalla del panel Memory tras haber ejecutado el programa, en la que se vea el código en el editor y el conteo de espacios en la memoria
+
+> Resolución: 
+
+Un posible resultado sería este: 
+
+```asm
+.data
+vector: .word 5,10,45,80,95,-3,81,12
+resultado: .word 0
+
+.text
+la a1,vector
+li a2,8
+li t0,10
+li t1,80
+li a0,0
+bucle:
+    beqz a2,fin
+    lw t2,0(a1)
+    bge t2,t0,mayor
+    addi a0,a0,1
+    j siguiente
+    
+mayor:
+    ble t2,t1,siguiente
+    addi a0,a0,1
+    j siguiente
+
+siguiente:
+    addi a1,a1,4
+    addi a2,a2,-1
+    j bucle
+
+fin:
+    la a3,resultado
+    sw a0,0(a3)
+    li a7,1
+    ecall
+```
+
+### Ejercicio 2 – 3/10 puntos - Archivo P3.pdf
+
+Ejecuta el programa del ejercicio 1 en las configuraciones de procesador Single-cycle processor (C1), 5-Stage processor w/o Forwarding unit (C2) y 5-stage processor (C3) y anota en cada caso el número de ciclos y CPI.
+
+Incluye en el documento creado antes una tabla con los ciclos, CPI y mejora en rendimiento de cada una de las configuraciones, calculando a partir de C1 una estimación de lo que se tardaría en un procesador sin cauce segmentado.
+
+Explica brevemente la fórmula que hayas empleado para hacer el cálculo de la mejora en rendimiento. Incluye una captura de pantalla de la ejecución en cada configuración en la que se aprecien los datos usados en la tabla.
+
+| Configuración de CPU | Ciclos | Instrucciones | CPI | Tiempo Relativo (Ciclos Eq. C1) | Speedup (vs. C1) |
+|:---|---:|---:|---:|---:|---:|
+| C1: Single-cycle processor | 74*5 =  370 | 74 | 1.00 | 370 | 1.00x (Base) |
+| C2: 5-stage w/o forwarding unit | 148 | 74 | 2 | 148 | 2.50x |
+| C3: 5-stage processor (Full) | 134 | 74 | 1.81 | 144 | 2.76x |
+
+$$\text{Speedup}_{C1 \to C X} = \frac{\text{Tiempo}_{C1}}{\text{Tiempo}_{CX}} = \frac{IC \times \text{CPI}_{C1} \times T_{C1}}{IC \times \text{CPI}_{CX} \times T_{CX}} = \frac{\text{Ciclos}_{C1} \times (5 \cdot \tau)}{\text{Ciclos}_{CX} \times (1 \cdot \tau)} = \frac{5 \cdot \text{Ciclos}_{C1}}{\text{Ciclos}_{CX}}$$
+
+
+## Parte 2 : Código Optimizado
+
+```asm
+.data
+vector: .word 5,10,45,80,95,-3,81,12
+resultado: .word 0
+
+.text
+la a1,vector
+li a2,8
+li t0,10
+li t1,80
+li a0,0
+bucle:
+    beqz a2,fin
+    lw t2,0(a1)
+    addi a1,a1,4
+    addi a2,a2,-1
+    blt t2,t0,riesgo
+    ble t2,t1,bucle
+    
+riesgo:
+    addi a0,a0,1
+    j bucle
+
+fin:
+    la a3,resultado
+    sw a0,0(a3)
+    li a7,1
+    ecall
+```
+
+| Estado del código | Ciclos totales | Instrucciones (IC) | CPI | Reducción de Ciclos | SpeedUp | 
+| -- | -- | -- | -- | -- | -- | 
+| **Código Original** | 134 | 74 | 1.81 | Base | 1.00x | 
+| **Código Optimizado** | 94 | 58 | 1.62 | -40 ciclos | 1.43x |
+
+$$\text{Speedup} = \frac{\text{Ciclos}_{\text{Original}}}{\text{Ciclos}_{\text{Optimizado}}} = \frac{134}{94} = \mathbf{1.4255\times} \approx \mathbf{1.43\times}$$
+
+### Ejercicio 3 – 3/10 puntos - Adaptación para Procesador sin Hazard/Forwarding
+
+Asume un procesador de 5 etapas (`IF, ID, EX, MEM, WB`) que NO TIENE unidad de adelantamiento (Forwarding Unit) ni unidad de detección de riesgos (Hazard Detection Unit).
+
+* **Condiciones del hardware:**
+    * Escritura en el banco de registros en la 1ª mitad del ciclo $WB$, lectura en la 2ª mitad del ciclo $ID$.Los saltos condicionales e incondicionales se resuelven en la etapa EX (provocando 2 ciclos de penalización de control si no se gestionan)
+    
+    * Toda dependencia de datos (RAW) o de carga (Load-Use) debe resolverse manualmente mediante la inserción de instrucciones nop.
+    
+Reescribe únicamente el código del **bucle principal del ejercicio 1**, insertando las instrucciones `nop` necesarias para asegurar que el programa funcione correctamente por hardware **sin que se produzca ningún riesgo de datos o de control**
+
+
+> Resolución: 
+Cogiendo el código de la Parte 1: 
+
+```cpp
+.data
+vector: .word 5,10,45,80,95,-3,81,12
+resultado: .word 0
+
+.text
+lui a1,%hi(vector)
+li a2,8
+li t0,10
+li t1,80
+addi a1,a1,%lo(vector)
+li a0,0
+la a3,resultado
+
+bucle:
+    beqz a2,fin
+    lw t2,0(a1)
+    bge t2,t0,mayor
+    addi a0,a0,1
+    j siguiente
+    
+mayor:
+    ble t2,t1,siguiente
+    addi a0,a0,1
+    j siguiente
+
+siguiente:
+    addi a1,a1,4
+    addi a2,a2,-1
+    j bucle
+
+fin:
+
+    li a7,1
+    sw a0,0(a3)
+    nop
+    nop
+
+    ecall
+```
