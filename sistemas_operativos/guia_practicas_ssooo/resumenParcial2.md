@@ -2,7 +2,138 @@
 
 > Muchos de los comandos y sus opciones se pueden recordar con el comando **man**, aún así es recomendable conocerlos y mirarse las explicaciones sobre las prácticas
 
-## 1. Administración de Software (`dpkg` y `apt`)
+## 1. Introducción a la Virtualización y Sistemas Operativos
+### Conceptos Fundamentales de Virtualización
+
+* **Virtualización**: Tecnología que permite crear representaciones basadas en software (virtuales) de recursos físicos como procesadores, memoria, almacenamiento y redes
+
+* **Hipervisor / VMM (Virtual Machine Monitor)**: Software, firmware o hardware que crea, gestiona y ejecuta máquinas virtuales
+
+* **Host (Sistema Anfitrión)**: El entorno físico real (hardware y SO base) sobre el que se ejecuta el hipervisor
+
+* **Guest (Sistema Invitado / SO Invitado)**: El sistema operativo que se ejecuta dentro de la máquina virtual de manera aislada
+
+* **Máquina Virtual (VM)**: Entorno de computación virtualizado que funciona como un sistema informático independiente dentro del hardware host. El SO invitado corre sobre la máquina virtual
+
+```text
++-------------------------------------------------------------+
+|              Sistema Operativo Invitado (Guest)              |
++-------------------------------------------------------------+
+|                     Máquina Virtual (VM)                     |
++-------------------------------------------------------------+
+|                     Hipervisor (VMM)                        |
++-------------------------------------------------------------+
+|           Hardware Físico / Sistema Anfitrión (Host)        |
++-------------------------------------------------------------+
+```
+
+### Tipos de Hipervisores
+### Hipervisor Tipo 1 (Nativo / Bare-Metal)
+
+* **Arquitectura**: Se ejecuta directamente sobre el hardware físico sin ningún sistema operativo intermediario
+
+* **Rendimiento**: Máxima eficiencia y menor latencia al tener acceso directo a los recursos de hardware
+
+* **Uso principal**: Entornos de producción, centros de datos y servidores empresariales
+
+> Ejemplos: VMware ESXi, Microsoft Hyper-V Server, Proxmox VE, Xen.
+
+### Hipervisor Tipo 2 (Alojado / Hosted)
+
+* **Arquitectura**: Se ejecuta como una aplicación sobre un sistema operativo anfitrión convencional (Windows, Linux, macOS)
+
+* **Rendimiento**: Menos eficiente debido a la capa adicional del SO anfitrión
+
+* **Uso principal**: Desarrollo, pruebas, docencia y uso personal
+
+> Ejemplos: Oracle VM VirtualBox, VMware Workstation, Parallels Desktop.
+
+### Configuración de Almacenamiento y Recursos en VirtualBox
+
+* **VDI (VirtualDisk Image)**: Formato nativo de Oracle VirtualBox (`.vdi`)
+
+* **VMDK (Virtual Machine Disk)**: Formato desarrollado por VMware, muy compatible entre plataformas (`.vmdk`)
+
+* **VHD (Virtual Hard Disk)**: Formato nativo de Microsoft (`.vhd`)
+
+**Formatos de exportación / despliegue:**
+
+* **OVA / OVF**: Formatos estándar para empaquetar y distribuir servicios virtualizados completos (appliances) para ser importados en múltiples equipos físicos
+
+### Herramientas de Integración: Guest Additions
+Las **Guest Additions** son un conjunto de controladores (drivers) y aplicaciones que se instalan **dentro del sistema operativo invitado** (normalmente desde una imagen ISO virtual como `VBoxGuestAdditions.iso`) una vez finalizada la instalación del SO
+
+| Funcionalidad | Descripción | 
+| -- | -- | 
+| **Vídeo y Resolución** | Soporte para aceleración 3D y redimensionado automático de la pantalla al cambiar el tamaño de la ventana. | 
+| **Integración del ratón** | Transición fluida del cursor entre el anfitrión y el invitado sin necesidad de liberar manualmente el ratón. | 
+| **Integración de datos** | Portapapeles compartido (copiar/pegar) y función de arrastrar y soltar (drag and drop) | 
+| **Carpetas compartidas** | Permite acceder a directorios del anfitrión directamente desde el invitado. | 
+| **Sincronización horaria** | Mantiene la hora de la VM sincronizada con el reloj del equipo físico. | 
+
+### Concepto de Distribución Linux
+
+```text
++-------------------------------------------------------------------------+
+| Software de Aplicación (Ofimática, navegadores, reproductores media)   |
++-------------------------------------------------------------------------+
+| Entorno Gráfico (X Window System / Wayland + GNOME, KDE, XFCE, etc.)    |
++-------------------------------------------------------------------------+
+| Bibliotecas y Herramientas del Sistema (Proyecto GNU, gestores de pkg) |
++-------------------------------------------------------------------------+
+|                             Núcleo (Kernel) Linux                       |
++-------------------------------------------------------------------------+
+```
+
+* **Linux Live CD/USB:** Modalidad de inicio que permite ejecutar el sistema operativo directamente desde un medio ejecutable secundario (CD, DVD, memoria USB) en la memoria RAM, **sin necesidad de modificar ni instalar nada en el disco duro**
+
+* **Imágenes ISO**: Formato estándar de archivo que contiene la copia exacta de un medio óptico de instalación. En virtualización se prefiere montar archivos `.iso` directamente en la unidad virtual porque ofrece mayor velocidad y comodidad de instalación frente a medios físicos.
+### Asignación de RAM
+
+* Debe balancearse entre las necesidades del sistema anfitrión y del invitado
+
+* **Criterio habitual**: Mantener la asignación en la "zona verde" de la interfaz (habitualmente entre un 25% y un 50% de la RAM física total). Si se asigna demasiada RAM, se desestabiliza el anfitrión; si se asigna muy poca, el invitado recurrirá al disco (swap) ralentizando su ejecución
+
+### Discos Virtuales
+* **Reserva dinámica**: El archivo de disco crece progresivamente a medida que el SO invitado guarda datos, ahorrando espacio en el disco físico real
+
+* **TAMAÑO FIJO**: Ocupa todo el espacio asignado desde su creación, ofreciendo un rendimiento de lectura/escritura ligeramente superior
+
+### Particionamiento del Disco y Sistema de Archivos en Linux
+
+Una **partición** es una división **lógica** (no física) de una unidad de almacenamiento que permite al sistema operativo tratar cada sección como una unidad independiente
+
+### Esquema de Particionado Tradicional (MBR)
+
+* **Particiones primarias**: Divisiones directas del disco (máximo 4 por disco en esquemas MBR tradicionales)
+
+* **Partición extendida**: Tipo especial de partición primaria utilizada para superar el límite de 4 particiones. Sirve como contenedor para crear múltiples particiones lógicas
+
+### Jerarquía de Directorios Básica en Linux
+A diferencia de Windows (que usa letras de unidad como `C:` o `D:`), Linux organiza todo el sistema en un único árbol jerárquico a partir del directorio raíz (`/`).
+
+* `/` (Raíz): Punto de montaje principal donde reside la estructura base del sistema
+
+* `/home` : Directorio reservado para las carpetas personales y configuraciones de los usuarios estándar del sistema
+
+* `/boot` : Contiene los archivos necesarios para el arranque del sistema operativo
+
+### Memoria de Intercambio (Swap) en Linux
+### Naturaleza de la Swap
+
+* Es un espacio en disco (gestionado mediante una partición dedicada de tipo swap o un archivo de intercambio `swapfile`) que el kernel de Linux utiliza como extensión de la memoria RAM física
+
+* No forma parte de la jerarquía de archivos tradicionales y no se monta en una ruta del sistema de archivos (como `/home` o `/root`)
+
+
+### Funcionamiento y Eficiencia
+* **Mecanismo de seguridad**: La swap evita que el sistema colapse por falta de memoria (Out Of Memory - OOM) cuando la RAM física se llena, enviando páginas de memoria inactivas al disco
+
+* **Impacto en la eficiencia**: El acceso al disco duro/SSD es significativamente más lento que a la RAM física. Si el sistema recurre constantemente a la swap (fenómeno llamado thrashing), el rendimiento global del sistema disminuye, por lo que usar swap no aumenta la velocidad del sistema
+
+* **Hibernación**: Para que el sistema pueda hibernar (guardar el estado completo de la RAM en el almacenamiento secundario y apagarse), el espacio de swap disponible debe ser al menos igual o superior a la memoria RAM instalada.
+
+## 2. Administración de Software (`dpkg` y `apt`)
 
 Nomenclatura del Paquete Debian (`.deb`)
 
@@ -122,7 +253,7 @@ sudo apt-mark unhold <paquete>   # Libera actualización
 apt-mark showhold                # Lista paquetes congelados
 ```
 
-## 2. Administración de Usuarios y Grupos
+## 3. Administración de Usuarios y Grupos
 ### Archivos Clave del Sistema
 
 | Archivo                            | Acceso          | Función y Estructura Principal                                                 |
