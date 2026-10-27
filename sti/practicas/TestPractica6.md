@@ -1,3 +1,5 @@
+## Preguntas Obtenidas de la práctica 6
+
 
 > La ingeniería inversa facilita la realización de prototipos y disminuye el costo al desarrollar nuevos productos
 

@@ -10,7 +10,7 @@
 > En la versión vsftpd 2.3.4, la vulnerabilidad reside en una mala configuración por defecto del archivo /etc/vsftpd.conf.
 
 - **Falso**
-- _Motivo: no se trata de un fallo de configuración. La vulnerabilidad (CVE-2011-2523) es una puerta trasera (backdoor) introducida maliciosamente en el propio código fuente de la aplicación, la cual se activa al recibir una secuencia de caracteres específica (":))") en el nombre de usuario._
+- _Motivo: no se trata de un fallo de configuración. La vulnerabilidad (CVE-2011-2523) es una puerta trasera (backdoor) introducida maliciosamente en el propio código fuente de la aplicación, la cual se activa al recibir una secuencia de caracteres específica en el nombre de usuario._
 
 ----------------------------
 
