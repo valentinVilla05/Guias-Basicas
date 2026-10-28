@@ -7,6 +7,7 @@ Estos ejercicios son los que el profesor **Pedro Jose (aka: Pedro J)** pone como
 ### 1.1 Punto de partida necesario
 
 Para poder abordar la práctica hace falta:
+
 **1. Virtual-Box**
 
 **2. La ISO de Ubuntu 24.04 LTS**
@@ -33,7 +34,6 @@ En el sistema anfitrión la carpeta de la máquina virtual contiene los siguient
 
 ---
 
-Cuestión 1: comandos raros ????
 
 ### 2.2 Comportamiento del disco de asignación Dinámica
 
