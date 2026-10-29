@@ -103,12 +103,16 @@ El comando `dpkg -l` lista los paquetes y su estado mediante un código de 3 car
 
 ## 6. Comandos Clave de Referencia Rápida
 
+- `whereis` Busca el binario, el código fuente y la página de manual de un programa en las rutas habituales (/usr/bin, /etc, /usr/share/man…) sin consultar el sistema de paquetes.
+
 - **Gestión local con** `dpkg`:
   - `dpkg -l ['patrón']`: Listar paquetes (o filtrados)
 
   - `dpkg -L <paquete>:` Listar archivos instalados por un paquete
 
   - `dpkg --verify:` Verificar integridad de archivos instalados
+
+  - `dpkg --contents <paquete>` Lee el archivo .deb y enumera las rutas que contiene, con sus permisos y propietarios.
 
 - **Gestión remota y automática con** `apt`:
   - `apt list --installed`: Enumerar paquetes instalados.
@@ -117,6 +121,8 @@ El comando `dpkg -l` lista los paquetes y su estado mediante un código de 3 car
 
   - `sudo apt install -f`: Corregir dependencias rotas
 
+  - `apt install --reinstall <paquete>`: Vuelve a copiar los archivos del paquete tal como están en el depósito.
+
   - `sudo apt-mark hold <paquete>`: Bloquear la actualización de un paquete
 
   - `apt policy`: Muestra de dónde puede instalarse un paquete y con qué versión. Sin argumentos, lista los repositorios configurados con su prioridad.
@@ -124,6 +130,8 @@ El comando `dpkg -l` lista los paquetes y su estado mediante un código de 3 car
   - `apt list --upgradable`: Lista los paquetes instalados para los que hay una versión más nueva en los repositorios.
 
   - `apt-mark unhold` / `showhold`: `hold` congela un paquete en su versión actual, de modo que upgrade y full-upgrade no lo tocan. Es útil cuando una versión nueva te rompería algo. En `dpkg -l` aparece con h en el primer carácter. `unhold` revierte el bloqueo y el paquete vuelve a actualizarse con normalidad.
+
+  - `apt search <paquete>` Busca por nombre y descripción entre los paquetes que conoce APT.
 
 ## 7. Inspección y Consulta de Paquetes Instalados
 
