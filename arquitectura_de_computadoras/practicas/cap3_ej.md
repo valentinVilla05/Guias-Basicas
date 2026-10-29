@@ -1,4 +1,4 @@
-# Ejercicios Práctica 3
+Cálculo de rendimiento respecto a C1# Ejercicios Práctica 3
 
 > Single-cycle processor (C1), 5-Stage processor w/o forwarding unit (C2) y 5-stage processor (C3)
 
@@ -130,8 +130,7 @@ b) Ponemos como configuración **5-Stage processor w/o forwarding unit**
 **Explicación:**
 Al no disponer de unidad de reenvío (forwarding unit), el procesador introduce burbujas o ciclos de detención (stalls) en el cauce para resolver las dependencias de datos (como el uso de `a2` tras `lw` o de `a0` tras `add`) y los riesgos de control provocados por los saltos. Esto eleva el CPI a 2.15 y requiere un total de 71 ciclos
 
-- **Cálculo de rendimiento respecto a C1:**
-  $$\text{Speedup}_{C2/C1} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{C2}} = \frac{165}{71} \approx 2.3239$$
+- **Cálculo de rendimiento respecto a C1:** $$\text{Speedup}_{C2/C1} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{C2}} = \frac{165}{71} \approx 2.3239$$
 
 c) Ponemos como configuración **5-Stage processor**
 
@@ -227,7 +226,7 @@ fin11:
 
 > AAl segmentar el cauce en 5 etapas pero carecer de unidad de adelantamiento (forwarding unit), el hardware congela el cauce e inserta ciclos de detención (stalls) cada vez que una instrucción necesita un dato producido por una instrucción anterior que aún no ha llegado a la etapa de escritura en el banco de registros. los saltos condicionales e incondicionales (beq, j) introducen penalizaciones por riesgos de control. Esto eleva los ciclos a **171** y el CPI a **1.92**
 
-Cálculo de Rendimiento respecto a C1:$$\text{Speedup}_{C2/C1} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{C2}} = \frac{445}{171} \approx \mathbf{2,6023\times}$$
+Cálculo de Rendimiento respecto a C1: $$\text{Speedup}_{C2/C1} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{C2}} = \frac{445}{171} \approx \mathbf{2,6023\times}$$
 
 **c) Configuración C3: Segmentado de 5 etapas con reenvío (5-Stage processor)**
 ![alt text](../images/D2.png)
@@ -236,9 +235,9 @@ La inclusión de la unidad de reenvío (forwarding unit) permite enviar los resu
 
 **Cálculos de Rendimiento:**
 
-Respecto a C1 (Single-cycle):$$\text{Speedup}_{C3/C1} = \frac{445}{152} \approx \mathbf{2.9276\times}$$
+Respecto a C1 (Single-cycle): $$\text{Speedup}_{C3/C1} = \frac{445}{152} \approx \mathbf{2.9276\times}$$
 
-Respecto a C2 (Sin forwarding):$$\text{Speedup}_{C3/C2} = \frac{171}{152} \approx \mathbf{1.125\times} \quad (\text{un } 12.5\% \text{ más rápido})$$
+Respecto a C2 (Sin forwarding): $$\text{Speedup}_{C3/C2} = \frac{171}{152} \approx \mathbf{1.125\times} \quad (\text{un } 12.5\% \text{ más rápido})$$
 
 **d) Identificación de detenciones y reordenación de código**
 
@@ -258,7 +257,7 @@ Se reorganiza el bucle intercalando la actualización del puntero `addi t0, t0, 
 
 ![alt text](../images/M11.png)
 
-Mejora de rendimiento del código reordenado (en C3):$$\text{Speedup} = \frac{\text{Ciclos}_{\text{C3 original}}}{\text{Ciclos}_{\text{C3 optimizado}}} = \frac{152}{137} \approx \mathbf{1.109\times} \quad (\text{un } 10.9\% \text{ de mejora})$$
+Mejora de rendimiento del código reordenado (en C3): $$\text{Speedup} = \frac{\text{Ciclos}_{\text{C3 original}}}{\text{Ciclos}_{\text{C3 optimizado}}} = \frac{152}{137} \approx \mathbf{1.109\times} \quad (\text{un } 10.9\% \text{ de mejora})$$
 
 #### Resumen / Comparación Final
 
@@ -316,8 +315,7 @@ En la arquitectura monociclo (C1), cada instrucción se ejecuta en un único cic
 **Explicación:**
 Al activar la segmentación en 5 etapas sin unidad de adelantamiento (_forwarding unit_), el procesador debe insertar ciclos de parada (_stalls_) cuando existen dependencias de datos y asumir las penalizaciones por desvío de control producidas por las instrucciones de salto condicional (`beq`) e incondicional (`j`). Esto eleva la ejecución a **6011 ciclos** con un **CPI de 1.50**.
 
-**Cálculo de Rendimiento respecto a C1:**
-$$\text{Speedup}_{C2/C1} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{C2}} = \frac{20015}{6011} \approx \mathbf{3.3297\times}$$
+**Cálculo de Rendimiento respecto a C1:** $$\text{Speedup}_{C2/C1} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{C2}} = \frac{20015}{6011} \approx \mathbf{3.3297\times}$$
 
 **c) Configuración C3: Segmentado de 5 etapas con reenvío (5-Stage processor)**
 
@@ -328,11 +326,9 @@ Al incorporar la unidad de reenvío (_forwarding unit_), el hardware envía los 
 
 **Cálculos de Rendimiento:**
 
-- **Respecto a C1 (Single-cycle):**
-  $$\text{Speedup}_{C3/C1} = \frac{20015}{6009} \approx \mathbf{3.3308\times}$$
+- **Respecto a C1 (Single-cycle):** $$\text{Speedup}_{C3/C1} = \frac{20015}{6009} \approx \mathbf{3.3308\times}$$
 
-- **Respecto a C2 (Sin forwarding):**
-  $$\text{Speedup}_{C3/C2} = \frac{6011}{6009} \approx \mathbf{1.0003\times}$$
+- **Respecto a C2 (Sin forwarding):** $$\text{Speedup}_{C3/C2} = \frac{6011}{6009} \approx \mathbf{1.0003\times}$$
 
 **d) Identificación de detenciones y reordenación de código**
 
