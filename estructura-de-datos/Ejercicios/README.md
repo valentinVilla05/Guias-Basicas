@@ -14,7 +14,7 @@ Es importante saber hacerlos y también sirve como repaso para recordar como se 
 
 **3. Primitiva (1,5 y 1,5 puntos)** 
 
-> Quiere decir que son las de programar una función en C++ (**SIN STL**)
+> Quiere decir que son las de programar una función en C++ (**SIN STL**) (SIEMPRE CAE O **ARBOLES** O **LISTAS ENLAZADAS**)
 
 **4. UML (3,5 puntos) CON STL**
 
