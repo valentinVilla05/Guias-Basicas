@@ -1,0 +1,79 @@
+# Ejercicio 7
+> Los números pseudo-aleatorios son buenos para aplicaciones como videojuegos
+
+- **Verdadero**
+
+- Motivo: Los generadores de números pseudoaleatorios (PRNG) son deterministas y computacionalmente muy rápidos, lo que los hace ideales para simulaciones y videojuegos donde la velocidad es prioritaria y no se requiere seguridad criptográfica
+
+---------------
+
+> La mayor parte de gestores de contraseñas incorpora herramientas para la actualización automática den uestras contraseñas almacenadas
+
+* **Falso**
+
+* **Motivo**: Aunque los gestores sugieren o generan contraseñas fuertes, el cambio o actualización en los sitios web suele requerir la intervención e interacción del usuario debido a las distintas formas y flujos de autenticación de cada plataforma
+
+----
+> Las características de la aleatoriedad dependen de una serie de números y no de un número en sí
+
+* **Verdadero**
+
+* **Motivo**: La aleatoriedad es una propiedad estadística que se evalúa sobre una secuencia o distribución de números, no sobre un valor individual (un número aislado no puede ser "aleatorio" por sí solo)
+
+---
+> La entropía de una contraseña marca el número total de intentos para adivinar nuestra contraseña mediante el algoritmo de fuerza bruta
+
+* **Falso**
+
+* **Motivo**: La entropía mide la incertidumbre o complejidad en bits ($E$). El número total de combinaciones o intentos requeridos en el peor de los casos es $2^E$, no el valor numérico de la entropía directamente
+
+----
+> En un generador de números pseudo-aleatorios, si se conoce el valor inicial o semilla se conoce toda la secuencia de números
+
+* **Verdadero**
+
+* **Motivo**: Los generadores pseudoaleatorios son algoritmos deterministas; partiendo del mismo estado o semilla (seed), siempre producirán exactamente la misma secuencia de números
+
+---
+> Los números pseudo-aleatorios son requeridos en aplicaciones críticas, como la criptografía
+
+* **Falso**
+
+* **Motivo**: La criptografía requiere generadores criptográficamente seguros (CSPRNG) o números aleatorios verdaderos (TRNG); los pseudoaleatorios estándar son predecibles si se conoce el estado interno
+
+---
+> La función $H = L \cdot \log_2(N)$ es la fórmula matemática que nos permite calcular la entropía de contraseñas con una longitud $L$
+
+* **Verdadero**
+
+* **Motivo**: Mide la entropía en bits donde $L$ es la longitud de la contraseña y $N$ es el tamaño del conjunto de caracteres posibles ($N^L$ número de combinaciones, luego $\log_2(N^L) = L \cdot \log_2(N)$)
+
+---
+> Una de las características deseables de un generador de números aleatorios es que la secuencia producida no sea repetible
+
+* **Verdadero**
+
+* **Motivo**: En la aleatoriedad ideal o verdadera, las secuencias no deben repetirse de forma periódica o predecible 
+
+---
+> Una de las características deseable de un generador de números aleatorios es que los números generados deben repetirse con frecuencia
+
+* **Falso**
+
+* **Motivo:** La repetición frecuente o patrones periódicos reducen la calidad de la aleatoriedad y la hacen predecible
+
+---
+> El valor de la semilla debe ser modificado en tiempo de ejecución
+
+* **Falso**
+
+* **Motivo**: La semilla se establece al inicializar el generador (seeding); modificarla continuamente en cada llamada altera la secuencia matemática y destruye las propiedades de distribución del generador
+
+---
+> La utilización de espacio en un generador de números pseudo-aleatorios no es importante porque el espacio es un conjunto infinito de estados
+
+* **Falso**
+
+* **Motivo**: El espacio de estados de un ordenador es finito y está determinado por la memoria/registros asignados; además, el tamaño del espacio del estado influye directamente en el periodo del generador
+
+---
