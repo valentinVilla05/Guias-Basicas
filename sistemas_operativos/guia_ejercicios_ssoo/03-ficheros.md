@@ -322,7 +322,7 @@ $$N = \left\lfloor \frac{B}{\text{tamaño de la entrada}} \right\rfloor$$
 | **Fichero en FAT** (cadena en RAM) | $D$ (la cadena está cacheada; el coste real es la **fragmentación**: saltos por todo el disco) |
 
 ---
-# PARTE 5 — FAT12 / FAT16 / FAT32 (todo el cálculo)
+# PARTE 5 — FAT12 / FAT16 / FAT32 
 
 ---
 
