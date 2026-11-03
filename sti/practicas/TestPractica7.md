@@ -1,4 +1,5 @@
-# Ejercicio 7
+# Tipo Test Pŕactica 7
+
 > Los números pseudo-aleatorios son buenos para aplicaciones como videojuegos
 
 - **Verdadero**
@@ -77,3 +78,58 @@
 * **Motivo**: El espacio de estados de un ordenador es finito y está determinado por la memoria/registros asignados; además, el tamaño del espacio del estado influye directamente en el periodo del generador
 
 ---
+> Un buen generador de números alteatorios es aquel que genera sucesiones de números que se asemejan a realizaciones de una variable aleatroia que sigue una distribución normal
+
+- **Falso**
+* **Motivo**: Por definición, un generador estándar de números aleatorios debe producir una distribución uniforme (donde todos los valores del rango tienen exactamente la misma probabilidad de ser elegidos). Si se necesita una distribución normal u otra específica, se aplican transformaciones estadísticas posteriores
+
+
+---
+> La entropía se calcula realizando el logaritmo en base 2 de la cantidad de elementos de la población por la longitud de la contraseña
+
+* **Falso**
+* **Motivo**: La fórmula de la entropía para contraseñas de caracteres equiprobables es $H = L \cdot \log_2(N)$, donde $L$ es la longitud y $N$ el número de caracteres de la población. Se multiplica la longitud por el logaritmo de la población, no el logaritmo del producto ($L \times N$)
+
+---
+> Si incluimos en nuestra contraseña mayúsculas, minúsculas y símbolos, la entriopía de nuestra contraseña será mayor puesto que lea población de caracteres usados es mucho mayor
+
+* **Verdadero**
+* **Motivo:** Al ampliar la variedad de caracteres se incrementa el tamaño del alfabeto/población ($N$), lo que eleva el valor del término $\log_2(N)$ y, por ende, aumenta la entropía final ($H$) para la misma cantidad de caracteres
+
+
+---
+> Una función hash es un algoritmo matemático que transofrma un bloque arbitrario de datos en una serie de caracteres con una longitud fija
+
+* **Verdadero**
+* **Motivo**: Es la propiedad fundamental de las funciones hash (como SHA-256 o MD5): aceptan una entrada de cualquier tamaño y generan una salida o digest de longitud predeterminada e invariable
+
+----
+> La mayor parte de gestores de contraseñas incorpora herramientas para la actualización automática de nuestra contraseña almacenada
+
+* **Falso**
+* **Motivo:** Aunque los gestores generan y guardan contraseñas robustas, el proceso de cambiar la contraseña en un sitio web requiere la intervención directa del usuario debido a las diferencias en los formularios y sistemas de autenticación de cada plataforma
+
+---
+> Los números pseudo aleatorios son buenos para aplicaciones como videojuegos
+
+* **Verdadero**
+* **Motivo**: Los generadores pseudoaleatorios (PRNG) ofrecen un rendimiento computacional muy alto y son deterministas, lo que los hace óptimos para mecánicas de juegos y simulaciones donde prima la velocidad sobre la seguridad criptográfica
+
+
+---
+> Una de las caracteristicas deseables de un generador de números aleatorios es que los números generados deberán repetirse con frecuencia
+
+* **Falso**
+* **Motivo**: Las repeticiones frecuentes o los ciclos cortos degradan la aleatoriedad y hacen que la secuencia generada sea fácil de predecir
+
+---
+> Un generador de números pesudoaleatorios el valro denominados semillas es el valor inicial con el que inicia la secuencia de números
+
+* **Verdadero**
+* **Motivo:** La semilla (seed) actúa como el estado inicial o punto de partida a partir del cual el algoritmo determinista genera toda la serie numérica
+
+---
+> Es un generador pesudo aleatorio basado en configuraciones se produce un ciclo cuando un número de la secuencia se repite
+
+* **Verdadero**
+* **Motivo**: Al ser un algoritmo determinista con una cantidad finita de estados internos, en cuanto el generador vuelve a pasar por un estado o valor ya visitado, comenzará a repetir íntegramente la misma secuencia de números a partir de ese instante
