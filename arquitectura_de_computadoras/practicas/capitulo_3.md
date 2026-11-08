@@ -1,4 +1,4 @@
-# Tema 3: Segmentación del cauce y riesgos de datos
+# Capitulo 3: Segmentación del cauce y riesgos de datos
 
 ## 3.1-Introducción
 
