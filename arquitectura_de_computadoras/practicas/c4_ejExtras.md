@@ -1,13 +1,17 @@
-# Ejercicios similares a los que ha dicho Juan Francisco en clase 
+# Ejercicios similares a los que ha dicho Juan Francisco en clase
 
 > Es muy recomendable hacerlos ya que ha dicho que si o si caerá algún ejercicio similar
 
-## Ejercicio 1 – 2/10 puntos - Archivos Eje1.s y P3.pdf
+---
+
+# Ejercicio 1 – 2/10 puntos - Archivos Eje1.s y P3.pdf
 Escribe un programa en ensamblador RISC-V ajustado a las siguientes directivas:
 
-En el segmento de datos se tiene un vector/conjunto de números enteros de 32 bits con signo. El programa deberá:
+En el segmento de datos se tiene un vector de números enteros de 32 bits con signo:
 
 $$\text{vector} = [12, -7, 45, 18, 9, -2, 3, 14, 21, -5]$$
+
+El programa deberá:
 
 * Recorrer el vector e identificar los números impares.
 
@@ -15,85 +19,133 @@ $$\text{vector} = [12, -7, 45, 18, 9, -2, 3, 14, 21, -5]$$
 
 * Calcular la suma total de dichos números impares.
 
-* Almacenar ambos resultados en memoria (el conteo y la suma) en espacios reservados a tal efecto en el segmento de datos no inicializado (sección .bss o etiqueta .space), representados como enteros de 32 bits.
+* Almacenar ambos resultados (el conteo y la suma) en espacios reservados en el segmento de datos, como enteros de 32 bits.
 
-Crea un documento y adjunta en él una captura de pantalla del panel Memory de Ripes tras haber ejecutado el programa completo, en la que se aprecie con claridad el código ensamblador en el editor y la zona de memoria donde se han guardado el conteo y la suma.
+Crea un documento y adjunta una captura de pantalla del panel Memory de Ripes tras haber ejecutado el programa completo, en la que se aprecie el código ensamblador y la zona de memoria donde se han guardado el conteo y la suma.
 
-## Ejercicio 2 – 4/10 puntos - Archivo P3.pdf
-Ejecuta el programa desarrollado en el Ejercicio 1 sobre las siguientes configuraciones de procesador en Ripes:
+# Ejercicio 2 – 4/10 puntos - Archivo P3.pdf
+Ejecuta el programa del Ejercicio 1 sobre las siguientes configuraciones de procesador en Ripes:
 
-* **Configuración 1 (C1): Single-cycle processor**
+* **Configuración 1 (C1):** Single-cycle processor
 
-* **Configuración 2 (C2): 5-Stage processor w/o Forwarding unit**
+* **Configuración 2 (C2):** 5-Stage processor w/o Forwarding unit
 
-* **Configuración 3 (C3): 5-stage processor**
+* **Configuración 3 (C3):** 5-Stage processor
 
-* **Configuración 4 (C4): 6-Stage Dual-Issue processor**
+Realiza los siguientes apartados:
 
-* **Realiza los siguientes apartados:**
+1. Anota para cada configuración el número total de ciclos de reloj y el CPI obtenido tras finalizar la ejecución
 
-1. Anota para cada una de las cuatro configuraciones el número total de ciclos de reloj y el CPI (Ciclos Por Instrucción) obtenido tras finalizar la ejecución del programa.
+2. Incluye una tabla comparativa con los ciclos, el CPI y el Speedup de C2 y C3 tomando como base C1
 
-2. Incluye en el documento una tabla comparativa que muestre los ciclos, el CPI y la ganancia/mejora en rendimiento (Speedup) de las configuraciones C2, C3 y C4 tomando como base de comparación el procesador monociclo (C1).
+3. Explica brevemente la fórmula empleada para calcular el Speedup
 
-3. Explica brevemente la fórmula que has empleado para calcular la mejora en rendimiento (Speedup).
+4. Adjunta las capturas de pantalla de Ripes de cada configuración
 
-4. Adjunta las capturas de pantalla del procesador Ripes para cada una de las 4 configuraciones donde se observen los datos recopilados en la tabla (ciclos y CPI).
+# Ejercicio 3 – 4/10 puntos - Riesgos de control y reordenación de código
+Tomando como base el programa del Ejercicio 1:
 
-## Ejercicio 3 – 4/10 puntos - Optimización por Desenrollamiento de Bucles
-Tomando como base el bucle principal desarrollado en el Ejercicio 1:
+1. Analiza los riesgos de datos (load-use) y de control (saltos) que provocan paradas (burbujas) en el procesador de 5 etapas
 
-1. Analiza los riesgos de datos (data hazards) y de control que generan paradas de reloj (stalls / burbujas) al ejecutar el bucle en la arquitectura 6-Stage Processor / 6-Stage Dual-Issue.
+2. Aplica desenrollamiento de bucle (2 elementos por iteración) y reordena las instrucciones para reducir las paradas
 
-2. Aplica la técnica de desenrollamiento de bucle (loop unrolling) (procesando 2 elementos por iteración) y reordena las instrucciones (instruction scheduling) para minimizar las paradas en la tubería de 6 etapas aprovechando la emisión múltiple / superescalar.
+3. Muestra el código ensamblador y explica qué dependencias se han resuelto o intercalado
 
-3. Muestra el código ensamblador del bucle desenrollado y explica qué dependencias de datos se han intercalado/resuelto para optimizar la ejecución en las 6 etapas.
+4. Vuelve a ejecutar el código en C3 y compara el nuevo número de ciclos y CPI con los del Ejercicio 2
 
-4. Vuelve a ejecutar el código optimizado en la configuración 6-Stage Dual-Issue processor y compara el nuevo número de ciclos y CPI con los obtenidos en el Ejercicio 2.
-
-----
-
-## Resolución
-### EJ 1
+# Resolución
+## EJ 1
 ![alt text](../images/cap4ej1.png)
 
 ## EJ 2
-| Configuración de Procesador | Ciclos de Reloj (CCC) | Instrucciones (III) | CPI (C/IC) | Speedup vs. C1 |
+| Configuración del Procesador | Ciclos Totales | Instrucciones | CPI | Speedup vs. C1 |
 |---|---:|---:|---:|---:|
-| C1: Single-cycle processor | 99 | 99 | 1.00 | 1.00× (Base) |
+| C1: Single-cycle | 99 | 99 | 1.00 | 1.00× (Base) |
 | C2: 5-Stage w/o Forwarding | 167 | 99 | 1.69 | 0.59× ($\frac{99}{167}$) |
-| C3: 5-Stage Processor (w/ Forwarding) | 151 | 99 | 1.53 | 0.66× ($\frac{99}{151}$) |
-| C4: 6-Stage Dual-Issue Processor | 139 | 99 | 1.40 | 0.71× ($\frac{99}{139}$) |
+| C3: 5-Stage w/ Forwarding | 151 | 99 | 1.53 | 0.66× ($\frac{99}{151}$) |
 
-**Explicación de las Fórmulas Aplicadas**
-La mejora en rendimiento se calcula tomando como referencia el procesador monociclo ($C1$):
-$$\text{Speedup}_{Cx} = \frac{\text{Tiempo de Ejecución}_{C1}}{\text{Tiempo de Ejecución}_{Cx}} = \frac{\text{Ciclos Total}_{C1}}{\text{Ciclos Total}_{Cx}}$$
+**Fórmula del Speedup**
 
-* **C1 vs C1:** $\frac{99}{99} = 1.00$   
-* **C2 vs C1:** $\frac{99}{167} \approx 0.59$   
-* **C3 vs C1:** $\frac{99}{151} \approx 0.66$   
-* **C4 vs C1:** $\frac{99}{139} \approx 0.71$   
+$$\text{Speedup}_{Cx} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{Cx}}$$
+
+Se compara el número de ciclos de C1 (base) entre el de cada configuración, ya que el programa es el mismo. Un valor menor que 1 indica que necesita más ciclos que el monociclo. Esto se debe a que los procesadores segmentados añaden ciclos de llenado del cauce y burbujas, aunque su ciclo de reloj es mucho más corto que el del monociclo.
 
 ## EJ 3
-![alt text](../images/ej3cap4.png)
 
-| Versión del Código (en 6-Stage Dual-Issue - C4) | Ciclos Totales | CPI | Mejora (Speedup vs. C4 Original) |
+**1. Análisis de riesgos del bucle original (C3: 5-Stage)**
+
+* **Riesgo de datos (load-use):** `andi t3,t2,1` usa `t2` justo después del `lw t2,0(t0)`. Aunque haya forwarding, el dato no está disponible hasta terminar la etapa MEM, así que se pierde 1 ciclo (burbuja) por elemento: **10 burbujas** en total. Sin forwarding (C2) la espera es mayor.
+* **Riesgo de control:** los saltos se resuelven en la etapa EX, por lo que cada salto tomado obliga a descartar las instrucciones ya captadas detrás de él. En el bucle original se toman **17 saltos**: 10 `j bucle`, 6 `bnez t3,impar` (uno por cada impar) y el `beqz t1,fin` final.
+
+**2. Código desenrollado (2 elementos por iteración) y reordenado**
+
+```asm
+.data
+vector: .word 12, -7, 45, 18, 9, -2, 3, 14, 21, -5
+num_impares: .word 0
+suma_impares: .word 0
+
+.text
+la t0,vector
+li t1,10
+li a2,0 # contador impares
+li a0,0 # suma impares
+la a3,num_impares
+la a4,suma_impares
+
+bucle:
+    beqz t1,fin
+    lw t2,0(t0)   # cargamos el primer valor
+    lw t4,4(t0)   # cargamos el segundo valor
+    addi t0,t0,8  # avanzamos el vector
+    addi t1,t1,-2 # disminuimos el núm de elementos restantes
+
+    andi t3,t2,1  # comprobamos primer elemento (t2)
+    beqz t3, par  # si t2 es par, pasamos a mirar el segundo
+
+    # Si t2 es impar:
+    add a2,a2,t3
+    add a0,a0,t2
+
+par:
+    andi t5,t4,1  # comprobamos segundo elemento (t4)
+    beqz t5,bucle # si t4 es par, volvemos al bucle
+
+    # Si t4 es impar:
+    add a2,a2,t5
+    add a0,a0,t4
+
+    j bucle
+
+fin:
+    li a7,1
+    sw a0,0(a4)
+    sw a2,0(a3)
+    ecall
+    mv a0,a2
+    ecall
+```
+
+**3. Dependencias resueltas e intercaladas**
+
+* **Load-use eliminado:** los dos `lw` van juntos al principio y los dos `addi` se colocan entre las cargas y el primer `andi`. Así, cuando `andi t3,t2,1` necesita `t2`, ya han pasado 3 instrucciones desde su `lw`, y lo mismo ocurre con `t4`. Las **10 burbujas load-use pasan a 0**.
+* **Menos sobrecarga de control:** el `beqz t1,fin`, el `j bucle` y los dos `addi` de avance se ejecutan 5 veces en lugar de 10. Los saltos tomados bajan de **17 a 7**.
+* **Riesgo que se mantiene:** `andi t3` → `beqz t3` es una dependencia RAW pegada. Con forwarding (C3) no para, pero sin él (C2) sí.
+
+**4. Comparativa en C3**
+| Versión del código (C3: 5-Stage) | Ciclos Totales | CPI | Speedup vs. C3 original |
 |---|---:|---:|---:|
-| Código Ejercicio 1 (Sin desenrollar) | 139 ciclos | 1.40 | 1.00× (Base) |
-| Código Ejercicio 3 (Desenrollado 2x) | 88 ciclos | 1.17 | 1.58× ($\frac{139}{88}$) |
+| Código Ejercicio 1 (sin desenrollar) | 151 | 1.53 | 1.00× (Base) |
+| Código Ejercicio 3 (desenrollado 2x y reordenado) | 95 | 1.27 | 1.59× |
 
-**Mejoras Realizadas**
-
-* **Desenrollamiento del bucle (Loop Unrolling 2x)**: Al procesar 2 elementos por iteración (`t2` y `t4`), la condición de final de bucle (`beqz t1, fin`), el salto de retorno (`j bucle`) y el avance de contadores (`addi t0, addi t1`) se ejecutan solo 5 veces en lugar de 10
-
-* **Eliminación del riesgo Load**: Al poner juntos lso dos `lw` mientras el procesador completa la lectura de memoria se interalan los `andi`
-
-* **Aprovechamiento de la doble emisión**: Al tener pares de instrucciones independientemente seguidas, la rquitectura de 6 etapas superescalar puede emitir dos instrucciones simultáneamente por ciclo de reloj
-
+$$\text{Speedup} = \frac{\text{Ciclos}_{\text{original}}}{\text{Ciclos}_{\text{desenrollado}}} = \frac{151}{95} \approx 1.59\times$$
 
 ---
+
 # Ejercicio 1 – 2/10 puntos - Archivos Eje1.s y P3.pdf
-Escribe un programa en ensamblador RISC-V ajustado a las siguientes directivas:En el segmento de datos se define un vector de números enteros de 32 bits con signo:$$\text{vector} = [15, -42, 8, -100, 55, 0, -7, 33, -12, 90]$$
+Escribe un programa en ensamblador RISC-V ajustado a las siguientes directivas: En el segmento de datos se define un vector de números enteros de 32 bits con signo:
+
+$$\text{vector} = [15, -42, 8, -100, 55, 0, -7, 33, -12, 90]$$
 
 El programa deberá:
 
@@ -103,39 +155,37 @@ El programa deberá:
 
 3. Calcular la suma total de todos los números tras aplicar la inversión de bits
 
-4. Almacenar ambos resultados en memoria (`num_negativos` y `suma_inversos`) en dos posiciones consecutivas del segmento de datos sin inicializar (`.bss` / `.space`), como enteros de 32 bits
+4. Almacenar ambos resultados en memoria (`num_negativos` y `suma_inversos`) en dos posiciones consecutivas del segmento de datos como enteros de 32 bits
 
 # Ejercicio 2 – 4/10 puntos - Archivo P3.pdf
-Ejecuta el programa desarrollado en el Ejercicio 1 sobre las siguientes configuraciones de procesador en Ripes:
+Ejecuta el programa del Ejercicio 1 sobre las siguientes configuraciones de procesador en Ripes:
 
-* **Configuración 1 (C1)**: Single-cycle processor
+* **Configuración 1 (C1):** Single-cycle processor
 
-* **Configuración 2 (C2)**: 5-Stage processor w/o Forwarding unit
+* **Configuración 2 (C2):** 5-Stage processor w/o Forwarding unit
 
-* **Configuración 3 (C3)**: 5-Stage processor
-
-* **Configuración 4 (C4)**: 6-Stage Dual-Issue processor
+* **Configuración 3 (C3):** 5-Stage processor
 
 Realiza los siguientes apartados:
 
-1. Anota para cada una de las cuatro configuraciones el número total de ciclos de reloj y el CPI (Ciclos Por Instrucción) obtenido tras finalizar la ejecución
+1. Anota para cada configuración el número total de ciclos de reloj y el CPI obtenido tras finalizar la ejecución
 
-2. Incluye en el documento una tabla comparativa que muestre los ciclos, el CPI y la ganancia en rendimiento (Speedup) de las configuraciones C2, C3 y C4 tomando como base el procesador monociclo (C1)
+2. Incluye una tabla comparativa con los ciclos, el CPI y el Speedup de C2 y C3 tomando como base C1
 
-3. Explica brevemente la fórmula empleada para calcular la mejora en rendimiento (Speedup)
+3. Explica brevemente la fórmula empleada para calcular el Speedup
 
-4. Adjunta las capturas de pantalla de Ripes para cada una de las 4 configuraciones
+4. Adjunta las capturas de pantalla de Ripes de cada configuración
 
-# Ejercicio 3 – 4/10 puntos - Optimización por Desenrollamiento de Bucles en Procesador de 6 Etapas (6-Stage Dual-Issue Processor)
+# Ejercicio 3 – 4/10 puntos - Riesgos de control y reordenación de código
 Tomando como base el programa del Ejercicio 1:
 
-1. Analiza las paradas por dependencias de datos de tipo Load-Use que ocurren entre la lectura del vector `lw` y la instrucción de inversión `xori`/`xor`, además de los saltos condicionales.
+1. Analiza las paradas por dependencias de datos Load-Use entre la lectura del vector `lw` y la instrucción de inversión `xori`, además de los saltos condicionales
 
-2. Aplica la técnica de desenrollamiento de bucle (loop unrolling) procesando 2 elementos por iteración, reordenando las instrucciones para maximizar el uso de los dos cauces (Dual-Issue)
+2. Aplica desenrollamiento de bucle (2 elementos por iteración) y reordena las instrucciones para reducir las paradas
 
-3. Muestra el código ensamblador del bucle desenrollado y explica qué dependencias de datos se han intercalado/resuelto
+3. Muestra el código ensamblador y explica qué dependencias se han resuelto o intercalado
 
-4. Vuelve a ejecutar el código optimizado en la configuración 6-Stage Dual-Issue processor (C4) y compara el nuevo número de ciclos y CPI respecto al Ejercicio 2
+4. Vuelve a ejecutar el código en C3 y compara el nuevo número de ciclos y CPI con los del Ejercicio 2
 
 # Resolución
 ## EJ 1
@@ -147,97 +197,210 @@ Tomando como base el programa del Ejercicio 1:
 | C1: Single-cycle | 103 | 1.00 | 1.00× (Base) |
 | C2: 5-Stage w/o Forwarding | 187 | 1.82 | 0.55× ($\frac{103}{187}$) |
 | C3: 5-Stage w/ Forwarding | 151 | 1.47 | 0.68× ($\frac{103}{151}$) |
-| C4: 6-Stage Dual-Issue | 150 | 1.46 | 0.69× ($\frac{103}{150}$) |
+
+**Fórmula del Speedup**
 
 $$\text{Speedup}_{Cx} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{Cx}}$$
 
+Se compara el número de ciclos de C1 (base) entre el de cada configuración, ya que el programa es el mismo. Un valor menor que 1 indica que necesita más ciclos que el monociclo. Esto se debe a que los procesadores segmentados añaden ciclos de llenado del cauce y burbujas, aunque su ciclo de reloj es mucho más corto que el del monociclo.
+
 ## EJ 3
-![alt text](../images/ej1ap1cap4.png)
 
-$$\text{Speedup} = \frac{\text{Ciclos}_{\text{base}}}{\text{Ciclos}_{\text{desenrollado}}} = \frac{150}{105} = \mathbf{1.43\times}$$
 
-| Versión en C4 (6-Stage Dual-Issue) | Ciclos Totales | CPI | Speedup vs. Base |
+**1. Análisis de riesgos del bucle original (C3: 5-Stage)**
+
+* **Riesgo de datos (load-use):** `xori t3,t2,-1` usa `t2` justo después de `lw t2,0(t0)`, por lo que se pierde 1 ciclo (burbuja) por elemento: **10 burbujas** en total.
+* **Riesgo de control:** los saltos se resuelven en la etapa EX, así que cada salto tomado obliga a descartar las instrucciones captadas detrás. Hay **15 saltos tomados**: 10 `j bucle`, 4 `bgez t3,positivo` (uno por cada número cuyo resultado es positivo) y el `beqz t1,fin` final. Además, `bgez` depende de `xori` justo antes, lo que sin forwarding (C2) genera más paradas.
+
+**2. Código desenrollado (2 elementos por iteración) y reordenado**
+
+```asm
+.data
+vector:         .word 15, -42, 8, -100, 55, 0, -7, 33, -12, 90
+num_negativos:  .word 0
+suma_inversos:  .word 0
+
+.text
+la t0, vector
+li t1, 10
+li a1, 0              # Conteo negativos
+li a0, 0              # Suma invertidos
+la a2, num_negativos
+la a3, suma_inversos
+
+bucle:
+    beqz t1, fin
+    lw t2, 0(t0)      # cargamos el primer valor
+    lw t4, 4(t0)      # cargamos el segundo valor
+    addi t0, t0, 8    # avanzamos el vector
+    addi t1, t1, -2   # disminuimos el núm de elementos restantes
+
+    xori t3, t2, -1   # Inversión de bits (NOT) del primero
+    xori t5, t4, -1   # Inversión de bits (NOT) del segundo
+
+    add a0, a0, t3    # sumamos el primero invertido
+    add a0, a0, t5    # sumamos el segundo invertido
+
+    srli t6, t3, 31   # bit de signo del primero (1 si negativo)
+    add a1, a1, t6
+    srli t6, t5, 31   # bit de signo del segundo (1 si negativo)
+    add a1, a1, t6
+
+    j bucle
+
+fin:
+    sw a0, 0(a3)
+    sw a1, 0(a2)
+
+    li a7, 1
+    ecall
+```
+
+**3. Dependencias resueltas e intercaladas**
+
+* **Load-use eliminado:** los dos `lw` van seguidos y los dos `addi` se colocan antes de los `xori`. Así, cada `xori` queda a 2 o más instrucciones de su `lw` y no hay burbuja. Las **10 burbujas load-use pasan a 0**.
+* **Saltos condicionales eliminados:** el `bgez` se sustituye por `srli t6, t3, 31`, que extrae el bit de signo (1 si es negativo) y se suma a `a1`. Desaparecen los 4 saltos tomados del `bgez`, y con ellos su penalización por riesgo de control.
+* **Menos sobrecarga de bucle:** el `beqz t1,fin`, el `j bucle` y los `addi` de avance se ejecutan 5 veces en lugar de 10. Los saltos tomados bajan de **15 a 6**.
+
+**4. Comparativa en C3**
+
+| Versión del código (C3: 5-Stage) | Ciclos Totales | CPI | Speedup vs. C3 original |
 |---|---:|---:|---:|
-| C4 Base (Sin desenrollar) | 150 | 1.46 | 1.00× |
-| C4 Optimizado (Desenrollado 2x) | 105 | 1.27 | 1.43× (+43% más rápido) |
+| Código Ejercicio 1 (sin desenrollar) | 151 | 1.47 | 1.00× (Base) |
+| Código Ejercicio 3 (desenrollado 2x y reordenado) | 102 | 1.21 | 1.48× |
 
-* **Reducción de instrucciones**: Al procesar 2 elementos por iteración, las instrucciones retiradas se reducen de 103 a 83, recortando la sobrecarga del bucle (overhead)
-
-* **Eliminación de saltos condicionales**: Reemplazar las comprobaciones `bgez` por operaciones lógicas evita las paradas por predicción de saltos (Control Hazards)
-
-* **Mayor paralelismo (IPC)**: El IPC sube a 0.79, permitiendo al cauce superescalar ejecutar 2 instrucciones simultáneamente de forma mucho más eficiente
+$$\text{Speedup} = \frac{\text{Ciclos}_{\text{original}}}{\text{Ciclos}_{\text{desenrollado}}} = \frac{151}{102} \approx 1.48\times$$
 
 ---
+
 # Ejercicio 1 – 2/10 puntos - Archivos Eje1.s y P3.pdf
 
-Escribe un programa en ensamblador RISC-V ajustado a las siguientes directivas: En el segmento de datos se define un vector de números enteros de 32 bits en formato binario:$$\text{vector} = [0\text{b1111}, 0\text{b0011}, 0\text{b0101}, 0\text{b0001}, 0\text{b0000}]$$
+Escribe un programa en ensamblador RISC-V ajustado a las siguientes directivas: En el segmento de datos se define un vector de números enteros de 32 bits en formato binario:
+
+$$\text{vector} = [0\text{b1111}, 0\text{b0011}, 0\text{b0101}, 0\text{b0001}, 0\text{b0000}]$$
 
 El programa deberá:
 
 1. Recorrer el vector analizando sus elementos bit a bit mediante desplazamientos lógicos a la derecha (`srli`) y la extracción del bit menos significativo mediante una máscara lógica (`andi`)
 
-2. Para cada elemento, **contar cuántos bits están a '1' (Popcount)** sumando directamente el bit extraído al contador sin utilizar saltos condicionales (branchless)
+2. Para cada elemento, **contar cuántos bits están a '1' (Popcount)** sumando directamente el bit extraído al contador sin utilizar saltos condicionales para el conteo (branchless)
 
 3. Calcular el **recuento total de bits a '1'** de todo el vector
 
-4. Almacenar el resultado en memoria en la variable `total_unos` en el segmento de datos sin inicializar (`.bss` / `.space`) como un entero de 32 bits
+4. Almacenar el resultado en memoria en la variable `total_unos` como un entero de 32 bits
 
 # Ejercicio 2 – 4/10 puntos - Archivo P3.pdf
-Ejecuta el programa desarrollado en el Ejercicio 1 sobre las siguientes configuraciones de procesador en Ripes:
+Ejecuta el programa del Ejercicio 1 sobre las siguientes configuraciones de procesador en Ripes:
 
-* **Configuración 1 (C1)**: Single-cycle processor
+* **Configuración 1 (C1):** Single-cycle processor
 
-* **Configuración 2 (C2)**: 5-Stage processor w/o Forwarding unit
+* **Configuración 2 (C2):** 5-Stage processor w/o Forwarding unit
 
-* **Configuración 3 (C3)**: 5-Stage processor
-
-* **Configuración 4 (C4):** 6-Stage Dual-Issue processor
+* **Configuración 3 (C3):** 5-Stage processor
 
 Realiza los siguientes apartados:
 
-1. Anota para cada una de las cuatro configuraciones el número total de ciclos de reloj y el CPI (Ciclos Por Instrucción) obtenido tras finalizar la ejecución
+1. Anota para cada configuración el número total de ciclos de reloj y el CPI obtenido tras finalizar la ejecución
 
-2. Incluye en el documento una tabla comparativa que muestre los ciclos, el CPI y la ganancia en rendimiento (Speedup) de las configuraciones C2, C3 y C4 tomando como base el procesador monociclo (C1)
+2. Incluye una tabla comparativa con los ciclos, el CPI y el Speedup de C2 y C3 tomando como base C1
 
-3. Explica brevemente la fórmula empleada para calcular la mejora en rendimiento (Speedup):
+3. Explica brevemente la fórmula empleada para calcular el Speedup
 
-$$\text{Speedup}_{Cx} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{Cx}}$$
+4. Adjunta las capturas de pantalla de Ripes de cada configuración
 
-4. Adjunta las capturas de pantalla de Ripes para cada una de las 4 configuraciones.
+# Ejercicio 3 – 4/10 puntos - Riesgos de control y reordenación de código
+Tomando como base el programa del Ejercicio 1:
+
+1. Analiza los riesgos de datos (`srli` / `andi` / `add`) y de control (salto del bucle) que provocan paradas en el procesador de 5 etapas
+
+2. Aplica desenrollamiento de bucle (2 bits por iteración) y reordena las instrucciones para reducir las paradas
+
+3. Muestra el código ensamblador y explica qué dependencias se han resuelto o intercalado
+
+4. Vuelve a ejecutar el código en C3 y compara el nuevo número de ciclos y CPI con los del Ejercicio 2
 
 # Resolución
 
 ## EJ 1
 ![alt text](../images/cap4ejj.png)
 
-
 ## EJ 2
-$$\text{Speedup}_{Cx} = \frac{5025}{\text{Ciclos}_{Cx}}$$
+| Configuración | Ciclos Totales | CPI | Speedup vs. C1 |
+|---|---:|---:|---:|
+| C1: Single-cycle | 1005 | 1.00 | 1.00× (Base) |
+| C2: 5-Stage w/o Forwarding | 1687 | 1.68 | 0.60× ($\frac{1005}{1687}$) |
+| C3: 5-Stage w/ Forwarding | 1353 | 1.35 | 0.74× ($\frac{1005}{1353}$) |
 
-C2: $\frac{5025}{1687} = \mathbf{2.98\times}$   
+**Fórmula del Speedup**
 
-C3: $\frac{5025}{1353} = \mathbf{3.71\times}$   
+$$\text{Speedup}_{Cx} = \frac{\text{Ciclos}_{C1}}{\text{Ciclos}_{Cx}}$$
 
-C4: $\frac{5025}{1203} = \mathbf{4.18\times}$   
-
-| Configuración | Ciclos Totales | CPI | Speedup (Ciclos Ripes) | Speedup (Normalizado ×5) |
-|---|---:|---:|---:|---:|
-| C1: Single-cycle | 1005 | 1.00 | 1.00× (Base) | 1.00× (Base) |
-| C2: 5-Stage w/o Forwarding | 1687 | 1.68 | 0.60× | 2.98× |
-| C3: 5-Stage w/ Forwarding | 1353 | 1.35 | 0.74× | 3.71× |
-| C4: 6-Stage Dual-Issue | 1203 | 1.20 | 0.84× | 4.18× |
+Se compara el número de ciclos de C1 (base) entre el de cada configuración, ya que el programa es el mismo. Un valor menor que 1 indica que necesita más ciclos que el monociclo. Esto se debe a que los procesadores segmentados añaden ciclos de llenado del cauce y burbujas, aunque su ciclo de reloj es mucho más corto que el del monociclo.
 
 ## EJ 3
 
-![alt text](../images/cap4ej5.png)
+**1. Análisis de riesgos del bucle original (C3: 5-Stage)**
 
-| Configuración | Ciclos Totales | CPI | Speedup vs C1 (Directo Ripes) | Speedup Normalizado (Ciclos C1 × 5) |
-|---|---:|---:|---:|---:|
-| C1: Single-cycle | 1005 | 1.00 | 1.00× (Base) | 1.00× (Base) |
-| C2: 5-Stage w/o Forwarding | 1687 | 1.68 | 0.60× | 2.98× |
-| C3: 5-Stage w/ Forwarding | 1353 | 1.35 | 0.74× | 3.71× |
-| C4: 6-Stage Dual-Issue (Base) | 1203 | 1.20 | 0.84× | 4.18× |
-| C4: 6-Stage Dual-Issue (Desenrollado 2x) | 1187 | 1.19 | 0.85× | 4.23× |
+* **Riesgo de datos:** en cada bit, `srli`, `andi` y `add` forman cadenas de dependencias RAW (el resultado de una instrucción lo usa la siguiente). Con forwarding (C3) se resuelven sin parar si las instrucciones dependientes no son de carga. Sin forwarding (C2) cada una genera burbujas, y de ahí la diferencia entre C2 y C3.
+* **Riesgo de control:** como el conteo es branchless, el único salto que queda en el bucle de bits es el de cierre (`bnez`), que se toma casi todas las veces. Cada salto tomado se resuelve en EX y descarta las instrucciones ya captadas, y al ser un bucle de muchas vueltas esta penalización se repite cientos de veces.
 
-$$\text{Speedup} = \frac{\text{Ciclos}_{\text{C4 Base}}}{\text{Ciclos}_{\text{C4 Desenrollado}}} = \frac{1203}{1187} = \mathbf{1.013\times}$$
+**2. Código desenrollado (2 bits por iteración) y reordenado**
 
+```asm
+.data
+vector:      .word 0b1111, 0b0011, 0b0101, 0b0001, 0b0000
+total_unos:  .word 0
+
+.text
+la t0, vector
+li a0, 0              # contador total de unos
+li t1, 5              # 5 elementos del vector
+la a2, total_unos
+li a7,10
+bucle:
+    beqz t1, fin
+    lw t2, 0(t0)      # cargamos elemento
+    li t3, 32         # 32 bits que tenemos q mirar
+
+bucle_bits:
+    beqz t3, sig_elem
+    andi t4, t2, 1    # extraemos el bit 0
+    srli t5, t2, 1    # desplazamos 1 bit para llegar al bit 1
+    add a0, a0, t4    # sumamos el bit 0 (rellena el hueco entre srli y andi)
+    andi t5, t5, 1    # extraemos el bit 1
+    srli t2, t2, 2    # desplazamos 2 bits a la derecha
+    addi t3, t3, -2   # restamos 2 al contador de bits
+    add a0, a0, t5    # sumamos el bit 1
+    j bucle_bits
+
+sig_elem:
+    addi t0, t0, 4    # avanzamos al siguiente elemento del vector
+    addi t1, t1, -1   # un elemento menos por procesar
+    j bucle
+
+fin:
+    sw a0, 0(a2)      # guardamos el resultado final (9) en memoria
+    ecall
+```
+
+**3. Dependencias resueltas e intercaladas**
+
+* **Menos saltos:** el salto `j bucle_bits`, el `beqz t3,sig_elem` y el `addi t3,t3,-2` se ejecutan 16 veces por elemento en lugar de 32. En total, los saltos `j bucle_bits` pasan de 160 a 80, así que se reduce a la mitad la penalización por riesgo de control (flush en EX).
+* **Menos instrucciones:** se ejecutan unas 765 instrucciones en lugar de 1005 (con 9 instrucciones por iteración de 2 bits en lugar de 6 por cada bit).
+* **Reordenación:** `srli t5,t2,1` y `andi t5,t5,1` son dependientes (RAW), así que entre ellas se coloca `add a0,a0,t4`, que es independiente. Lo mismo pasa con el último `add a0,a0,t5`, que queda separado de su `andi` por `srli t2` y `addi t3`. Ninguna instrucción queda pegada a la que produce su operando, lo que ayuda sobre todo en C2 (sin forwarding).
+* **Riesgo de datos del contador:** `addi t3,t3,-2` se coloca lejos del `beqz t3,sig_elem` de la siguiente vuelta (con el `add` y el `j` por medio).
+
+
+**3. Dependencias resueltas e intercaladas**
+
+* **Menos saltos:** al procesar 2 bits por iteración, el salto de cierre y el contador del bucle se ejecutan la mitad de veces, por lo que se reducen a la mitad las penalizaciones de control.
+* **Reordenación:** se intercalan las instrucciones independientes de los dos bits (`andi` del bit 0, `srli`, `andi` del bit 1, `add`...) para que ninguna instrucción quede pegada a la que produce su operando.
+
+**4. Comparativa en C3**
+
+| Versión del código (C3: 5-Stage) | Ciclos Totales | CPI | Speedup vs. C3 original |
+|---|---:|---:|---:|
+| Código Ejercicio 1 (sin desenrollar) | 135 | 1.35 | 1.00× (Base) |
+| Código Ejercicio 3 (desenrollado 2x y reordenado) | 95 | 1.24 | 1.42× |
+
+$$\text{Speedup} = \frac{\text{Ciclos}_{\text{original}}}{\text{Ciclos}_{\text{desenrollado}}} = \frac{1353}{951} \approx 1.42\times$$

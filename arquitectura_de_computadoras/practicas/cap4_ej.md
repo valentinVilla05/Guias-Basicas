@@ -1,135 +1,415 @@
-# Ejercicios del capítulo 4
+# Capítulo 4 Ejercicios
 
-## Ejercicio 5.1. 
-Copia de `https://bit.ly/3pchzlQlalistade100númerosenterosaleatoriosque`
-aparecen, pégalos en el editor de Ripes y **sepáralos con comas**, introduciéndolos
-como un **vector en tu programa**. A continuación, escribe el código necesario para
-obtener la suma y mostrarla en la consola. A partir de ese código lleva a cabo las
-siguientes acciones:
+**1.** Almacenar en memoria un vector con los valores `7, 4, 23, 12, 6, 20, 17, 8,3, 10, 11, 23` y mostrar por consola la media aritmética. Para ello se ha de calcular su suma y también contar cuántos valores hay en el vector, como se indicaba en el ejercicio 2.5. A continuación, realizar las siguientes acciones:
 
-> No va el link así que para hacer el ejercicio copiad directamente de aquí:
+    a) Ejecuta el programa y anota el número de ciclos y CPI.
+    b) Examina el cronograma de ejecución para identificar dónde se producen los riesgos de control.
+    c) Aplica un desenrollado de factor dos, ejecuta el programa y anota ciclos y CPI.
+    d) Examina el cronograma de ejecución para identificar dónde aparecen riesgos de datos.
+    e) Aplica reordenado de código para evitar todos los riesgos de datos posibles, ejecuta el programa y anota ciclos y CPI.
+    f) Calcula la ganancia de rendimiento obtenida con cada versión del programa respecto a la original.
 
+
+> Resolución: 
+a) Versión Original (Sin desenrollar)
 ```asm
-v: .word 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
+
+.text
+    la t0,v
+    li s0, 12
+    li a0, 0       
+bucle:
+    lw a1, 0(t0)  
+    add a0, a0, a1    
+    addi t0, t0, 4   
+    addi s0, s0, -1   
+    bnez s0, bucle  
+    li t1, 12
+    div a0, a0, t1 
+    li a7, 1      
+    ecall
+    li a7, 10
+    ecall
+```
+Métricas de Ejecución (Ripes - 5-Stage Processor):
+
+* **Ciclos totales**: $124$ ciclos
+* **CPI (Ciclos Por Instrucción):** $\approx 1.6$
+
+
+b) Análisis de Riesgos de Control (Versión Original)
+**Al examinar la pestaña Processor / Diagrama de Ciclos (Cronograma):**
+
+1. La instrucción `bnez s0, bucle` evalúa la condición en la etapa EX y actualiza el PC en la etapa MEM
+
+2. Mientras la instrucción bnez está procesándose, el cauce capta automáticamente las 2 instrucciones siguientes secuenciales (`li t1, 13` y `div a0, a0, t1`)
+
+3. En las primeras 12 iteraciones (donde el salto sí se produce), el cauce debe descartar esas 2 instrucciones incorrectamente captadas (flush en las etapas IF e ID)
+
+4. **Penalización total:** $12 \text{ saltos tomados} \times 2 \text{ ciclos perdidos} = 24 \text{ ciclos perdidos por riesgos de control}$
+
+c) y d) Versión con Desenrollado de Factor 2 (y detección de riesgos de datos)
+
+* El bucle principal procesará 6 parejas ($6 \times 2 = 12$ elementos)
+
+```
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
+
+.text
+    la t0, v
+    li s0, 12 
+    li a0, 0   
+
+bucle:
+    lw a1, 0(t0)
+    add a0, a0, a1  
+    addi t0, t0, 4
+    addi s0, s0, -1
+    lw a1, 0(t0)
+    add a0, a0, a1 
+    addi t0, t0, 4
+    addi s0, s0, -1 
+
+    bnez s0, bucle
+    li t1, 12
+    div a0, a0, t1
+    li a7, 1
+    ecall
+
+    li a7, 10
+    ecall
 ```
 
-**a) Ejecuta el programa con la confguración de cinco etapas no superescalar y anota el número de ciclos y CPI.**
-
-**Nos saldrá un código similar a este:**
-
-![alt text](../images/5050.png)
-
-**Ciclos obtenidos:**
-
-![alt text](../images/ci11.png)
+* Al hacer `add a0, a0, a1` inmediatamente después de `lw a1, 0(t0)`, el dato leído en memoria aún no ha salido de la etapa MEM. La CPU debe pausar el cauce 1 ciclo antes de poder usarlo en la etapa EX
 
 
-**b) Cambia a la confguración de seis etapas superescalar, ejecuta de nuevo el programa y anota el número de ciclos y CPI.**
+e) Código Desenrollado y Reordenado (Optimizado sin Riesgos)
+Fusionamos la resta del contador (s0), el avance de memoria (`t0`) y usamos dos registros (`a1` y `a2`) para eliminar los stalls
 
-![alt text](../images/ci12.png)
+```
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
 
-**c) Aplica un desenrollado de factor cuatro a fn de incrementar el número de instrucciones disponibles en el programa**
-Para procesar 4 elementos por iteración manteniendo la estructura de tu código:
+.text
+    la t0, v
+    li s0, 6
+    li a0, 0 
 
-* El contador inicial a2 pasa de 100 a 25 ($100 / 4 = 25$)
+bucle:
+    lw a1, 0(t0) 
+    lw a2, 4(t0) 
 
-* En cada vuelta leemos 4 palabras consecutivas usando desplazamientos: `0(a1)`, `4(a1)`, `8(a1)` y `12(a1)`
+    addi s0, s0, -1 
+    addi t0, t0, 8 
 
-* Avanzamos el puntero de memoria en 16 bytes (`addi a1, a1, 16`) en lugar de 4.
+    add a0, a0, a1    # SIN riesgo de datos (a1 ya está listo)
+    add a0, a0, a2    # SIN riesgo de datos (a2 ya está listo)
 
-**Código**
+    bnez s0, bucle
 
-![alt text](../images/crand.png)
+    li t1, 12
+    div a0, a0, t1
+
+    li a7, 1
+    ecall
+
+    li a7, 10
+    ecall
+```
+
+f) Tabla de Resultados Actualizada (en Ripes)
+
+| Versión del Programa | Instrucciones | Ciclos Totales | CPI | Ganancia de Rendimiento (Speedup) |
+|---|---:|---:|---:|---|
+| a) Original | 68 | 106 | 1.56 | 1.00x (Referencia) |
+| c) Desenrollada ($t=2$) | 62 | 88 | 1.42 | 1.20x (+20.5% más rápido) |
+| e) Desenrollada + Reordenada | 50 | 64 | 1.28 | 1.66x (+65.6% más rápido) |
+
+---
+**2.** Partiendo del mismo programa del ejercicio 4.1, repetir los pasos indicados pero aplicando un desenrollado del bucle con factor tres
+
+```asm
+
+```
+**3.**  Partiendo del mismo programa del ejercicio 4.1, repetir los pasos indicados pero aplicando un desenrollado del bucle con factor cuatro
+
+```asm
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
+
+.text
+    la t0, v
+    li s0, 3
+    li a0, 0
+
+bucle:
+    lw a1, 0(t0)
+    lw a2, 4(t0)
+    lw a3, 8(t0)
+    lw a4, 12(t0)
+
+    addi s0, s0, -1
+    addi t0, t0, 16
+
+    add a0, a0, a1
+    add a0, a0, a2
+    add a0, a0, a3
+    add a0, a0, a4
+
+    bnez s0, bucle
+
+    li t1, 12
+    div a0, a0, t1
+
+    li a7, 1
+    ecall
+
+    li a7, 10
+    ecall
+```
+
+**4.** Almacenar en memoria un vector con los valores `7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23` y mostrar por consola la suma de los números impares. A
+continuación, realizar las siguientes acciones:
+
+    a) Ejecuta el programa y anota el número de ciclos y CPI.
+    b) Examina el cronograma de ejecución para identificar dónde se producen los riesgos de control.
+    c) Aplica un desenrollado de factor dos, ejecuta el programa y anota ciclos y CPI.
+    d) Examina el cronograma de ejecución para identificar dónde aparecen riesgos de datos.
+    e) Aplica reordenado de código para evitar todos los riesgos de datos posibles, ejecuta el programa y anota ciclos y CPI.
+    f) Calcula la ganancia de rendimiento obtenida con cada versión del programa respecto a la original
+
+> Resolución
+
+```asm
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
+
+.text
+    la t0, v
+    li s0, 12
+    li a0, 0          # Acumulador para la suma de impares
+
+bucle:
+    lw a1, 0(t0)
+    andi t1, a1, 1    # t1 = a1 & 1 (1 si es impar, 0 si es par)
+    beqz t1, par   # Si es par (t1 == 0), salta el add
+
+    add a0, a0, a1
+
+par:
+    addi t0, t0, 4
+    addi s0, s0, -1
+    bnez s0, bucle
+    li a7, 1
+    ecall
+
+    li a7, 10
+    ecall
+```
+
+b) Análisis de Riesgos de Control (Original)
+
+En esta versión existen **dos saltos por iteración:**
+
+`beqz t1, par` (salto condicional interno según los datos del vector)
+
+`bnez s0, bucle` (salto condicional de control del bucle)
+
+* Cada vez que se toma cualquiera de estos dos saltos (evaluados en la etapa **EX** y hechos efectivos en **MEM**), se producen **2 ciclos perdidos (flushes)** en las etapas IF e ID
+
+* Con los valores dados, `beqz` salta 6 veces (números pares) y `bnez` salta 11 veces, sumando un total de $17 \times 2 = 34 \text{ ciclos perdidos por control}$
+
+c) Código Desenrollado (Factor 2)
+```asm
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
+
+.text
+    la t0, v
+    li s0, 12
+    li a0, 0
+
+bucle:
+    lw a1, 0(t0)
+    andi t1, a1, 1
+    beqz t1, par1
+    add a0, a0, a1
+par1:
+    addi t0, t0, 4
+    addi s0, s0, -1
+    lw a1, 0(t0)
+    andi t1, a1, 1
+    beqz t1, par2
+    add a0, a0, a1
+par2:
+    addi t0, t0, 4
+    addi s0, s0, -1
+
+    bnez s0, bucle
+
+    li a7, 1
+    ecall
+
+    li a7, 10
+    ecall
+```
+
+d) Análisis de Riesgos de Datos (Desenrollado Factor 2)
+
+* Aparece un riesgo de datos de tipo Load-Use entre la carga del dato `lw a1, 0(t0)` y su comprobación inmediata `andi t1, a1, 1`
+
+* El cauce debe insertar **1 ciclo de parada (stall)** antes de la etapa EX de `andi` en cada lectura del vector ($12 \text{ stalls en total}$)
+
+e) Código Desenrollado (Factor 2) y Reordenado
+Para optimizar, cargamos 2 datos por iteración en registros separados (`a1` y `a2`), adelantamos las instrucciones de avance de puntero y contador, y sustituimos los saltos internos usando máscaras aritméticas (multiplicando/haciendo AND con el bit de imparidad) para eliminar los saltos condicionales `beqz`
+
+```asm
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
+
+.text
+    la t0, v
+    li s0, 6     
+    li a0, 0
+
+bucle:
+    lw a1, 0(t0)  
+    lw a2, 4(t0)      
+
+    addi s0, s0, -1
+    addi t0, t0, 8
+
+    andi t1, a1, 1    # t1 = 1 si a1 es impar, 0 si par
+    andi t2, a2, 1    # t2 = 1 si a2 es impar, 0 si par
+    beqz t1, salto1
+    add a0, a0, a1
+salto1:
+    beqz t2, salto2
+    add a0, a0, a2
+salto2:
+
+    bnez s0, bucle
+
+    li a7, 1
+    ecall
+
+    li a7, 10
+    ecall
+```
+
+f) Resumen y Ganancia de Rendimiento (Factor 2)
+
+| Versión del Programa | Instrucciones | Ciclos Totales | CPI | Speedup |
+|---|---:|---:|---:|---:|
+| Original ($t=1$) | 104 | 150 | 1.44 | 1.00x (Ref) |
+| c) Desenrollado ($t=2$) | 98 | 132 | 1.35 | 1.14x |
+| e) Desenrollado ($t=2$) + Reordenado | 74 | 96 | 1.30 | 1.56x |
+
+---
+**5.** Partiendo del mismo programa del ejercicio 4.4, repetir los pasos indicados pero aplicando un desenrollado del bucle con factor tres
 
 
-**d) Empareja las instrucciones y marca aquellos pares en los que surjan riesgos estructurales. Reordena para evitarlos, de forma que no haya parejas de dos instrucciones de acceso a memoria o de salto.**
+```asm
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
 
-* **Riesgo Estructural de Memoria**: No podemos poner dos instrucciones lw seguidas porque solo hay una unidad de memoria en la Vía 2. Intercalamos lw con sumas y decrementos de contador
+.text
+    la t0, v
+    li s0, 12
+    li a0, 0
 
-**e) Identifca otro tipo de riesgos, como los RAW y WAR/WAW, si es preciso ayudándote del cronograma y la vista del cauce mientras ejecutas paso a paso. Reordena donde sea posible para reducir esos riesgos.**
+bucle:
+    # Bloque 1
+    lw a1, 0(t0)
+    andi t1, a1, 1
+    beqz t1, p1
+    add a0, a0, a1
+p1:
+    addi t0, t0, 4
+    addi s0, s0, -1
 
-* **Riesgos RAW / Latencia de Carga:** Usamos cuatro registros temporales (t0, t1, t2, t3). Intercalamos la carga del siguiente elemento mientras la Vía 1 suma el elemento cargado anteriormente, eliminando así las paradas (stalls).
+    # Bloque 2
+    lw a1, 0(t0)
+    andi t1, a1, 1
+    beqz t1, p2
+    add a0, a0, a1
+p2:
+    addi t0, t0, 4
+    addi s0, s0, -1
 
-**f) Ejecuta la versión fnal del programa, anota número de ciclos y CPI.**
+    # Bloque 3
+    lw a1, 0(t0)
+    andi t1, a1, 1
+    beqz t1, p3
+    add a0, a0, a1
+p3:
+    addi t0, t0, 4
+    addi s0, s0, -1
 
-![alt text](../images/c15.png)
+    bnez s0, bucle
 
-**g) Resume en una tabla los ciclos, CPI y ganancia de rendimiento de cada versión respecto a la anterior**
+    li a7, 1
+    ecall
 
-| Versión del programa / Configuración | Ciclos (Cycles) | CPI | Instrucciones (Instrs. retired) | Ganancia de rendimiento (respecto a la versión anterior) | Ganancia de rendimiento (respecto a la versión inicial) |
-|---|---:|---:|---:|---:|---:|
-| a) Código original (5-Stage / Escalar) | 809 | 1.6 | 506 | — (Referencia) | — (Referencia) |
-| b) Código original (6-Stage Dual-Issue / Superescalar) | 806 | 1.59 | 506 | +0.37% | +0.37% |
-| f) Código optimizado (Desenrollado x4 y Reordenado) | 331 | 1.17 | 283 | +143.50% | +144.41% |
+    li a7, 10
+    ecall
+```
+**6.**  Partiendo del mismo programa del ejercicio 4.4, repetir los pasos indicados pero aplicando un desenrollado del bucle con factor cuatro
 
+```asm
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
 
-**Explicación de los cálculos de ganancia:**
+.text
+    la t0, v
+    li s0, 12
+    li a0, 0
 
-* De a) a b) (Cambio de procesador sin optimizar código):
+bucle:
+    # Bloque 1
+    lw a1, 0(t0)
+    andi t1, a1, 1
+    beqz t1, b1
+    add a0, a0, a1
+b1:
+    addi t0, t0, 4
+    addi s0, s0, -1
 
-$$\text{Ganancia} = \left(\frac{809 - 806}{806}\right) \times 100 = \mathbf{+0.37\%}$$
+    # Bloque 2
+    lw a1, 0(t0)
+    andi t1, a1, 1
+    beqz t1, b2
+    add a0, a0, a1
+b2:
+    addi t0, t0, 4
+    addi s0, s0, -1
 
-> La mejora es prácticamente nula ($0.37\%$) porque, aunque el hardware admite dos vías, las dependencias del código original obligan a emitir casi todas las instrucciones de una en una.
+    # Bloque 3
+    lw a1, 0(t0)
+    andi t1, a1, 1
+    beqz t1, b3
+    add a0, a0, a1
+b3:
+    addi t0, t0, 4
+    addi s0, s0, -1
 
-* De b) a f) (Optimización con desenrollado x4 y reordenación estática):$$\text{Ganancia} = \left(\frac{806 - 331}{331}\right) \times 100 = \mathbf{+143.50\%}$$
+    # Bloque 4
+    lw a1, 0(t0)
+    andi t1, a1, 1
+    beqz t1, b4
+    add a0, a0, a1
+b4:
+    addi t0, t0, 4
+    addi s0, s0, -1
 
-> Al eliminar los riesgos estructurales y de datos, la CPU aprovecha las 2 vías reduciendo los ciclos a menos de la mitad y haciendo bajar el CPI de $1.59$ a $1.17$.
+    bnez s0, bucle
 
-Ganancia Total (f respecto a la versión inicial a):$$\text{Ganancia Total} = \left(\frac{809 - 331}{331}\right) \times 100 = \mathbf{+144.41\%}$$
+    li a7, 1
+    ecall
 
-
-## Ejercicio 5.2. 
-Copia de https://bit.ly/3pchzlQ una nueva lista de 100 números enteros y prepáralos para usarlos desde un nuevo programa. Este deberá calcular por separado la media aritmética de los **valores que ocupan posición impar** y **la de los que ocupan posiciones pares**, mostrando por la consola ambas sumas y promedios. Completado el programa, repite los pasos indicados para el ejercicio 5.1.
-
-
-**1. Código Base Original (Apartados a y b)**
-En esta versión procesamos los números de uno en uno dentro de un bucle de 100 iteraciones. En cada vuelta comprobamos el contador para alternar entre sumar a la suma par (`a0`) o a la suma impar (`a2`)
-
-![alt text](../images/c21.png)
-
-**a) Ejecución en 5-Stage Processor (Escalar)**
-
-![alt text](../images/c22.png)
-
-**b) Ejecución en 6-Stage Dual-Issue (Superescalar sin optimizar):**
-![alt text](../images/c23.png)
-
-
-**2. Código Optimizado: Desenrollado (Factor 4) y Reordenación por Parejas (Apartados c, d, e y f)**
-
-Aplicamos un **factor de desenrollado 4** (procesamos 4 elementos por iteración: 2 pares y 2 impares). Con 100 elementos, realizaremos 25 iteraciones ($100 / 4 = 25$)
-
-![alt text](../images/c24.png)
-
-**Resultados optimizados**
-![alt text](../images/opp2.png)
-
-**Identificación y Solución de Riesgos (Apartados d y e)**
-
-* **Riesgos Estructurales de Memoria (Etapa MEM):**
-
-    * **Problema**: El cauce superescalar solo dispone de un bus de memoria (Vía 2). Intentar ejecutar dos instrucciones de carga (lw) consecutivas genera una detención (stall)
-
-    * **Solución**: Intercalamos cada lectura de memoria (lw) con una operación aritmética (add o addi) que pueda emitirse concurrentemente por la Vía 1
-
-* **Riesgos de Datos (RAW - Latencia de Carga):**
-
-    * **Problema**: Si intentamos usar el valor de un registro inmediatamente en la instrucción siguiente a su carga (lw), el procesador se detiene a esperar a que complete la etapa de acceso a memoria
-
-    * **Solución**: Usamos 4 registros temporales distintos (t0, t1, t2, t3). Mientras la Vía 2 carga el siguiente dato, la Vía 1 va procesando y sumando el dato cargado en la pareja anterior
-
-* **Riesgos de Control (Saltos):**
-
-    * **Problema**: Los saltos (bnez) en un cauce superescalar descargan las instrucciones de la segunda vía y penalizan el rendimiento
-
-    * **Solución**: El desenrollado a factor 4 reduce las iteraciones de 50 a 25, eliminando la mitad de las operaciones de salto del programa original
-
-| Versión del programa / Configuración | Ciclos (Cycles) | CPI | Instrucciones (Instrs. retired) | Ganancia (respecto a versión anterior) | Ganancia (respecto a versión inicial) |
-|---|---:|---:|---:|---:|---:|
-| a) Código Base (5-Stage / Escalar) | 583 | 1.57 | 371 | — (Referencia) | — (Referencia) |
-| b) Código Base (6-Stage Dual-Issue sin optimizar) | 577 | 1.56 | 371 | +1.04% | +1.04% |
-| f) Código Optimizado (Desenrollado x4 y Reordenado) | 348 | 1.19 | 293 | +65.80% | +67.53% |
-
-## Ejercicio 5.3. 
-
-Copia de https://bit.ly/3pchzlQ una nueva lista de 100 números enteros y prepáralos para usarlos desde un nuevo programa. Este deberá calcular por separado la media aritmética de aquellos valores que sean impares, por una parte, y la de los que sean pares, por otra, mostrando por la consola ambas sumas y promedios. Completado el programa, repite los pasos indicados para el ejercicio 5.1.
+    li a7, 10
+    ecall
+```
