@@ -1,4 +1,4 @@
-# Capitulo 4: Arquitectura Superescalar
+# Capitulo 5: Arquitectura Superescalar
 
 ## 1. Introducción y Conceptos Fundamentales
 
