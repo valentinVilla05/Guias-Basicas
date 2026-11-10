@@ -1,8 +1,4 @@
-# Tipo Test Práctica 7
-
-## Aleatoriedad, entropía y hashes
-
----
+# Tipo Test Práctica 7 Aleatoriedad, entropía y hashes
 
 > Los números pseudo-aleatorios son buenos para aplicaciones como videojuegos
 
@@ -120,73 +116,6 @@
 
 - **Verdadero**
 - **Motivo**: Al ser un algoritmo determinista con una cantidad finita de estados internos, en cuanto el generador vuelve a pasar por un estado o valor ya visitado, comenzará a repetir íntegramente la misma secuencia de números a partir de ese instante
-
----
-
-## Ingeniería inversa
-
----
-
-> El objetivo de la ingeniería inversa es obtener el diseño y esquema de un producto software
-
-- **Verdadero**
-- **Motivo**: Recuperar el diseño, la estructura y el esquema de un software a partir de su producto ejecutable es uno de los objetivos clásicos de la ingeniería inversa
-
----
-
-> Entre los beneficios que se generan al hacer una ingeniería inversa se encuentra la de detectar efectos/errores laterales
-
-- **Verdadero**
-- **Motivo**: Al analizar el comportamiento real de un programa, la ingeniería inversa permite identificar efectos no documentados, errores y comportamientos laterales que no se ven a simple vista
-
----
-
-> El objetivo de la ingeniería inversa es obtener información o un diseño a partir de un producto accesible al público para rehacer el propio programa
-
-- **Verdadero**
-- **Motivo**: Consiste en estudiar un producto ya existente (accesible o distribuido) para extraer de él conocimiento, diseño o especificaciones y poder rehacer o replicar un programa propio
-
----
-
-> Los desensambladores son herramientas que convierten código máquina en lenguaje normal
-
-- **Falso**
-- **Motivo**: Los desensambladores convierten código máquina en **lenguaje ensamblador** (código fuente de bajo nivel), no en un lenguaje de alto nivel o "normal". Para obtener código de alto nivel se usarían los **decompiladores**
-
----
-
-> El concepto de ingeniería inversa solo se aplica en el ámbito informático
-
-- **Falso**
-- **Motivo**: La ingeniería inversa se aplica en muchos campos más allá de la informática, como la ingeniería mecánica, electrónica, química, biotecnología o el análisis de protocolos y formatos de datos
-
----
-
-> La herramienta OllyDBG para Windows y Linux es un depurador de código ensamblador muy empleado en auditoría informática para detectar los agujeros de seguridad de una herramienta
-
-- **Falso**
-- **Motivo**: OllyDbg es un depurador de código ensamblador muy usado en auditoría, pero **solo está disponible para Windows** (principalmente 32 bits), no para Linux
-
----
-
-> Entre los beneficios que se generan al hacer una ingeniería inversa se encuentran los de reducir los tamaños y complejidad de los sistemas
-
-- **Falso**
-- **Motivo**: Los beneficios típicos de la ingeniería inversa son recuperar el diseño, entender cómo funciona un producto, detectar errores/efectos laterales, auditar seguridad, lograr interoperabilidad o portar software; **no** reducir directamente el tamaño o la complejidad de los sistemas
-
----
-
-> El objetivo de la ingeniería inversa es obtener información o un diseño a partir de un producto que nos permite auditir y buscar agujeros de seguridad
-
-- **Verdadero**
-- **Motivo**: Una de las aplicaciones más importantes de la ingeniería inversa es la auditoría de seguridad: analizar un producto para entender su funcionamiento y descubrir vulnerabilidades o agujeros de seguridad
-
----
-
-> Se conoce por ingeniería inversa a la actividad que se ocupa de descubrir cómo funciona un programa, función o característica de cuyo código fuente no se dispone, hasta el punto de poder modificar ese código o generar código propio que cumpla las mismas funciones
-
-- **Verdadero**
-- **Motivo**: Es la definición clásica de ingeniería inversa: analizar un software sin disponer de su código fuente para entenderlo, modificarlo o crear una implementación equivalente
 
 ---
 

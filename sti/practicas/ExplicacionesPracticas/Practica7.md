@@ -1,5 +1,4 @@
-## Práctica 7: Aleatoriedad, Entropía, Hashes de Contraseñas e Ingeniería Inversa
-
+## Práctica 7: Aleatoriedad, Entropía, Hashes de Contraseñas
 
 ### 1. Aleatoriedad y Generadores de Números (PRNG vs. CSPRNG)
 

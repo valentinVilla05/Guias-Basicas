@@ -1,23 +1,5 @@
 ## Preguntas Obtenidas de la práctica 5
 
-
-> Los algoritmos MD5 y SHA1 son algoritmos asimétricos
-
-- **Falso**
-- _Motivo: MD5 y SHA-1 son **funciones hash** (de resumen unidireccional), no algoritmos de cifrado; por tanto no son simétricos ni asimétricos._
-
-----------------------------
-
-> Los algoritmos MDS y SHAI son algoritmos de hashing
-
-- **Verdadero**
-- _Motivo: con las erratas corregidas son **MD5 y SHA-1**, que efectivamente son algoritmos de hashing (funciones de resumen)._
-
-
-- **Falso**
-- _Motivo: el plugboard disponía de 10 cables, pero **cada cable conectaba un par de letras distinto** (una en cada extremo, hasta un máximo de 20 letras); no podían conectarse 10 cables a un solo par de letras._
-
-
 > La ingeniería inversa facilita la realización de prototipos y disminuye el costo al desarrollar nuevos productos
 
 - **Verdadero**
@@ -60,7 +42,7 @@
 
 ----------------------------
 
-> La ingeniería inversa permite mejorar el diseño de lso produtos ya xistentes haciendolos más eficientes y efectivos
+> La ingeniería inversa permite mejorar el diseño de los produtos ya existentes haciendolos más eficientes y efectivos
 
 - **Verdadero**
 - _Motivo: al entender el diseño de los productos existentes se pueden identificar mejoras que aumentan su eficiencia y efectividad y reducen costes._
