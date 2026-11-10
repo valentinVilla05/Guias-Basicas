@@ -73,7 +73,7 @@
 > La etapa final del algirtmo AES está compuesta por 3 operaciones: AddRoundKey, ShitRosws y ShitBytes
 
 - **Verdadero**
-- _Motivo: la ronda final realiza exactamente 3 operaciones: **SubBytes, ShiftRows y AddRoundKey** (sin MixColumns). Las erratas "ShitBytes" y "ShitRosws" son SubBytes y ShiftRows._
+- _Motivo: la ronda final realiza exactamente 3 operaciones: **SubBytes, ShiftRows y AddRoundKey** (sin MixColumns).
 
 ----------------------------
 
@@ -91,10 +91,10 @@
 
 ----------------------------
 
-> El esquema general del algoritmo AES está formado por una etapa inicial, una central y una final , todas ellas no
+> El esquema general del algoritmo AES está formado por una etapa inicial, una central y una final , todas ellas no lineales
 
 - **Falso**
-- _Motivo: la pregunta está incompleta, pero al referirse a que todas las etapas no son cíclicas es falsa: **la etapa central es cíclica**._
+- _Motivo: **la etapa central es cíclica**._
 
 ----------------------------
 
