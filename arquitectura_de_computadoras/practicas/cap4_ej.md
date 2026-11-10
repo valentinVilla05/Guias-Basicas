@@ -132,7 +132,36 @@ f) Tabla de Resultados Actualizada (en Ripes)
 **2.** Partiendo del mismo programa del ejercicio 4.1, repetir los pasos indicados pero aplicando un desenrollado del bucle con factor tres
 
 ```asm
+.data
+v: .word 7, 4, 23, 12, 6, 20, 17, 8, 3, 10, 11, 23
 
+.text
+    la t0, v
+    li s0, 4
+    li a0, 0
+
+bucle:
+    lw a1, 0(t0)
+    lw a2, 4(t0)
+    lw a3, 8(t0)
+
+    addi s0, s0, -1
+    addi t0, t0, 12
+
+    add a0, a0, a1
+    add a0, a0, a2
+    add a0, a0, a3
+
+    bnez s0, bucle
+
+    li t1, 12
+    div a0, a0, t1
+
+    li a7, 1
+    ecall
+
+    li a7, 10
+    ecall
 ```
 **3.**  Partiendo del mismo programa del ejercicio 4.1, repetir los pasos indicados pero aplicando un desenrollado del bucle con factor cuatro
 
