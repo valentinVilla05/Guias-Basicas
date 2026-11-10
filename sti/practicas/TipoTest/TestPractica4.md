@@ -98,75 +98,12 @@
 - **Falso**
 - _Motivo: MD5 y SHA-1 son **funciones hash** (de resumen unidireccional), no algoritmos de cifrado; por tanto no son simétricos ni asimétricos._
 
-----------------------------
 
-> Las operaciones de la ronda estándar para el algoritmo AES son SubBytes, AddRoundKey y MaxColumns
 
-- **Falso**
-- _Motivo: además del nombre incorrecto "MaxColumns" (es **MixColumns**), falta **ShiftRows**. La ronda completa es: SubBytes, ShiftRows, MixColumns y AddRoundKey._
-
-----------------------------
-
-> El esquema general del algoritmo AES está formado por una etapa inicial, una central y una final, todas ellas no cíclicas
-
-- **Falso**
-- _Motivo: la etapa **central sí es cíclica**: se repite en bucle durante Nr − 1 rondas._
-
-----------------------------
-
-> El número de rondas del algoritmo AES es 10 para claves de 128-bit, 11 para claves de 192-bit, y 12 para claves de 256-bit
-
-- **Falso**
-- _Motivo: lo correcto es **10, 12 y 14**; los valores 11 y 12 son incorrectos._
-
-----------------------------
-
-> Las operaciones de la ronda estándar para el algoritmo AES son SubBytes, ShitRows y MixComuns
-
-- **Falso**
-- _Motivo: con las erratas corregidas serían SubBytes, ShiftRows y MixColumns, pero **falta AddRoundKey**, operación presente en todas las rondas._
-
-----------------------------
-
-> La etapa final del algirtmo AES está compuesta por 3 operaciones: AddRoundKey, ShitRosws y ShitBytes
+> Los algoritmos MDS y SHA-1 son algoritmos de hashing
 
 - **Verdadero**
-- _Motivo: la ronda final realiza exactamente 3 operaciones: **SubBytes, ShiftRows y AddRoundKey** (sin MixColumns). Las erratas "ShitBytes" y "ShitRosws" son SubBytes y ShiftRows._
-
-----------------------------
-
-> El módulo SubBytes se encarga de dividir la entrada en bytes y combinarlos usando una transformación lineal
-
-- **Falso**
-- _Motivo: SubBytes **no combina** nada con una transformación lineal: sustituye cada byte por otro mediante la **S-box**, una transformación **no lineal** (propiedad de confusión de la que depende la seguridad de AES)._
-
-----------------------------
-
-> La matriz estado del algoritmo AES es un bloque formado por segmentos que se agrupan en tamaños de matrices cada casilla tiene una parte del mensaje igual a 1024 bits
-
-- **Falso**
-- _Motivo: el estado es una matriz de **4×4 = 16 bytes = 128 bits**, y cada casilla contiene **1 byte (8 bits)**, no 1024 bits._
-
-----------------------------
-
-> El esquema general del algoritmo AES está formado por una etapa inicial, una central y una final , todas ellas no
-
-- **Falso**
-- _Motivo: la pregunta está incompleta, pero al referirse a que todas las etapas no son cíclicas es falsa: **la etapa central es cíclica**._
-
-----------------------------
-
-> La matriz estado del algoritmo AES es un vector de tamaño 1024 bits
-
-- **Falso**
-- _Motivo: el estado tiene **128 bits** (16 bytes), igual que el bloque de cifrado de AES._
-
-----------------------------
-
-> Los algoritmos MDS y SHAI son algoritmos de hashing
-
-- **Verdadero**
-- _Motivo: con las erratas corregidas son **MD5 y SHA-1**, que efectivamente son algoritmos de hashing (funciones de resumen)._
+- _Motivo: **MD5 y SHA-1**, que efectivamente son algoritmos de hashing (funciones de resumen)._
 
 ----------------------------
 
@@ -196,11 +133,3 @@
 - **Verdadero**
 - _Motivo: ambos son funciones resumen (hash) unidireccionales que generan salidas de longitud fija._
 
-----------------------------
-
-> El número de rondas del algoritmo AES es 12 para claves de 128-bit, 13 para claves de 192-bit, y 14 para 256-bit.
-
-- **Falso**
-- _Motivo: las rondas correctas son: **10** para claves de 128 bits, **12** para claves de 192 bits y **14** para claves de 256 bits._
-
-----------------------------
