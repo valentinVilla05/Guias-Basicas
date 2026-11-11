@@ -289,3 +289,30 @@ Cuando escribes una línea de comandos, Bash comprueba si la primera palabra es 
 
 * **Prevención de bucles**: Si el alias reemplaza un comando por sí mismo (ej. `alias who='who;date'`), Bash realiza el cambio una sola vez y detiene el procesamiento para no caer en un ciclo infinito
 
+* **Anular un alias en ejecución**: Si antepones una barra invertida `\` al comando (ej. `\ls`), Bash ignorará el alias y ejecutará el comando original del sistema
+
+**Ejemplos**
+
+**1. Alias simples:**
+
+```bash
+alias h=history
+alias ll='ls -l'
+alias ls='ls -CF'
+```
+
+**2. Importancia de las comillas:**
+```bash
+# CORRECTO (las comillas evitan que ';' corte la orden):
+$ alias who='who;date'
+
+# INCORRECTO (crea el alias 'who=who' y ejecuta inmediatamente 'date'):
+$ alias who=who;date
+```
+
+**3. Uso de argumentos en alias:**
+```bash
+$ alias buscar='who | fgrep \!^'
+```
+
+Al ejecutar buscar `igor`, se expande como `who | fgrep igor`, filtrando los terminales conectados por el usuario especificado

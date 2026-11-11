@@ -1,4 +1,4 @@
-## Bloque 1: Generación de Números Aleatorios y Criptografía
+## Test obtenido de la práctica 7: Generación de Números Aleatorios y Criptografía
 
 > La entropía de una contraseña es inversamente proporcional a la población de caracteres utilizados en la contraseña.
 
