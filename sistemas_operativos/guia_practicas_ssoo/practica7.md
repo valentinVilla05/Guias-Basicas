@@ -45,13 +45,12 @@ chmod +x mi_script.sh
 *(Es necesario indicar `./` porque el directorio actual no suele estar en la variable de entorno `$PATH`)
 ```
 
-- **Ubicación recomendada (`~/bin`):**
+- **Ubicación recomendada (`/bin`):**
 
-Crear la carpeta `~/bin` y guardar allí los scripts para ejecutarlos directamente por su nombre desde cualquier directorio:
+Mover a la carpeta `/bin` y guardar allí los scripts para ejecutarlos directamente por su nombre desde cualquier directorio:
 
 ```bash
-mkdir -p ~/bin
-mv mi_script.sh ~/bin/
+mv mi_script.sh /bin
 ```
 
 ## Entrada y Salida de Datos
