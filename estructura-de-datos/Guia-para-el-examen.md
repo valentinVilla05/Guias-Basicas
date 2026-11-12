@@ -15,7 +15,7 @@
 7. [Listas enlazadas: la cirugía de punteros](#7-listas-enlazadas-la-cirugía-de-punteros)
 8. [Tablas de dispersión (hash)](#8-tablas-de-dispersión-hash)
 9. [Árbol B: reglas de inserción y borrado](#9-árbol-b-reglas-de-inserción-y-borrado)
-10. [STL: los snippets que salen siempre](#10-stl-los-snippets-que-salen-siempre)
+10. [STL: los que salen siempre](#10-stl-los-que-salen-siempre)
 11. [UML: patrones de implementación recurrentes](#11-uml-patrones-de-implementación-recurrentes)
 12. [Trampas y condiciones típicas de los enunciados](#12-trampas-y-condiciones-típicas-de-los-enunciados)
 13. [Checklist de repaso la noche anterior](#13-checklist-de-repaso-la-noche-anterior)
@@ -24,35 +24,41 @@
 
 ## 1. Estructura del examen
 
-El examen tiene **tres bloques independientes**, cada uno en su carpeta dentro de [`Examenes/`](Examenes/):
 
-| Bloque | Número de preguntas | Formato | Carpeta |
+| Pregunta | Puntos | Contenido | Carpeta en las notas |
 | -- | -- | -- | -- |
-| **Tipo Test** | 10 preguntas | Verdadero/Falso **sin explicación** | [`Examenes/TipoTest/`](Examenes/TipoTest/) |
-| **Primitivas** | 2–3 ejercicios | 1 de **trazado/dibujo** + 1 o 2 de **código C++** | [`Examenes/Primitivas/`](Examenes/Primitivas/) |
-| **UML** | 1 enunciado largo | Diagrama UML  → **implementar las clases en C++** | [`Examenes/UML/`](Examenes/UML/) |
+| **P1** | **2** | 10 afirmaciones **V/F**, **sin explicación** | [`Examenes/TipoTest/`](Examenes/TipoTest/) |
+| **P2** | **1,5–2** | 1 ejercicio de **trazado/dibujo** | [`Examenes/Primitivas/`](Examenes/Primitivas/) |
+| **P3** | **3** | 1 o 2 apartados de **código C++** con la firma dada | [`Examenes/Primitivas/`](Examenes/Primitivas/) |
+| **P4** | **3–3,5** | Diagrama UML → **implementar las clases en C++** | [`Examenes/UML/`](Examenes/UML/) |
 
-### 1.1 Bloque Tipo Test
+Los puntos exactos de P2 y P4 alternan según el año (1,5 + 3,5 o bien 2 + 3),
+pero el total siempre son **10**.
 
-- 10 afirmaciones de **V/F**. En todos los años el formato es `[V]` o `[F]`.
+### 1.1 Pregunta 1: Tipo Test (V/F) — 2 ptos
 
+- **10 afirmaciones de V/F**. En todos los años el formato es `[V]` o `[F]`.
+- **No hace falta justificar**: solo hay que marcar. La letra literal del enunciado es
+  *"Contestar V/F las siguientes cuestiones, teniendo en cuenta que una respuesta incorrecta
+  invalida una correcta"* → **penalización**: cada fallo anula un acierto.
 - Los enunciados son trampa: suelen ser afirmaciones *casi* ciertas con un matiz invertido
   (por ejemplo, cambiar $\mathcal{O}(1)$ por $\mathcal{O}(n)$, o "izquierda" por "derecha").
 
+### 1.2 Pregunta 2: Trazado (1,5–2 ptos)
 
-### 1.2 Bloque Primitivas
+- **Un ejercicio de trazado** (dibujar estados, no código). Por frecuencia, el enunciado puede ser:
+  - Tabla de dispersión (cerrada con exploración cuadrática o doble dispersión) con `I/B` y búsquedas.
+  - Árbol B de orden 3 con una secuencia de `I(...)` y `B(...)`.
+  - Heap sobre vector de soporte con `push(...)` y `pop()`.
+  - AVL o ABB con inserciones/borrados (y rotaciones si es AVL): AVL salió en 2015 y en los dos exámenes de 2017 (enero y julio); ABB, solo en junio 2012.
+  - Conjuntos disjuntos sobre una matriz.
 
-Patrón fijo año tras año:
+### 1.3 Pregunta 3: Código (3 ptos)
 
-1. **Un ejercicio de trazado** (dibujar estados, no código): siempre es UNO de estos:
-   - Árbol B de orden 3 con una secuencia de `I(...)` y `B(...)`.
-   - Heap sobre vector de soporte con `push(...)` y `pop()`.
-   - Tabla de dispersión (cerrada con exploración cuadrática o doble dispersión) con `I/B` y búsquedas.
-   - Conjuntos disjuntos sobre una matriz.
-2. **Uno o dos ejercicios de código** con la **firma ya dada** en el enunciado. Suele pedirse:
-   - Funciones de ABB/AVL (recorridos, construir, consultar propiedades).
-   - Operaciones sobre listas enlazadas (insertar, borrar, invertir, concatenar).
-   - Funciones sobre tablas hash o matrices dinámicas.
+- **Uno o dos apartados de código** con la **firma ya dada** en el enunciado. Suele pedirse:
+  - Funciones de ABB/AVL (recorridos, construir, consultar propiedades).
+  - Operaciones sobre listas enlazadas (insertar, borrar, invertir, concatenar).
+  - Funciones sobre tablas hash o matrices dinámicas.
 
 Condiciones que **casi siempre** aparecen en la letra del enunciado:
 
@@ -62,12 +68,11 @@ Condiciones que **casi siempre** aparecen en la letra del enunciado:
 - Devolver un valor concreto (`bool`, un vector, la longitud...) o lanzar una excepción.
 - Respetar la firma exacta: si pone `vector<T> inorden() const`, no la cambies.
 
-### 1.3 Bloque UML
+### 1.4 Pregunta 4: UML (3–3,5 ptos)
 
 - Un caso de uso largo con **diagrama de clases**
 - Hay que implementar **todo en C++**: constructores, destructores, métodos públicos.
-- Elementos recurrentes: vectores de punteros (`vector<T*>`), punteros a objetos de otras clases,
-  `pair` devueltos por métodos externos, recursión sobre estructuras jerárquicas, excepciones.
+- Elementos recurrentes: vectores de punteros (`vector<T*>`), punteros a objetos de otras clases,`pair` devueltos por métodos externos, recursión sobre estructuras jerárquicas, excepciones.
 - No hacen falta los `#include` (lo dice el enunciado).
 - **No** se puede ni debe usar `auto`
 
@@ -77,52 +82,63 @@ Condiciones que **casi siempre** aparecen en la letra del enunciado:
 
 ### 2.1 Primitivas: qué ejercicios de trazado salen
 
-Contando los 10 exámenes de Primitivas (2014, 2016, 2017, 2018, 2019×2, 2022×2, 2023, 2024):
+Contando los **15 exámenes** que tenemos (2012×2, 2014, 2015, 2016, 2017 enero y julio, 2018,
+2019×3, 2022×2, 2023 y 2024):
 
 | Ejercicio de trazado | Veces que ha salido | Años |
 | -- | -- | -- |
-| **Árbol B de orden 3** (I/B) | **4** | 2019 Extra2, 2022, 2024 (+ reglas del árbol B en autoevaluaciones) |
-| **Tabla de dispersión** (cuadrática, doble, abierta) | **4** | 2014 (abierta + cuadrática), 2018, 2022 Extra, 2023 |
-| **Heap** (push/pop sobre vector) | **2** | 2016, 2019 Extra |
+| **Tabla de dispersión** (cuadrática, doble, abierta) | **4** | 2014 (abierta + cuadrática), 2019 enero (cuadrática), 2022 Extra, 2023 |
+| **Árbol B de orden 3** (I/B) | **3** | 2019 Extra2, 2022, 2024 (+ reglas del árbol B en autoevaluaciones) |
+| **Heap** (push/pop sobre vector) | **3** | 2012 septiembre, 2016, 2019 Extra |
+| **AVL** (inserciones con rotaciones) | **3** | 2015, 2017 enero, 2017 julio |
 | **Conjuntos disjuntos** | **1** | 2018 |
+| **ABB** (I/B sobre ABB) | **1** | 2012 junio |
 
-**Conclusión**: lo que MÁS cae de trazado es **árbol B** y **tabla hash**. Los dos hay que
-saberlos dibujar de carrerilla. El heap es el tercero en importancia.
 
 ### 2.2 Primitivas: qué código se pide
 
-| Tipo de código | Veces | Años (aprox.) |
+| Tipo de código | Veces | Años |
 | -- | -- | -- |
-| **Funciones sobre ABB** (recorridos, construir equilibrado, comprobar propiedades) | **7** | 2014, 2016, 2017, 2018, 2019E, 2022, 2023 |
-| **Listas enlazadas** (insertar/concatenar/invertir, lista doble desde simple...) | **6** | 2014, 2017, 2019E, 2022E, 2023, 2024 |
-| **Funciones sobre tabla hash** (insertar/buscar con la secuencia de exploración) | **3** | 2016, 2018, 2022E |
-| **AVL** (insertar con rotaciones, datoMax, etc.) | **3** | 2017, 2022E, 2024 |
-| **Matrices dinámicas** (añadir fila/columna) | **1** | 2019 Extra2 |
+| **Funciones sobre ABB** (recorridos, construir equilibrado, comprobar propiedades) | **10** | 2012 septiembre, 2014, 2015, 2016, 2017 enero, 2017 julio, 2018, 2019 Extra, 2022, 2023 |
+| **Listas enlazadas** (insertar/concatenar/invertir, borrar ocurrencias...) | **8** | 2014, 2015, 2017, 2019 Extra, 2019 enero, 2022 Extra, 2023, 2024 |
+| **Funciones sobre tabla hash** (insertar/buscar con la secuencia de exploración) | **4** | 2012 junio, 2016, 2018, 2022 Extra |
+| **AVL** (insertar con rotaciones, datoMax, compatibleAVL...) | **3** | 2017, 2022 Extra, 2024 |
+| **Matrices dinámicas** (añadir fila/columna, `operator+`) | **2** | 2012 septiembre, 2019 Extra2 |
+| **Heap** (consulta `menorPrioridad` sobre `Heap<T>`) | **1** | 2019 enero |
 | **Árbol genérico** (contar descendientes) | **1** | 2019 Extra2 |
+| **Recorrido en anchura / BFS** (`rellenarColor` sin recursión) | **1** | 2017 julio |
 
-**Conclusión**: el **ABB con recursividad y sin ella** es el rey de Primitivas. Segundo: listas.
-Prepárate ambos como si fueran lo único que va a salir (y son: entre los dos, más de la mitad
-de los ejercicios de código históricos).
+**Conclusión**: sigue mandando el **ABB con recursividad y sin ella** (10 veces), y segundo
+**listas** (8): entre los dos son 18 de los 30 apartados de código de toda la historia. Si
+solo puedes preparar dos temas de código, esos.
 
 ### 2.3 Tipo Test: frecuencia de temas
 
-Contando en cuántos de los 12 archivos de TipoTest aparece cada tema:
+Contando en cuántos de los **15 archivos** de TipoTest aparece cada tema (ya incluidos 2015,
+enero 2019, julio 2017 y septiembre 2012):
 
 | Tema | Archivos | Notas |
 | -- | -- | -- |
-| **Punteros y memoria** (pila/heap, `new/delete`, fugas) | **11/12** | Casi garantizado |
-| **Listas enlazadas** (simple, doble, circular) | **11/12** | Casi garantizado |
-| **Vector dinámico** (redimensión, direcciones de memoria) | **10/12** | Muy habitual |
-| **Árbol B** (propiedades, orden, alturas) | **10/12** | Muy habitual |
-| **STL** (`map`, `set`, `list`, comparadores, `erase`) | **9/12** | Muy habitual |
-| **AVL** (rotaciones, casos, sensibilidad al orden) | **8/12** | Habitual |
-| **Hash** (agrupamientos, cubetas, factores de carga) | **7/12** | Habitual |
-| **Heap** (equilibrio, prioridades, menor/mayor) | **7/12** | Habitual |
-| **Mapas/contenedores asociativos** | **7/12** | Habitual |
-| **Grafos** (definiciones, recorridos) | **7/12** | Habitual |
-| **Quadtrees** (codificación Z, búsqueda del más cercano) | **6/12** | Aparece bastante |
-| **Recorridos de árboles** (preorden/inorden/postorden) | **5/12** | Frecuente |
-| **ABB** (propiedades del inorden) | **4/12** | Aparece |
+| **Punteros y memoria** (pila/heap, `new/delete`, fugas) | **15/15** | En todos |
+| **STL** (`map`, `set`, `list`, comparadores, `erase`) | **13/15** | Casi garantizado |
+| **Vector dinámico** (redimensión, direcciones de memoria) | **14/15** | Muy habitual |
+| **Árbol B** (propiedades, orden, alturas) | **14/15** | Muy habitual |
+| **Listas enlazadas** (simple, doble, circular) | **14/15** | Muy habitual |
+| **Hash** (agrupamientos, cubetas, factores de carga) | **13/15** | Muy habitual |
+| **AVL** (rotaciones, casos, sensibilidad al orden) | **11/15** | Habitual |
+| **Heap** (equilibrio, prioridades, menor/mayor) | **10/15** | Habitual |
+| **Mapas/contenedores asociativos** | **7/15** | Habitual |
+| **Grafos** (definiciones, recorridos) | **10/15** | Habitual |
+| **Quadtrees / Kd-trees** (codificación Z, búsqueda del más cercano, por rango) | **8/15** | Aparece bastante (el Kd-tree, solo en septiembre 2012) |
+| **Recorridos de árboles** (preorden/inorden/postorden) | **5/15** | Frecuente |
+| **ABB** (propiedades del inorden) | **6/15** | Aparece |
+
+> **Nota**: ya están las **15 fichas**, incluido septiembre 2012 (sus respuestas V/F estaban
+> rotuladas en rojo en la propia página del examen: el texto que extrae el PDF no las recogía).
+> Ojo con dos preguntas discutibles que se dejan tal cual vienen marcadas y con su aviso en la
+> ficha: la 2 de septiembre 2012 (direcciones de un dato en una lista dinámica) y la 3 de julio
+> 2017 (fusionar dos listas ordenadas en $O(n)$). Por cierto, la pregunta de **ficheros con
+> registros de longitud variable** solo aparece en 2015.
 
 ### 2.4 Autoevaluaciones de Platea
 
@@ -144,7 +160,7 @@ tema. Fíjate en el **matiz exacto** de cada una: ahí está la trampa.
 ### 3.1 Listas y vectores
 
 - El borrado del **último elemento de una lista simple es $\mathcal{O}(n)$ aunque tengas un puntero
-  al mismo** → **V**. Necesitas el penúltimo para poner su `sig = NULL`, y para eso hay que
+  al mismo** → **V**. Necesitas el penúltimo para poner su `sig = nullptr`, y para eso hay que
   recorrer desde el principio.
 - **Insertar antes de un iterador en una lista simple no es $\mathcal{O}(1)$** → **F** si lo afirma;
   en realidad *sí* que es $\mathcal{O}(n)$ en lista simple (hay que llegar al anterior) pero
@@ -154,54 +170,75 @@ tema. Fíjate en el **matiz exacto** de cada una: ahí está la trampa.
   desde él llegas al primero) → **V**.
 - Los datos de un **vector dinámico pueden cambiar su dirección de memoria aunque nunca se borren**
   (por la redimensión) → **V**.
-- La redimensión **no reduce a la mitad** el tamaño físico cuando el lógico cae por debajo de la
-  mitad (en la implementación de la asignatura es a **un tercio**) → **F**.
+- La redimensión **no reduce a la mitad** el tamaño físico cuando el lógico cae por debajo de la mitad (en la implementación de la asignatura es a **un tercio**) → **F**.
 - `int **p` puede servir para matriz, vector u otro uso → **V**.
-- Es **peligroso** guardar `vector<B>` (objetos, no punteros) si otra clase mantiene asociación con
-  esos objetos → **V** (la redimensión invalidaría todos los punteros externos).
+- Es **peligroso** guardar `vector<B>` (objetos, no punteros) si otra clase mantiene asociación con esos objetos → **V** (la redimensión invalidaría todos los punteros externos).
+- "**El puntero cola de una lista simple permite que la inserción y el borrado por el final sean
+  $\mathcal{O}(1)$**" → **F**: la inserción sí lo es, pero el borrado no (necesitas el penúltimo).
+  Como la frase mezcla las dos operaciones, la afirmación entera es falsa.
 
 ### 3.2 Árboles: ABB, AVL y recorridos
 
-- El **inorden de un ABB devuelve los datos ordenados** de menor a mayor → **V** (propiedad que
-  más cae de todas).
+- El **inorden de un ABB devuelve los datos ordenados** de menor a mayor → **V** (propiedad que más cae de todas).
 - En un ABB **y** en un AVL, el orden de inserción afecta a la estructura y a la eficiencia → **V**.
-- Insertando datos **ascendentes** en un AVL siempre se produce el **caso 4** (rotación simple a la
-  izquierda) → **V**; si fueran descendentes, siempre **caso 1** (simple a la derecha).
-- **Una inserción en un AVL requiere a lo sumo UNA rotación** (simple o doble) → aquí hay que
-  leer con cuidado: el enunciado pone `[F]` y la explicación dice que es verdad... **El truco**:
-  fíjate si habla de inserción o de **borrado**. En el borrado puede haber un caso extra (el
-  hermano con `bal = 0`) que obliga a una rotación adicional. Lee siempre qué operación nombra.
+- Insertando datos **ascendentes** en un AVL siempre se produce el **caso 4** (rotación simple a la izquierda) → **V**; si fueran descendentes, siempre **caso 1** (simple a la derecha).
+- **"Tras una inserción en un AVL, el proceso de ajuste requiere a lo sumo una rotación
+  simple o doble"** → **F** (así salió en el examen de enero 2015). La trampa es la palabra
+  *requiere*: muchas inserciones **no requieren ninguna rotación** (el árbol sigue
+  equilibrado tras subir el dato). Cuando sí hace falta rotar, como máximo es UNA rotación
+  simple **o** una doble (nunca dos seguidas en la inserción). Ojo: eso es en la
+  **inserción**; en el **borrado** el reajuste sí puede encadenarse por varios niveles
+  mientras subes recalculando alturas.
 - **Partir de un vector ordenado y coger el centro como raíz recursivamente** produce un árbol
   **compatible con AVL** → **V**.
 - Un **heap es un árbol binario equilibrado en altura** → **V** (es completo, y completo implica
   equilibrado en altura).
 - Datos **ordenados de forma ascendente** introducidos en un ABB lo **degeneran en lista**
   ($\mathcal{O}(n)$), mientras que en un AVL se mantiene $\mathcal{O}(\log n)$ → **V**.
+- "**Un heap puede no estar equilibrado si los valores se insertan en orden contrario al que se
+  desea recuperar**" → **F**: la forma de un heap depende solo del número de inserciones (siempre
+  queda completo y equilibrado en altura); los valores no la alteran.
+- El orden de un **ABB** y el de un **heap** "es el mismo" y solo cambia que uno va en vector →
+  **F**: el ABB separa menores (izquierda) y mayores (derecha) en cada nodo; el heap ordena por
+  **prioridad** entre padre e hijos (la raíz es la extrema) y no hay orden entre hermanos.
+- "**La hoja con mayor profundidad de un ABB no se puede calcular de forma iterativa**" → **F**:
+  cualquier recorrido de árbol, incluido éste, se hace con una pila explícita en lugar de la pila
+  de llamadas.
 
 ### 3.3 Árbol B
 
 - Los datos **dentro de un nodo** de un árbol B están **ordenados** → **V**.
 - **Todas las hojas están al mismo nivel/profundidad** → **V**.
-- Es **imposible** que un árbol B de orden 20 tenga **menos altura** que uno de orden 22 con los
-  mismos datos → **F** (es perfectamente posible: con orden mayor el árbol es más "ancho" y puede
-  requerir menos niveles... el enunciado lo plantea al revés, repásalo: con más orden la altura
-  no puede ser *mayor*).
-- En la **inserción** se puede **repartir carga con nodos hermanos** si el dato no cabe → **V**
-  (préstamo).
+- Es **imposible** que un árbol B de orden 20 tenga **menos altura** que uno de orden 22 con los mismos datos → **F** (es perfectamente posible: con orden mayor el árbol es más "ancho" y puede requerir menos niveles... el enunciado lo plantea al revés, repásalo: con más orden la altura no puede ser *mayor*).
+- En la **inserción** se puede **repartir carga con nodos hermanos** si el dato no cabe → **V** (préstamo).
 - La **profundidad de todas las hojas es la misma** → **V**.
+- "**Cualquier borrado en un árbol B implica acceder siempre a una hoja**" → **F**: el préstamo y
+  la fusión que siguen al borrado tocan hermanos y padres que no son hojas; el "siempre" de la
+  frase es la trampa.
+- El **árbol B usa rotaciones** para mantener el equilibrio → **F**: se equilibra con reparto y
+  fusión (split al insertar; préstamo con el hermano o fusión al borrar), no con rotaciones como
+  el ABB o el AVL.
+- "**La búsqueda de un registro con un índice simple es más eficiente que con un árbol B**" →
+  **F**: el índice lineal es $\mathcal{O}(n)$, mientras que el árbol B descarta niveles enteros
+  en cada paso y se resuelve en $\mathcal{O}(\log n)$ con muy pocos accesos a disco.
 
 ### 3.4 Hash y dispersión
 
-- **Agrupamiento primario**: acumulación de claves en la posición base; **secundario**: acumulación
-  alrededor de posiciones ocupadas por otras claves que colisionaron distinto.
-- Evitar **ambos** agrupamientos: es preferible la **doble dispersión** sobre la cuadrática → la
-  cuadrática elimina el primario pero crea secundario; la doble elimina ambos (depende del enunciado,
-  lee bien cuál afirma cada cosa).
+- **Agrupamiento primario**: acumulación de claves en la posición base; **secundario**: acumulación alrededor de posiciones ocupadas por otras claves que colisionaron distinto.
+- Evitar **ambos** agrupamientos: es preferible la **doble dispersión** sobre la cuadrática → la cuadrática elimina el primario pero crea secundario; la doble elimina ambos (depende del enunciado, lee bien cuál afirma cada cosa).
 - Las **cubetas** minimizan el número de elementos reasignados → **V**.
-- Un dato en dispersión **abierta (encadenamiento) no queda en su posición de hash**, va en la
-  lista de esa posición → el enunciado típico dice que "queda en la celda que le corresponde" → **F**.
+- Un dato en dispersión **abierta (encadenamiento) no queda en su posición de hash**, va en la lista de esa posición → el enunciado típico dice que "queda en la celda que le corresponde" → **F**.
 - **Factor de carga** $\lambda = n / t$: si dos tablas tienen los mismos datos y $\lambda_1 = 0.8$,
   $\lambda_2 = 0.7$, entonces $t_1 < t_2$ (no al revés) → la afirmación "T1 es mayor" es **F**.
+- En **dispersión abierta no se produce agrupamiento secundario, pero sí el primario** → **V**:
+  no hay sondeo, cada clave cae siempre en su posición base, donde se acumulan todas las que
+  comparten hash (eso es primario); ninguna se acumula alrededor de posiciones ajenas.
+- En **cubetas**, si al buscar se llega a un **hueco** la búsqueda **sí se detiene siempre** → la
+  frase "no siempre se detiene" es **F** (hueco = clave ausente). Ojo con la trampa contraria: en
+  una celda **BORRADO** hay que seguir buscando.
+- "**Las operaciones de borrado e inserción posteriores deterioran la tabla de dispersión
+  abierta**" → **F**: es al revés; en la **cerrada** los BORRADOS dejan celdas que hay que ir
+  saltando en cada sondeo, y en la encadenada borrar solo toca la lista de su posición.
 
 ### 3.5 STL y contenedores asociativos
 
@@ -214,17 +251,34 @@ tema. Fíjate en el **matiz exacto** de cada una: ahí está la trampa.
 - `map<Fecha, list<Reserva>>` y `multimap<Fecha, Reserva>` son válidas para reservas de hotel → **V**.
 - Una cola con `std::vector` tiene `pop_front` en $\mathcal{O}(n)$ mientras que con `std::list`
   o `deque` es $\mathcal{O}(1)$ → la afirmación "es igual eficiencia" es **F**.
+- "**El deque permite inserciones eficientes en cualquier posición**" → **F**: solo es
+  $\mathcal{O}(1)$ en los dos extremos (inicio y final); en una posición intermedia hay que
+  desplazar los elementos.
+- "**Las colas y colas con prioridad se implementan igual de eficientes con vector que con lista;
+  la única diferencia es si conocemos el tamaño máximo**" → **F**: depende de la operación
+  (`pop_front` en vector $\mathcal{O}(n)$; `push`/`pop` sobre heap-vector $\mathcal{O}(\log n)$;
+  en lista doble, $\mathcal{O}(1)$).
 
 ### 3.6 Grafos, quadtrees y memoria
 
 - Un **grafo camino** es una sucesión de aristas donde cada una comparte vértice con la siguiente → **V**.
 - Un **árbol binario es un grafo dirigido, conexo y acíclico** con grado de salida $\le 2$ → **V**.
 - **DFS = pila, BFS = cola** (recorrido por niveles) → **V**.
-- El punto más cercano en un quadtree **no tiene por qué estar en un hermano** del nodo → **F**
-  si afirma que "debe" estar ahí.
-- No liberar memoria provoca **memory leak**, no **stackoverflow** (eso es desbordamiento de pila,
-  típico de recursión infinita) → **F**.
+- El punto más cercano en un quadtree **no tiene por qué estar en un hermano** del nodo → **F** si afirma que "debe" estar ahí.
+- No liberar memoria provoca **memory leak**, no **stackoverflow** (eso es desbordamiento de pila, típico de recursión infinita) → **F**.
 - Los dos conceptos **no son lo mismo**: fuga de memoria vs. desbordamiento de pila.
+- Un **grafo poco denso** conviene más implementarlo con **listas de adyacencia** que con matriz
+  → **V**: $\mathcal{O}(V+E)$ de espacio frente a $\mathcal{O}(V^2)$ casi todo ceros.
+- "**La búsqueda de un punto es siempre más eficiente en una malla regular que en un quadtree**"
+  → **F**: con los puntos concentrados en una zona, el quadtree poda regiones enteras vacías y
+  examina muchas menos celdas que la malla.
+- Rejilla regular de **500 m**: localizar lo que hay a **100 m** de $(x,y)$ se reduce a filtrar
+  la celda que contiene $(x,y)$ → **V** (el radio es mucho menor que la celda).
+- Un **bitset** para el rango 100–100000 ocupa **1238 bytes** → **F**: son 99901 bits ≈ 12488
+  bytes.
+- En un fichero con **registros de longitud variable**, el hueco de un registro borrado **no
+  siempre** se puede reutilizar → **V**: los huecos quedan fragmentados y hay que medirlos antes
+  de darlos por buenos.
 
 ---
 
@@ -235,8 +289,7 @@ tema. Fíjate en el **matiz exacto** de cada una: ahí está la trampa.
 
 ### 4.1 Inorden con pila (Izquierda → Raíz → Derecha)
 
-La idea: **baja todo lo que pueda a la izquierda apilando cada nodo**. Cuando ya no puedas bajar,
-**desapila, guarda el dato y ve a su derecha**. Repite mientras haya pila o nodo actual.
+La idea: **baja todo lo que pueda a la izquierda apilando cada nodo**. Cuando ya no puedas bajar,**desapila, guarda el dato y ve a su derecha**. Repite mientras haya pila o nodo actual.
 
 ![Inorden con pila](assets/img/guia_inorden_pila.png)
 
@@ -265,8 +318,7 @@ vector<T> ABB<T>::inordenIterativo() const {
 **Claves del examen:**
 
 - El bucle es `while (act != nullptr || !p.vacia())`: **condición con `||`**.
-- Si te piden **inorden inverso** (Derecha → Raíz → Izquierda), basta con cambiar `act->izq` por
-  `act->der` en ambos sitios (o al revés según el orden que quieras).
+- Si te piden **inorden inverso** (Derecha → Raíz → Izquierda), basta con cambiar `act->izq` por `act->der` en ambos sitios (o al revés según el orden que quieras).
 - En un ABB, este recorrido **siempre devuelve los datos ordenados**.
 
 ### 4.2 Preorden con pila (Raíz → Izquierda → Derecha)
@@ -1122,3 +1174,32 @@ Lista de "letra pequeña" que aparece repetidamente y que hay que cumplir **AL P
 - [Comparación de complejidades (Resumen)](Resumen.md)
 - [Referencia STL completa](stl.md)
 
+---
+
+## 13. Checklist de repaso la noche anterior
+
+Repaso corto y ordenado. No hace falta inventar nada nuevo: solo refrescar lo que ya sabes.
+
+1. **Lee otra vez §1 y respira**: 4 preguntas (2 / 1,5–2 / 3 / 3–3,5). En las V/F **no hace
+   falta justificar**, y cada respuesta incorrecta invalida una correcta: si una no te convence,
+   mejor no la marques.
+2. **Fíjate en las tablas de §2.1 y §2.2**: los trazados que más salen (hash, árbol B y AVL
+   encabezan) y el dato clave de la historia: el código es ABB + listas en más de la mitad de
+   los apartados. A eso dedica el rato largo.
+3. **Repasa los esqueletos de código que más se repiten** (los tienes aquí mismo): inorden con
+   pila (§4.1), por niveles con cola (§4.4), insertar y borrar en ABB (§5.1 y §5.3), rotaciones
+   del AVL (§5.6), push/pop del heap (§6), insertar y borrar en hash con estados (§8.2–§8.4) y
+   la cirugía de punteros de las listas (§7.1–§7.4).
+4. **De STL, solo los cuatro de siempre**: iterar un `map` sin perder iteradores con `erase`
+   (§10.1), remove-erase en `vector` (§10.2), `lower_bound`/`upper_bound` (§10.3) y
+   comparadores (§10.6).
+5. **De UML (§11)**, recuerda los patrones: vector de punteros con búsqueda lineal, recursión
+   sobre jerarquía de dependencias, contadores de uso, `pair` devuelto por servicio externo y
+   destructor que libera en profundidad.
+6. **Pasa el dedo por las trampas de §12.1** (BORRADO nunca VACÍO, no pisar punteros antes de
+   guardarlos, preorden derecha primero...) y por las preguntas V/F de §3, fijándote en el
+   matiz exacto de cada una.
+7. **Relee tus fichas de TipoTest** de los temas con más presencia (punteros, STL, vector,
+   árbol B, listas y hash): solo releer y asentar, sin resolver nada nuevo.
+8. **Duerme.** El examen se aprueba con calma y con la lista de arriba, no con prisas ni con
+   un temario nuevo a medianoche.
