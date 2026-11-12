@@ -25,7 +25,7 @@ Cuando se desarrolla un software se busca: **seguridad, usabilidad y funcionalid
 
 *Un sistema muy seguro puede requerir muchas contraseñas, lo que dificulta su uso diario ( usabilidad) y añadir nuevas funcionalidades aumenta la probabilidad de ataque.*
 
-![alt text](imagenes/triangulo.png)
+![alt text](../imagenes/triangulo.png)
 
 La tensión se representa mediante un triángulo en cuyos vértices se sitúan sus propiedades. **El punto de equilibrio dependerá del contexto y necesidades del usuario**, (Cuanto más se aleja a una esquina más se sacrifican las otras)   
 **No existe una solución universal que maximice la seguridad, usabilidad y funcionalidad de un sistema**. El diseñador debe encontrar el equilibrio adecuado para cada caso
@@ -34,7 +34,7 @@ La tensión se representa mediante un triángulo en cuyos vértices se sitúan s
 
 Existe una relación `no lineal` entre el **esfuerzo / coste invertido en seguridad y el nivel de protección que se obtiene**. Cuando se incrementa la inversión se alcanzan niveles de seguridad cada vez más altos pero con rendimientos decrecientes. **Las primeras medidas suelen ser más baratas y efectivas, a niveles cercanos al máximo teórico aumenta desproporcionadamente el coste**. La curva crece rápidamente al principio y se aplana sin tocar la asíntota ( `seguridad total`).
 
-![alt text](imagenes/curva.png)
+![alt text](../imagenes/curva.png)
 
 
 Es  fundamental **encontrar un compromiso entre el coste del sistema de seguridad y el nivel de protección deseado**. 
@@ -198,7 +198,7 @@ El ciclo de vida comprende las siguientes fases:
 
 **6\. Cierre de la ventana:** una vez que todos los sistemas afectados han aplicado el parche, la ventana de exposición se cierra.
 
-![alt text](imagenes/ciclo.png)
+![alt text](../imagenes/ciclo.png)
 
 > El objetivo de toda organización debe ser que la ventana de exposición sea lo más pequeña posible teniendo en cuenta los factores que la amplian: retrasos en detección, tiempo de desarrollo del parche, demoras en distribución y la lentitud de las actualizaciones de seguridad
 

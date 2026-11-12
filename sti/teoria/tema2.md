@@ -58,7 +58,7 @@ El **NIST** (*National Institute of Standards and Technology*) clasifica las pol
 * **Contenido:** Definen la visión global y el compromiso de la organización con la protección de la confidencialidad, integridad y disponibilidad de la información.  
 * **Funciones principales:** Asignan los recursos económicos y humanos necesarios, designan formalmente la figura del **CISO** (*Chief Information Security Officer*) y fijan la estructura organizativa básica para gestionar la seguridad sin descender a detalles técnicos.
 
-![alt text](imagenes/politicas.png)
+![alt text](../imagenes/politicas.png)
 
 ### **Importancia de las Políticas de Programa**
 
@@ -91,7 +91,8 @@ Son las políticas de más bajo nivel. Especifican las acciones permitidas en co
 
 ***Ejemplo en un Cortafuegos:** Regla de default deny (denegar todo el tráfico entrante salvo excepciones autorizadas), registro de conexiones rechazadas y alertas automáticas tras múltiples intentos fallidos.*
 
-**Jerarquía entre los Tres Niveles**  
+**Jerarquía entre los Tres Niveles** 
+
 ┌────────────────────────────────────────────────────────┐ │POLÍTICA DE PROGRAMA (Estratégico / Alto Nivel) │ │ "Protección general de los activos de la empresa"  └───────────────────────────┬────────────────────────────┘   ┌────────────────────────────────────────────────────────┐  POLÍTICA ESPECÍFICA (Ámbito Determinado) │ │ "Acceso a servidores internos mediante red autorizada" └───────────────────────────┬────────────────────────────┘ ┌────────────────────────────────────────────────────────┐ │POLÍTICA DEL SISTEMA (Técnico / Bajo Nivel) │ │ "Reglas de filtrado y denegación por defecto (VPN)"    
  └────────────────────────────────────────────────────────┘
 

@@ -87,12 +87,3 @@
    - **Impacto de ampliar la ventana temporal**: Si la cuenta se hubiese creado en un intervalo de varios meses en lugar de una hora, el número de semillas a probar aumentaría a unos pocos millones (los segundos equivalentes a esos meses). Sin embargo, para la capacidad de cálculo actual, probar unos pocos millones de semillas sigue siendo una tarea trivial que se resuelve en cuestión de segundos.
 
 ---
-
-### 4. Resumen de Conceptos de Ingeniería Inversa (Repaso de Auditoría)
-
-| Concepto / Herramienta | Naturaleza Real | Falsas Creencias / Erratas Comunes |
-|---|---|---|
-| **Objetivo de la Ingeniería Inversa** | Analizar un ejecutable sin código fuente para obtener su diseño, estructura, auditar fallos o replicar funcionalidades. | **No** se limita a "obtener un esquema", ni se aplica únicamente al ámbito informático (se aplica en mecánica, electrónica, etc.). |
-| **Beneficios del Análisis** | Permite detectar errores ocultos, comportamientos/efectos laterales y vulnerabilidades de seguridad. | **No** garantiza directamente reducir el tamaño o la complejidad del código del sistema original. |
-| **Desensambladores** | Traducen código máquina ejecutable a **lenguaje ensamblador (assembly)**. | **No** traducen código máquina a "lenguaje normal" ni a lenguajes de alto nivel (eso lo hacen los decompiladores). |
-| **OllyDbg** | Depurador/desensamblador a nivel de ensamblador x86 **exclusivamente para Windows**. | **No** existe versión nativa para Linux. Permite inspeccionar la **memoria** y los **registros de la CPU** (no existen "registros de la memoria"). |
