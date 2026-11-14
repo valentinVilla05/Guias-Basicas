@@ -37,20 +37,7 @@
 
 ---
 
-### Tabla 4: Ejecución Masiva, Procesos y Red (`xargs`, `ps`, `kill`, `curl`, `ss`)
-*Para automatizar acciones en lote, controlar procesos colgados y diagnosticar red.*
-
-| Comando | Operandos / Flags Imprescindibles | Qué hace exactamente | Ejemplo práctico de alto valor |
-| :--- | :--- | :--- | :--- |
-| **`xargs`** | **`-n 1`**<br>**`-P N`**<br>**`-I {}`**<br>**`-0`** (junto a `find -print0`) | Ejecuta el comando pasando 1 argumento cada vez.<br>**Paraleliza**: lanza `N` procesos simultáneos.<br>Sustituye `{}` por el argumento recibido en cualquier posición.<br>Maneja de forma segura nombres de archivo con espacios. | `find . -name "*.jpg" -print0 \| xargs -0 -P 4 -I {} cp {} /backup/`<br>*(Copia todas las fotos en paralelo usando 4 hilos sin fallar por espacios)* |
-| **`ps`** | **`aux`**<br>**`-ef`** | Lista todos los procesos del sistema con uso de CPU, RAM y usuario.<br>Formato estándar con PID y PPID (proceso padre). | `ps aux --sort=-%mem \| head -n 6`<br>*(Muestra los 5 procesos que más memoria RAM consumen)* |
-| **`kill`** / **`pkill`** | **`-9`** (`SIGKILL`)<br>**`-15`** (`SIGTERM`)<br>**`pkill -f "nombre"`** | Mata el proceso inmediatamente sin dejarle cerrar nada.<br>Pide al proceso que termine de forma limpia (por defecto).<br>Mata procesos buscando por su nombre o comando completo (sin buscar el PID). | `pkill -9 -f "python3 script_colgado.py"`<br>*(Mata el script directamente por su nombre)* |
-| **`curl`** | **`-s`**<br>**`-I`**<br>**`-o archivo`**<br>**`-L`** | Modo silencioso (oculta la barra de progreso, vital en scripts).<br>Descarga solo las cabeceras HTTP (código 200, 404, etc.).<br>Guarda la descarga con un nombre específico.<br>Sigue redirecciones automáticamente. | `curl -sI https://google.com \| head -n 1`<br>*(Comprueba rápidamente el código de estado HTTP de una web)* |
-
----
-
-### Tabla 5: Operadores y Variables Especiales de Bash (El pegamento)
-*Sin estos símbolos no puedes conectar comandos ni controlar la lógica de un script.*
+### Tabla 4: Operadores y Variables Especiales de Bash
 
 | Símbolo / Operador | Nombre / Función | Qué hace exactamente | Ejemplo práctico |
 | :--- | :--- | :--- | :--- |
