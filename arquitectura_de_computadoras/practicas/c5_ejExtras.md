@@ -182,3 +182,167 @@ Realiza los siguientes apartados:
 | **C2: 5-Stage (base)** | 199 | **199** | 155 | 1.28 | 0.779 | 3.89x | — |
 | **C3: 6-Stage (sin optimizar)** | 177 | **177** | 155 | 1.14 | 0.876 | 4.38x | 1.00x |
 | **C3: 6-Stage (desenrollado x4)** | **137** | **137** | **125** | **1.10** | **0.912** | **5.66x** | **1.29x** |
+
+----
+# Ejercicio 1 – 2/10 puntos - Archivos Eje1.s y P4.pdf
+Escribe un programa en ensamblador RISC-V ajustado a las siguientes directivas (utilizando instrucciones reales base de RISC-V, evitando pseudoinstrucciones como `la`):
+
+En el segmento de datos se tiene un vector de **40 números enteros de 32 bits con signo**:
+
+`vector = [14, 7, -6, 21, 8, -3, 12, 15, -10, 9, 4, -17, 26, 3, -8, 11, 20, -5, 16, 1, -12, 19, 6, -13, 24, 5, -2, 23, 18, -9, 10, 17, -4, 25, 2, -11, 22, 13, -14, 27]`
+
+El programa deberá:
+
+- Recorrer los 40 elementos del vector de forma secuencial mediante un bucle.
+- Evaluar el **valor numérico** de cada elemento para acumular por un lado la **suma aritmética de todos los números pares** (`valor % 2 == 0`) y por otro la **suma aritmética de todos los números impares** (`valor % 2 != 0`).
+- Almacenar ambos resultados en dos variables independientes reservadas en el segmento de datos como enteros de 32 bits (`suma_val_pares` y `suma_val_impares`).
+- Mostrar por la consola de Ripes (mediante llamadas al sistema `ecall`) ambos resultados obtenidos.
+
+Crea un documento (`P4.pdf`) y adjunta una captura de pantalla del panel **Memory** y de la **Consola** de Ripes tras haber ejecutado el programa completo, en la que se aprecie el código ensamblador, las posiciones de memoria donde se han guardado `suma_val_pares` y `suma_val_impares` y la salida impresa por pantalla.
+
+---
+
+# Ejercicio 2 – 4/10 puntos - Archivo P4.pdf
+Ejecuta el programa del Ejercicio 1 sobre las siguientes configuraciones de procesador en Ripes:
+
+- **Configuración 1 (C1):** Single-cycle processor
+- **Configuración 2 (C2):** 5-Stage processor (con unidad de adelantamiento / forwarding)
+- **Configuración 3 (C3):** 6-Stage dual-issue processor
+
+Realiza los siguientes apartados:
+
+1. Anota para cada configuración el número total de ciclos de reloj, las instrucciones ejecutadas (*Instructions Retired*) y el **CPI** (o **IPC**) obtenido tras finalizar la ejecución completa.
+2. Incluye una tabla comparativa con los ciclos reales de Ripes, los **ciclos equivalentes en tiempo** (multiplicando C1 × 5 para equiparar la duración del ciclo monociclo a las 5 etapas), el CPI y el **Speedup real** de C2 y C3 tomando como base C1, además del Speedup de C3 frente a C2.
+3. Explica brevemente la fórmula empleada para calcular el Speedup y justifica las diferencias de rendimiento observadas entre las tres arquitecturas.
+4. Adjunta las capturas de pantalla de Ripes de cada configuración donde se aprecien claramente las métricas de ejecución.
+
+---
+
+# Ejercicio 3 – 4/10 puntos - Riesgos y desenrollamiento de bucle (Factor 4) en 6 etapas
+Tomando como base el programa del Ejercicio 1 ejecutado sobre la **Configuración 3 (6-Stage dual-issue processor)**, cuya emisión doble sigue la siguiente distribución de vías:
+- **Vía 1:** Instrucciones aritméticas, saltos (`beq`, `bne`) y `ecall`.
+- **Vía 2:** Instrucciones aritméticas, cargas (`lw`) y almacenamientos (`sw`).
+
+Realiza los siguientes apartados:
+
+1. Analiza los **riesgos estructurales** (conflictos de vías por cargas o saltos consecutivos), **riesgos de datos** (*load-use* tras leer el dato para comprobar su paridad con `andi` y dependencias RAW) y **riesgos de control** (saltos condicionales internos para discriminar par/impar más el salto de cierre del bucle) que limitan la emisión doble.
+2. Aplica un **desenrollamiento de bucle de factor 4** (procesando **4 elementos por iteración** con desplazamientos `0, 4, 8, 12`, reduciendo las iteraciones del bucle a **10**) y **reordena las instrucciones** para separar las cargas `lw` de sus comprobaciones `andi`, intercalando instrucciones independientes para maximizar la emisión paralela entre **Vía 1** y **Vía 2**.
+3. Muestra el código ensamblador optimizado (`Eje3.s`) y explica qué dependencias y conflictos de vías se han resuelto en el cronograma.
+4. Vuelve a ejecutar el código optimizado en **C3 (6-Stage processor)** y compara el nuevo número de ciclos, el CPI/IPC y el Speedup total alcanzado respecto a `C1 × 5` y respecto a la versión sin optimizar del Ejercicio 2.
+
+---
+
+## Ej 1:
+![alt text](../images/parImpar.png)
+
+| Configuración | Ciclos Ripes | Ciclos equiv. (Tiempo) | Instrucciones ejecutadas | CPI | IPC | Speedup real vs C1 (×5) | Speedup C3 vs C2 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **C1: Single-cycle** | 415 | **2075** (415 × 5) | 415 | 1.00 | 1.000 | **1.00x (Base)** | — |
+| **C2: 5-Stage (c/ forwarding)** | 499 | **499** | 415 | 1.20 | 0.832 | **4.16x** | — |
+| **C3: 6-Stage dual-issue** | 417 | **417** | 415 | 1.00 | 0.995 | **4.98x** | **1.20x** |
+
+### Cálculo del Speedup real y justificación
+
+* **Fórmula empleada:**
+  `Speedup = Tiempo_C1 / Tiempo_mejorado = (Ciclos_C1 × 5) / Ciclos_mejorado`
+
+* **Análisis de resultados:**
+  * **C2 frente a C1 (`2075 / 499 = 4.16x`):** Aunque un cauce de 5 etapas tiene un límite teórico de 5x, se queda en **4.16x** por los **39 saltos condicionales tomados** (`39 × 2 ciclos de flush = 78 ciclos extra`), ya que las paradas *load-use* se evitan gracias a que `addi t0` y `addi t1` separan la carga `lw t2` de su uso en `andi t3`.
+  * **C3 frente a C1 (`2075 / 417 = 4.98x`) y frente a C2 (`499 / 417 = 1.20x`):** El procesador de 6 etapas reduce **82 ciclos** respecto a C2 gracias a la emisión doble (*dual-issue*), alcanzando un `CPI = 1.00`. Sin embargo, está muy lejos del límite teórico de 2 instrucciones por ciclo (`CPI = 0.50`) debido a las dependencias de datos dentro de cada iteración.
+
+## Desenrollado
+
+![alt text](../images/fumada.png)
+
+| Versión / Configuración | Ciclos Ripes | Ciclos equiv. (Tiempo) | Instrucciones ejecutadas | CPI | IPC | Speedup real vs C1 (×5) | Speedup vs C3 base |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **C1: Single-cycle (base)** | 415 | **2075** (415 × 5) | 415 | 1.00 | 1.000 | 1.00x | — |
+| **C2: 5-Stage (base)** | 499 | **499** | 415 | 1.20 | 0.832 | 4.16x | — |
+| **C3: 6-Stage (sin optimizar)** | 417 | **417** | 415 | 1.00 | 0.995 | 4.98x | 1.00x |
+| **C3: 6-Stage (desenrollado x4)** | **267** | **267** | **325** | **0.822** | **1.22** | **7.77x** | **1.56x** |
+
+* **Speedup frente a monociclo (`C1 × 5`):** `2075 / 267 = 7.77x` (**7.77 veces más rápido**).
+* **Speedup frente a 6 etapas base (`C3`):** `417 / 267 = 1.56x` (ahorro de **150 ciclos**, reduciendo el tiempo de ejecución en un **36.0%** y logrando un **IPC de 1.22**).
+
+-----
+# Ejercicio 1 – 2/10 puntos - Archivos Eje1.s y P4.pdf
+Escribe un programa en ensamblador RISC-V ajustado a las siguientes directivas (utilizando instrucciones reales base de RISC-V, evitando pseudoinstrucciones como `la`):
+
+En el segmento de datos se tiene un vector de **40 números enteros de 32 bits con signo**:
+
+`vector = [15, -8, 4, -19, 22, -3, 0, -11, 9, -25, 14, -6, 30, -2, 7, -16, 18, -1, 11, -14, 27, -9, 5, -21, 13, -4, 19, -12, 8, -17, 24, -5, 10, -23, 16, -7, 20, -10, 12, -15]`
+
+El programa deberá:
+
+- Recorrer los 40 elementos del vector de forma secuencial mediante un bucle.
+- Evaluar el signo de cada elemento para:
+  - Acumular en una variable la **suma aritmética de todos los números positivos** (`elemento > 0`).
+  - Contar en otra variable la **cantidad total de números negativos** (`elemento < 0`).
+- Almacenar ambos resultados en dos variables independientes reservadas en el segmento de datos como enteros de 32 bits (`suma_positivos` y `cuenta_negativos`).
+- Mostrar por la consola de Ripes (mediante llamadas al sistema `ecall`) ambos resultados obtenidos.
+
+Crea un documento (`P4.pdf`) y adjunta una captura de pantalla del panel **Memory** y de la **Consola** de Ripes tras haber ejecutado el programa completo, en la que se aprecie el código ensamblador, las posiciones de memoria donde se han guardado `suma_positivos` y `cuenta_negativos` y la salida impresa por pantalla.
+
+---
+
+# Ejercicio 2 – 4/10 puntos - Archivo P4.pdf
+Ejecuta el programa del Ejercicio 1 sobre las siguientes configuraciones de procesador en Ripes:
+
+- **Configuración 1 (C1):** Single-cycle processor
+- **Configuración 2 (C2):** 5-Stage processor (con unidad de adelantamiento / forwarding)
+- **Configuración 3 (C3):** 6-Stage dual-issue processor
+
+Realiza los siguientes apartados:
+
+1. Anota para cada configuración el número total de ciclos de reloj, las instrucciones ejecutadas (*Instructions Retired*) y el **CPI** (o **IPC**) obtenido tras finalizar la ejecución completa.
+2. Incluye una tabla comparativa con los ciclos reales de Ripes, los **ciclos equivalentes en tiempo** (multiplicando C1 × 5 para equiparar la duración del ciclo monociclo a las 5 etapas), el CPI y el **Speedup real** de C2 y C3 tomando como base C1, además del Speedup de C3 frente a C2.
+3. Explica brevemente la fórmula empleada para calcular el Speedup y justifica las diferencias de rendimiento observadas entre las tres arquitecturas.
+4. Adjunta las capturas de pantalla de Ripes de cada configuración donde se aprecien claramente las métricas de ejecución.
+
+---
+
+# Ejercicio 3 – 4/10 puntos - Riesgos y desenrollamiento de bucle (Factor 4) en 6 etapas
+Tomando como base el programa del Ejercicio 1 ejecutado sobre la **Configuración 3 (6-Stage dual-issue processor)**, cuya emisión doble sigue la siguiente distribución de vías:
+- **Vía 1:** Instrucciones aritméticas, saltos (`beq`, `bne`, `blt`, `bge`) y `ecall`.
+- **Vía 2:** Instrucciones aritméticas, cargas (`lw`) y almacenamientos (`sw`).
+
+Realiza los siguientes apartados:
+
+1. Analiza los **riesgos estructurales**, **riesgos de datos** (*load-use* y dependencias RAW) y **riesgos de control** (saltos condicionales internos para comprobar el signo más el salto de cierre del bucle) que limitan la emisión doble.
+2. Aplica un **desenrollamiento de bucle de factor 4** (procesando **4 elementos por iteración** con desplazamientos `0, 4, 8, 12`, reduciendo las iteraciones del bucle a **10**) y **reordena las instrucciones** para separar las cargas `lw` de las operaciones dependientes, eliminando saltos internos si es posible y maximizando la emisión paralela entre **Vía 1** y **Vía 2**.
+3. Muestra el código ensamblador optimizado (`Eje3.s`) y explica qué dependencias y conflictos de vías se han resuelto en el cronograma.
+4. Vuelve a ejecutar el código optimizado en **C3 (6-Stage processor)** y compara el nuevo número de ciclos, el CPI/IPC y el Speedup total alcanzado respecto a `C1 × 5` y respecto a la versión sin optimizar del Ejercicio 2.
+
+![alt text](../images/pra5.png)
+
+### Tabla comparativa de rendimiento (Ejercicio 2)
+
+| Configuración | Ciclos Ripes | Ciclos equiv. (Tiempo) | Instrucciones ejecutadas | CPI | IPC | Speedup real vs C1 (×5) | Speedup C3 vs C2 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **C1: Single-cycle** | 375 | **1875** (375 × 5) | 375 | 1.00 | 1.000 | **1.00x (Base)** | — |
+| **C2: 5-Stage (c/ forwarding)** | 459 | **459** | 375 | 1.22 | 0.817 | **4.08x** | — |
+| **C3: 6-Stage dual-issue** | 457 | **457** | 375 | 1.22 | 0.821 | **4.10x** | **1.004x** |
+
+---
+
+### Cálculo del Speedup real y justificación
+
+* **Fórmula empleada:**
+  $$\text{Speedup} = \frac{\text{Tiempo}_{\text{C1}}}{\text{Tiempo}_{\text{mejorado}}} = \frac{\text{Ciclos}_{\text{C1}} \times 5}{\text{Ciclos}_{\text{mejorado}}}$$
+  
+
+* **Análisis de los resultados:**
+  * **C2 frente a C1 (`1875 / 459 = 4.08x`):** Aunque la segmentación en 5 etapas tiene un límite teórico de `5x`, baja a **4.08x** por los **39 saltos condicionales tomados** (`bne t1, zero, bucle`), que provocan **2 ciclos de vaciado (*flush*)** por iteración (`39 × 2 = 78 ciclos` penalizados), mientras que las paradas *load-use* se evitan gracias a que `addi t0` y `addi t1` separan `lw t2` de su uso en `srli t3`.
+  * **C3 frente a C1 (`1875 / 457 = 4.10x`) y frente a C2 (`459 / 457 = 1.004x`):** Fíjate en que **C3 apenas mejora 2 ciclos respecto a C2** (`457` frente a `459`[cite: 6, 7], manteniendo el mismo `CPI = 1.22`[cite: 6, 7]). Esto ocurre porque dentro del bucle cada instrucción depende directamente del resultado de la inmediatamente anterior (`lw t2` $\rightarrow$ `srli t3` $\rightarrow$ `addi t3` $\rightarrow$ `and t2` $\rightarrow$ `add a0`), formando una cadena lineal de dependencias de datos (RAW) que impide al procesador *dual-issue* emparejar instrucciones en paralelo, sumado a la penalización de salto de 6 etapas.
+
+![alt text](../images/reor2.png)
+
+| Versión / Configuración | Ciclos Ripes | Ciclos equiv. (Tiempo) | Instrucciones ejecutadas | CPI | IPC | Speedup real vs C1 (×5) | Speedup vs C3 base |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **C1: Single-cycle (base)** | 375 | **1875** (375 × 5) | 375 | 1.00 | 1.000 | **1.00x** | — |
+| **C2: 5-Stage (base)** | 459 | **459** | 375 | 1.22 | 0.817 | **4.08x** | — |
+| **C3: 6-Stage (sin optimizar)** | 457 | **457** | 375 | 1.22 | 0.821 | **4.10x** | **1.00x** |
+| **C3: 6-Stage (desenrollado x4)** | **257** | **257** | **285** | **0.902** | **1.11** | **7.30x** | **1.78x** |
+
+* **Speedup frente a monociclo (`C1 × 5`):** `1875 / 257 = 7.30x` (**7.30 veces más rápido**).
+* **Speedup frente a 6 etapas base (`C3`):** `457 / 257 = 1.78x` (ahorro de **200 ciclos**, reduciendo el tiempo de ejecución en un **43.8%** y rompiendo la barrera de 1 instrucción/ciclo con un **IPC de 1.11**).
