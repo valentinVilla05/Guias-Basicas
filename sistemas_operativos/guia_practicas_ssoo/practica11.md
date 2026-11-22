@@ -217,3 +217,46 @@ done
  ******** 
 **********
 ```
+
+# Ejercicios
+## Ej 1
+Los directorios base de usuario suelen estar ubicados en el directorio `/home` (o en la ruta que guarda la variable `$HOME`, debes eliminar el nombre de usuario), pero no tiene por qué ser así. Escribe un shell script sin argumentos que analice el archivo `/etc/passwd` y que escriba por pantalla aquellos usuarios, que no sean de sistema (uid mayor o igual a 1000), cuyo directorio base no cuelgue de `/home`. Debes usar la expansión de variables para obtener las subcadenas de las cuentas analizadas
+
+![alt text](../imagenes/res1.png)
+
+## Ej 2
+Escribe un shell script que renombre todos los archivos ejecutables del directorio `~/ bin`, de forma que le añada los caracteres `.sh`, sólo si el archivo no termina ya en `.sh`. Así si, por ejemplo, en `~/bin` existe un archivo ejecutable llamado programa, debería renombrarlo para que se llame `programa.sh`, pero si ya existe un ejecutable llamado `archivo.sh` lo deja tal y como está
+
+![alt text](../imagenes/res2.png)
+
+## Ej 3
+La orden `ls -l` lista todos los archivos del directorio de trabajo actual con información completa (incluyendo permisos, tamaño, etc). Escribe un shell script que analice los archivos del directorio `~/bin` e informe si hay archivos cuyos
+permisos de lectura o escritura estén activados para el grupo y otros usuarios.
+
+![alt text](../imagenes/res3.png)
+
+## Ej 4
+En el directorio `~/bin` se tienen varios shell scripts. Algunos de ellos tienen nombre
+terminado en `.sh`, otros no tienen extensión y otros tienen extensión `.exe`. 
+
+Escribe un shell script que unifique todos los nombres de archivo de forma que todos terminen en `.sh`
+![alt text](../imagenes/res4.png)
+
+## Ej 5
+En el directorio `~/bin` se tienen varios shell scripts. Escribe un shell script que los renombre usando el siguiente nombre: `nombre.###.sh` donde nombre es el nombre que tenga cada script sin extensión, `###` es un número secuencial comenzando en `000` que se incrementa para cada nuevo shell script que se
+renombra.
+
+![alt text](../imagenes/res5.png)
+
+## Ej 6
+Cree dos scripts `basename.sh` y `dirname.sh` que emulen respectivamente el comportamiento de los comandos basename y dirname de Unix.
+
+Notas: consulte la funcionalidad de cada uno en su página man; para visualizar un carácter nulo, NUL, utilice el carácter especial `\x00` con la función printf estudiada.
+
+> $basename.sh$
+
+![alt text](../imagenes/basename.png)
+
+> $dirname.sh$
+
+![alt text](../imagenes/dirname.png)
